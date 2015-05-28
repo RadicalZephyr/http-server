@@ -12,6 +12,17 @@
       :scm {:url "https://github.com/RadicalZephyr/http-server.git"}
       :licens {"MIT" "http://opensource.org/licenses/MIT"}})
 
+(deftask junit
+  "Run the jUnit test runner."
+  []
+  )
+
+(deftask test
+  "Compile and run my jUnit tests."
+  []
+  (comp (javac)
+        (junit)))
+
 (deftask build
   "Build my http server."
   []
