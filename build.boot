@@ -10,3 +10,10 @@
       :url "https://github.com/RadicalZephyr/http-server"
       :scm {:url "https://github.com/RadicalZephyr/http-server.git"}
       :licens {"MIT" "http://opensource.org/licenses/MIT"}})
+
+(deftask build
+  "Build my http server."
+  []
+  (comp (javac)
+        (pom)
+        (jar)))
