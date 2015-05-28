@@ -1,5 +1,6 @@
 (set-env!
- :source-paths #{"src"})
+ :source-paths #{"src"}
+ :dependencies '[[junit "4.12" :scope "test"]])
 
 (def +version+ "0.1.0")
 
