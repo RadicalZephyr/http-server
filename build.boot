@@ -1,6 +1,5 @@
 (set-env!
- :source-paths #{"src/main/java"}
- :test-paths #{"src/test/java"}
+ :source-paths #{"src/main/java" "src/test/java"}
  :dependencies '[[junit "4.12" :scope "test"]])
 
 (def +version+ "0.1.0")
@@ -18,7 +17,6 @@
 (deftask junit
   "Run the jUnit test runner."
   []
-  (set-env! :source-paths #(clojure.set/union % (get-env :test-paths)))
   (with-pre-wrap fileset
     fileset))
 
