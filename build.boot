@@ -14,7 +14,7 @@
       :scm {:url "https://github.com/RadicalZephyr/http-server.git"}
       :licens {"MIT" "http://opensource.org/licenses/MIT"}}
  jar {:file "server.jar"}
- junit {:packages '#{net.zephyrizing.http_server}})
+ junit {:packages '#{net.zephyrizing.http_server_test}})
 
 (deftask test
   "Compile and run my jUnit tests."
