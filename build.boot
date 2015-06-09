@@ -16,6 +16,12 @@
  jar {:file "server.jar"}
  junit {:packages '#{net.zephyrizing.http_server_test}})
 
+;;; This prevents a name collision WARNING between the test task and
+;;; clojure.core/test, a function that nobody really uses or cares
+;;; about.
+(if ((loaded-libs) 'boot.user)
+  (ns-unmap 'boot.user 'test))
+
 (deftask test
   "Compile and run my jUnit tests."
   []
