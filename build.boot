@@ -13,6 +13,7 @@
       :url "https://github.com/RadicalZephyr/http-server"
       :scm {:url "https://github.com/RadicalZephyr/http-server.git"}
       :licens {"MIT" "http://opensource.org/licenses/MIT"}}
+ jar {:file "server.jar"}
  junit {:packages '#{net.zephyrizing.http_server}})
 
 (deftask test
