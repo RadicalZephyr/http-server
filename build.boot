@@ -1,5 +1,5 @@
 (set-env!
- :source-paths #{"src/main/java" "src/test/java"}
+ :source-paths #{"src"}
  :dependencies '[[radicalzephyr/boot-junit "0.1.0" :scope "test"]])
 
 (def +version+ "0.1.0")
