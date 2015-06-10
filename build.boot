@@ -1,10 +1,12 @@
 (set-env!
  :source-paths #{"src"}
- :dependencies '[[radicalzephyr/boot-junit "0.1.0" :scope "test"]])
+ :dependencies '[[radicalzephyr/boot-junit "0.1.0" :scope "test"]
+                 [jeluard/boot-notify "0.1.2"      :scope "test"]])
 
 (def +version+ "0.1.0-SNAPSHOT")
 
-(require '[radicalzephyr.boot-junit :refer [junit]])
+(require '[radicalzephyr.boot-junit :refer [junit]]
+         '[jeluard.boot-notify      :refer [notify]])
 
 (task-options!
  pom {:project 'http-server
