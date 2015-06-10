@@ -13,7 +13,8 @@
       :url "https://github.com/RadicalZephyr/http-server"
       :scm {:url "https://github.com/RadicalZephyr/http-server.git"}
       :licens {"MIT" "http://opensource.org/licenses/MIT"}}
- jar {:file "server.jar"}
+ jar {:file "server.jar"
+      :manifest {"Main-Class" "net.zephyrizing.http_server.HttpServer"}}
  junit {:packages '#{net.zephyrizing.http_server_test}})
 
 ;;; This prevents a name collision WARNING between the test task and
