@@ -2,7 +2,7 @@
  :source-paths #{"src"}
  :dependencies '[[radicalzephyr/boot-junit "0.1.0" :scope "test"]])
 
-(def +version+ "0.1.0")
+(def +version+ "0.1.0-SNAPSHOT")
 
 (require '[radicalzephyr.boot-junit :refer [junit]])
 
