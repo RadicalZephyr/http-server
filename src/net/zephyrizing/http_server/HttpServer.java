@@ -1,6 +1,11 @@
 package net.zephyrizing.http_server;
 
 public class HttpServer {
+
+    public HttpServer(HttpServerSocket serveSocket) {
+
+    }
+
     public static void main(String[] args) {
         int portNumber;
         if (args.length == 1) {
