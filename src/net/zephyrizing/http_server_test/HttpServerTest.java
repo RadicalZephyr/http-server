@@ -15,6 +15,7 @@ public class HttpServerTest {
     @Test
     public void testCreateServer() {
         MockHttpServerSocket serveSocket = new MockHttpServerSocket();
-        HttpServer server = new HttpServer(serveSocket);
+        int port = 7070;
+        HttpServer server = new HttpServer(serveSocket, port);
     }
 }

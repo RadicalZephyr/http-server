@@ -2,7 +2,7 @@ package net.zephyrizing.http_server;
 
 public class HttpServer {
 
-    public HttpServer(HttpServerSocket serveSocket) {
+    public HttpServer(HttpServerSocket serveSocket, int port) {
 
     }
 
