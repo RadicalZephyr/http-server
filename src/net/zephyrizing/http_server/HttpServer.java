@@ -23,5 +23,9 @@ public class HttpServer {
         }
         System.err.format("Starting server on port %d...", portNumber);
 
+        HttpServerSocket httpSocket = new HttpServerSocketImpl();
+        HttpServer server = new HttpServer(httpSocket, portNumber);
+
+        server.listen();
     }
 }
