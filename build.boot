@@ -16,8 +16,7 @@
       :scm {:url "https://github.com/RadicalZephyr/http-server.git"}
       :licens {"MIT" "http://opensource.org/licenses/MIT"}}
  jar {:file "server.jar"
-      :manifest {"Main-Class" "net.zephyrizing.http_server.HttpServer"}}
- junit {:packages '#{net.zephyrizing.http_server_test}})
+      :manifest {"Main-Class" "net.zephyrizing.http_server.HttpServer"}})
 
 ;;; This prevents a name collision WARNING between the test task and
 ;;; clojure.core/test, a function that nobody really uses or cares
