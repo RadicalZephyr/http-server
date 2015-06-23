@@ -1,6 +1,6 @@
 (set-env!
  :source-paths #{"src"}
- :dependencies '[[radicalzephyr/boot-junit "0.1.0" :scope "test"]
+ :dependencies '[[radicalzephyr/boot-junit "0.1.1" :scope "test"]
                  [jeluard/boot-notify "0.1.2"      :scope "test"]])
 
 (def +version+ "0.1.0-SNAPSHOT")
