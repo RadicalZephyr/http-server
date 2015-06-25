@@ -2,18 +2,6 @@ package net.zephyrizing.http_server;
 
 public class HttpServer {
 
-    private HttpServerSocket serveSocket;
-    private int port;
-
-    public HttpServer(HttpServerSocket serveSocket, int port) {
-        this.serveSocket = serveSocket;
-        this.port = port;
-    }
-
-    public void listen() {
-        serveSocket.bind(port);
-    }
-
     public static void main(String[] args) {
         int portNumber;
         if (args.length == 1) {
@@ -27,5 +15,19 @@ public class HttpServer {
         HttpServer server = new HttpServer(httpSocket, portNumber);
 
         server.listen();
+    }
+
+    // Actual class begins
+
+    private HttpServerSocket serveSocket;
+    private int port;
+
+    public HttpServer(HttpServerSocket serveSocket, int port) {
+        this.serveSocket = serveSocket;
+        this.port = port;
+    }
+
+    public void listen() {
+        serveSocket.bind(port);
     }
 }
