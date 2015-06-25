@@ -1,5 +1,6 @@
 package net.zephyrizing.http_server_test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,14 +17,14 @@ public class HttpServerTest {
         public int bindCallCount = 0;
         public List<Integer> portList = new ArrayList<Integer>();
 
-        public void bind(int port) {
+        public void bind(int port) throws IOException {
             bindCallCount++;
             portList.add(port);
         }
     }
 
     @Test
-    public void serverListensAtPort() {
+    public void serverListensAtPort() throws Exception {
         MockHttpServerSocket serveSocket = new MockHttpServerSocket();
         int port = 7070;
         HttpServer server = new HttpServer(serveSocket, port);
