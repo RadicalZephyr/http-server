@@ -1,8 +1,11 @@
 package net.zephyrizing.http_server;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+
 public class HttpServer {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         int portNumber;
         if (args.length == 1) {
             portNumber = Integer.parseInt(args[0]);
@@ -10,11 +13,10 @@ public class HttpServer {
             portNumber = 5000;
         }
         System.err.format("Starting server on port %d...", portNumber);
-
-        HttpServerSocket httpSocket = new HttpServerSocketImpl();
-        HttpServer server = new HttpServer(httpSocket, portNumber);
-
-        server.listen();
+        try (ServerSocket serverSocket = new ServerSocket()) {
+            HttpServerSocket httpSocket = new HttpServerSocketImpl(serverSocket);
+            HttpServer server = new HttpServer(httpSocket, portNumber);
+        }
     }
 
     // Actual class begins
@@ -27,7 +29,7 @@ public class HttpServer {
         this.port = port;
     }
 
-    public void listen() {
+    public void listen() throws IOException {
         serveSocket.bind(port);
     }
 }
