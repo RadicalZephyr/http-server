@@ -29,6 +29,9 @@ public class HttpServerTest {
             String[] requestLines = new String[] {"GET / HTTP/1.1\r\n"};
             return new HttpRequest(requestLines);
         }
+
+        @Override
+        public void close() {}
     }
 
     @Test
