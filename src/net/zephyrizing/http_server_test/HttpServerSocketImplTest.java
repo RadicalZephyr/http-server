@@ -5,9 +5,11 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.SocketAddress;
 
+import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpServerSocket;
 import net.zephyrizing.http_server.HttpServerSocketImpl;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -36,8 +38,18 @@ public class HttpServerSocketImplTest {
     public void testBindSocket() throws Exception {
         TestServerSocket testServerSocket = new TestServerSocket();
         HttpServerSocket socket = new HttpServerSocketImpl(testServerSocket);
-        int port = 1000;
+        int port = 10000;
         socket.bind(port);
         assertEquals(port, testServerSocket.bindCalledWith());
+    }
+
+    @Ignore
+    @Test
+    public void testSocketAccept() throws Exception {
+        TestServerSocket testServerSocket = new TestServerSocket();
+        HttpServerSocket socket = new HttpServerSocketImpl(testServerSocket);
+        socket.bind(10000);
+        HttpRequest request = socket.accept();
+        assertNotNull(request);
     }
 }
