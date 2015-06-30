@@ -32,4 +32,8 @@ public class HttpServer {
     public void listen() throws IOException {
         serveSocket.bind(port);
     }
+
+    public HttpRequest acceptRequest() {
+        return serveSocket.accept();
+    }
 }
