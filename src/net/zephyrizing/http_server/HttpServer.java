@@ -21,19 +21,19 @@ public class HttpServer {
 
     // Actual class begins
 
-    private HttpServerSocket serveSocket;
+    private HttpServerSocket serverSocket;
     private int port;
 
-    public HttpServer(HttpServerSocket serveSocket, int port) {
-        this.serveSocket = serveSocket;
+    public HttpServer(HttpServerSocket serverSocket, int port) {
+        this.serverSocket = serverSocket;
         this.port = port;
     }
 
     public void listen() throws IOException {
-        serveSocket.bind(port);
+        serverSocket.bind(port);
     }
 
     public HttpRequest acceptRequest() {
-        return serveSocket.accept();
+        return serverSocket.accept();
     }
 }
