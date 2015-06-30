@@ -8,11 +8,22 @@ import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpServer;
 import net.zephyrizing.http_server.HttpServerSocket;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class HttpServerTest {
+
+    MockHttpServerSocket serverSocket;
+    int port = 7070;
+    HttpServer server;
+
+    @Before
+    public void initialize() {
+        serverSocket = new MockHttpServerSocket();
+        server = new HttpServer(serverSocket, port);
+    }
 
     public class MockHttpServerSocket implements HttpServerSocket {
         public int bindCallCount = 0;
@@ -36,19 +47,14 @@ public class HttpServerTest {
 
     @Test
     public void serverListensAtPort() throws Exception {
-        MockHttpServerSocket serverSocket = new MockHttpServerSocket();
-        int port = 7070;
-        HttpServer server = new HttpServer(serverSocket, port);
         server.listen();
+
         assertEquals(1, serverSocket.bindCallCount);
         assertEquals(port, (int)serverSocket.portList.get(0));
     }
 
     @Test
     public void serverReceivesARequest() throws Exception {
-        MockHttpServerSocket serverSocket = new MockHttpServerSocket();
-        int port = 7070;
-        HttpServer server = new HttpServer(serverSocket, port);
         server.listen();
 
         HttpRequest request = server.acceptRequest();
@@ -83,8 +89,6 @@ public class HttpServerTest {
 
     @Test
     public void serverAcceptsMultipleRequests() {
-        MockHttpServerSocket serverSocket = new MockHttpServerSocket();
-        int port = 7070;
         AcceptMockedHttpServer server = new AcceptMockedHttpServer(serverSocket, port);
         int numCalls = 3;
         server.setNumberOfAccepts(numCalls);
