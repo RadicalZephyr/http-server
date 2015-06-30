@@ -16,6 +16,7 @@ public class HttpServer {
         try (ServerSocket serverSocket = new ServerSocket();
              HttpServerSocket httpSocket = new HttpServerSocketImpl(serverSocket);) {
             HttpServer server = new HttpServer(httpSocket, portNumber);
+            server.serve();
         }
     }
 
@@ -35,5 +36,15 @@ public class HttpServer {
 
     public HttpRequest acceptRequest() {
         return serverSocket.accept();
+    }
+
+    public boolean acceptingRequests() {
+        return true;
+    }
+
+    public void serve() {
+        while (acceptingRequests()) {
+            HttpRequest request = acceptRequest();
+        }
     }
 }

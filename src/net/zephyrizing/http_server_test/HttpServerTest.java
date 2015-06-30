@@ -54,4 +54,43 @@ public class HttpServerTest {
         HttpRequest request = server.acceptRequest();
         assertEquals("GET", request.method());
     }
+
+    public class AcceptMockedHttpServer extends HttpServer {
+        public int timesAcceptRequestCalled = 0;
+
+        private int acceptThreshold = 1;
+
+
+        public AcceptMockedHttpServer(HttpServerSocket socket, int port) {
+            super(socket, port);
+        }
+
+        public void setNumberOfAccepts(int threshold) {
+            acceptThreshold = threshold;
+        }
+
+        @Override
+        public boolean acceptingRequests() {
+            return timesAcceptRequestCalled < acceptThreshold;
+        }
+
+        @Override
+        public HttpRequest acceptRequest() {
+            timesAcceptRequestCalled++;
+            return null;
+        }
+    }
+
+    @Test
+    public void serverAcceptsMultipleRequests() {
+        MockHttpServerSocket serverSocket = new MockHttpServerSocket();
+        int port = 7070;
+        AcceptMockedHttpServer server = new AcceptMockedHttpServer(serverSocket, port);
+        int numCalls = 3;
+        server.setNumberOfAccepts(numCalls);
+
+        server.serve();
+
+        assertEquals(numCalls, server.timesAcceptRequestCalled);
+    }
 }
