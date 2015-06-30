@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpServer;
 import net.zephyrizing.http_server.HttpServerSocket;
 
@@ -17,9 +18,15 @@ public class HttpServerTest {
         public int bindCallCount = 0;
         public List<Integer> portList = new ArrayList<Integer>();
 
+        @Override
         public void bind(int port) throws IOException {
             bindCallCount++;
             portList.add(port);
+        }
+
+        @Override
+        public HttpRequest accept() {
+            return null;
         }
     }
 
