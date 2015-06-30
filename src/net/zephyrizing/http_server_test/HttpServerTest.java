@@ -26,7 +26,8 @@ public class HttpServerTest {
 
         @Override
         public HttpRequest accept() {
-            return null;
+            String[] requestLines = new String[] {"GET / HTTP/1.1\r\n"};
+            return new HttpRequest(requestLines);
         }
     }
 
@@ -38,5 +39,16 @@ public class HttpServerTest {
         server.listen();
         assertEquals(1, serveSocket.bindCallCount);
         assertEquals(port, (int)serveSocket.portList.get(0));
+    }
+
+    @Test
+    public void serverReceivesARequest() throws Exception {
+        MockHttpServerSocket serveSocket = new MockHttpServerSocket();
+        int port = 7070;
+        HttpServer server = new HttpServer(serveSocket, port);
+        server.listen();
+
+        HttpRequest request = server.acceptRequest();
+        assertEquals("GET", request.method());
     }
 }
