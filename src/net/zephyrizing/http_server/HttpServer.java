@@ -13,8 +13,8 @@ public class HttpServer {
             portNumber = 5000;
         }
         System.err.format("Starting server on port %d...", portNumber);
-        try (ServerSocket serverSocket = new ServerSocket()) {
-            HttpServerSocket httpSocket = new HttpServerSocketImpl(serverSocket);
+        try (ServerSocket serverSocket = new ServerSocket();
+             HttpServerSocket httpSocket = new HttpServerSocketImpl(serverSocket);) {
             HttpServer server = new HttpServer(httpSocket, portNumber);
         }
     }
