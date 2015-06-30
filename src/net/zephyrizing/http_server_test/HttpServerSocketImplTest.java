@@ -1,8 +1,13 @@
 package net.zephyrizing.http_server_test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketAddress;
 
 import net.zephyrizing.http_server.HttpRequest;
@@ -16,6 +21,22 @@ import static org.junit.Assert.*;
 
 public class HttpServerSocketImplTest {
 
+    public class TestSocket extends Socket {
+        public TestSocket() throws IOException {
+            super();
+        }
+
+        @Override
+        public InputStream getInputStream() {
+            return new ByteArrayInputStream("GET / HTTP/1.1\r\n".getBytes());
+        }
+
+        @Override
+        public OutputStream getOutputStream() {
+            return new ByteArrayOutputStream();
+        }
+    }
+
     public class TestServerSocket extends ServerSocket {
         public TestServerSocket() throws IOException {
             super();
@@ -27,6 +48,11 @@ public class HttpServerSocketImplTest {
         public void bind(SocketAddress sockAddr) {
             InetSocketAddress iSockAddr = (InetSocketAddress)sockAddr;
             port = iSockAddr.getPort();
+        }
+
+        @Override
+        public Socket accept() throws IOException {
+            return new TestSocket();
         }
 
         public int bindCalledWith() {
@@ -43,7 +69,6 @@ public class HttpServerSocketImplTest {
         assertEquals(port, testServerSocket.bindCalledWith());
     }
 
-    @Ignore
     @Test
     public void testSocketAccept() throws Exception {
         TestServerSocket testServerSocket = new TestServerSocket();
