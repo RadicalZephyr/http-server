@@ -33,19 +33,19 @@ public class HttpServerTest {
 
     @Test
     public void serverListensAtPort() throws Exception {
-        MockHttpServerSocket serveSocket = new MockHttpServerSocket();
+        MockHttpServerSocket serverSocket = new MockHttpServerSocket();
         int port = 7070;
-        HttpServer server = new HttpServer(serveSocket, port);
+        HttpServer server = new HttpServer(serverSocket, port);
         server.listen();
-        assertEquals(1, serveSocket.bindCallCount);
-        assertEquals(port, (int)serveSocket.portList.get(0));
+        assertEquals(1, serverSocket.bindCallCount);
+        assertEquals(port, (int)serverSocket.portList.get(0));
     }
 
     @Test
     public void serverReceivesARequest() throws Exception {
-        MockHttpServerSocket serveSocket = new MockHttpServerSocket();
+        MockHttpServerSocket serverSocket = new MockHttpServerSocket();
         int port = 7070;
-        HttpServer server = new HttpServer(serveSocket, port);
+        HttpServer server = new HttpServer(serverSocket, port);
         server.listen();
 
         HttpRequest request = server.acceptRequest();
