@@ -13,6 +13,7 @@ import java.util.List;
 import net.zephyrizing.http_server.HttpConnection;
 import net.zephyrizing.http_server.HttpConnectionImpl;
 import net.zephyrizing.http_server.HttpRequest;
+import net.zephyrizing.http_server.HttpResponse;
 import net.zephyrizing.http_server.HttpServer;
 import net.zephyrizing.http_server.HttpServerSocket;
 
@@ -76,6 +77,17 @@ public class HttpServerTest {
         assertEquals(GET, request.method());
     }
 
+    public class MockHttpConnection implements HttpConnection {
+        @Override
+        public HttpRequest getRequest() {return null;}
+
+        @Override
+        public void send(HttpResponse response) {}
+
+        @Override
+        public void close() {}
+    }
+
     public class AcceptMockedHttpServer extends HttpServer {
         public int timesAcceptRequestCalled = 0;
 
@@ -98,7 +110,7 @@ public class HttpServerTest {
         @Override
         public HttpConnection acceptConnection() {
             timesAcceptRequestCalled++;
-            return null;
+            return new MockHttpConnection();
         }
     }
 
