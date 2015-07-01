@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 
 public class HttpServerSocketImpl implements HttpServerSocket {
 
@@ -30,7 +31,7 @@ public class HttpServerSocketImpl implements HttpServerSocket {
             BufferedReader in = new BufferedReader(
                 new InputStreamReader(socket.getInputStream()))) {
             String[] requestLines = new String[] { in.readLine() };
-            return new HttpRequest(requestLines);
+            return new HttpRequest(Arrays.asList(requestLines));
         } catch (IOException e) {
 
         }
