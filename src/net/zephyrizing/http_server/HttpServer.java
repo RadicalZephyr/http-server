@@ -28,6 +28,11 @@ public class HttpServer {
 
         Path public_root = FileSystems.getDefault().getPath(public_root_path);
 
+        if (!public_root.toFile().exists()) {
+            System.err.println("The directory given must exist!");
+            return;
+        }
+
         System.err.format("Starting server on port %d...", portNumber);
         try (ServerSocket serverSocket = new ServerSocket();
              HttpServerSocket httpSocket = new HttpServerSocketImpl(serverSocket);) {

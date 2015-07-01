@@ -15,10 +15,12 @@ import static org.hamcrest.CoreMatchers.*;
 
 public class SmokeTest {
     public class ServerThread extends Thread {
-        Integer port = null;
-        String directory = null;
+        Integer port;
+        String directory;
 
-        public ServerThread() {}
+        public ServerThread() { this(null, null); }
+        public ServerThread(Integer port) { this(port, null); }
+        public ServerThread(String directory) { this(null, directory); }
         public ServerThread(Integer port, String directory) {
             this.port = port;
             this.directory = directory;
@@ -55,7 +57,33 @@ public class SmokeTest {
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
 
         server.start();
-        Thread.sleep(1000);
+        Thread.sleep(100);
+
+        assertTrue(server.isAlive());
+
+        server.interrupt();
+    }
+
+    @Test
+    public void runServerWithPortArgument() throws Exception {
+        ServerThread server = new ServerThread(10000);
+        assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
+
+        server.start();
+        Thread.sleep(100);
+
+        assertTrue(server.isAlive());
+
+        server.interrupt();
+    }
+
+    @Test
+    public void runServerWithDirectoryArgument() throws Exception {
+        ServerThread server = new ServerThread("public");
+        assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
+
+        server.start();
+        Thread.sleep(100);
 
         assertTrue(server.isAlive());
 
