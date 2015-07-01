@@ -1,6 +1,8 @@
 package net.zephyrizing.http_server_test;
 
 import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +20,12 @@ public class HttpServerTest {
     MockHttpServerSocket serverSocket;
     int port = 7070;
     HttpServer server;
+    Path public_root = FileSystems.getDefault().getPath("../public");
 
     @Before
     public void initialize() {
         serverSocket = new MockHttpServerSocket();
-        server = new HttpServer(serverSocket, port);
+        server = new HttpServer(serverSocket, port, public_root);
     }
 
     public class MockHttpServerSocket implements HttpServerSocket {
@@ -68,7 +71,7 @@ public class HttpServerTest {
 
 
         public AcceptMockedHttpServer(HttpServerSocket socket, int port) {
-            super(socket, port);
+            super(socket, port, public_root);
         }
 
         public void setNumberOfAccepts(int threshold) {
@@ -96,5 +99,14 @@ public class HttpServerTest {
         server.serve();
 
         assertEquals(numCalls, server.timesAcceptRequestCalled);
+    }
+
+    @Test
+    public void serverSendsResponses() {
+        AcceptMockedHttpServer server = new AcceptMockedHttpServer(serverSocket, port);
+        int numCalls = 1;
+        server.setNumberOfAccepts(numCalls);
+
+        server.serve();
     }
 }
