@@ -9,6 +9,7 @@ import java.net.Socket;
 import net.zephyrizing.http_server.HttpConnection;
 import net.zephyrizing.http_server.HttpConnectionImpl;
 import net.zephyrizing.http_server.HttpRequest;
+import net.zephyrizing.http_server.HttpResponse;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -42,5 +43,13 @@ public class HttpConnectionTest {
         HttpConnection connection = new HttpConnectionImpl(socket, socketIn, socketOut);
         HttpRequest request = connection.getRequest();
         assertThat(request.method(), equalTo(GET));
+    }
+
+    @Test
+    public void sendsAResponse() {
+        HttpConnection connection = new HttpConnectionImpl(socket, socketIn, socketOut);
+        HttpRequest request = connection.getRequest();
+        HttpResponse response = HttpResponse.responseFor(request);
+        connection.send(response);
     }
 }
