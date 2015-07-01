@@ -24,21 +24,6 @@ public class HttpServerSocketImpl implements HttpServerSocket {
     }
 
     @Override
-    public HttpRequest accept() {
-        try (
-            Socket socket = serverSocket.accept();
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(
-                new InputStreamReader(socket.getInputStream()))) {
-            String[] requestLines = new String[] { in.readLine() };
-            return new HttpRequest(Arrays.asList(requestLines));
-        } catch (IOException e) {
-
-        }
-        return null;
-    }
-
-    @Override
     public HttpConnection acceptConnection() {
         try {
             Socket socket = serverSocket.accept();

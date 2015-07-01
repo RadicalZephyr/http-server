@@ -6,7 +6,5 @@ import java.io.IOException;
 public interface HttpServerSocket extends Closeable {
     public void bind(int port) throws IOException;
 
-    public HttpRequest accept();
-
     public HttpConnection acceptConnection();
 }
