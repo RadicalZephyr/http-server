@@ -8,5 +8,5 @@ public interface HttpConnection extends Closeable {
 
     public HttpRequest getRequest();
 
-    //public void sendResponse(HttpResponse);
+    public void send(HttpResponse response);
 }

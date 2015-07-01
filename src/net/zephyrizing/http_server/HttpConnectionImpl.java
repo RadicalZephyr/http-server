@@ -41,4 +41,9 @@ public class HttpConnectionImpl implements HttpConnection {
             return null;
         }
     }
+
+    @Override
+    public void send(HttpResponse response) {
+
+    }
 }
