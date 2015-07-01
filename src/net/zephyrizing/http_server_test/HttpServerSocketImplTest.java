@@ -15,6 +15,7 @@ import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpServerSocket;
 import net.zephyrizing.http_server.HttpServerSocketImpl;
 
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -61,10 +62,17 @@ public class HttpServerSocketImplTest {
         }
     }
 
+    TestServerSocket testServerSocket;
+    HttpServerSocket socket;
+
+    @Before
+    public void initialize() throws Exception {
+        testServerSocket = new TestServerSocket();
+        socket           = new HttpServerSocketImpl(testServerSocket);
+    }
+
     @Test
     public void testBindSocket() throws Exception {
-        TestServerSocket testServerSocket = new TestServerSocket();
-        HttpServerSocket socket = new HttpServerSocketImpl(testServerSocket);
         int port = 10000;
         socket.bind(port);
         assertEquals(port, testServerSocket.bindCalledWith());
@@ -72,8 +80,6 @@ public class HttpServerSocketImplTest {
 
     @Test
     public void testSocketAccept() throws Exception {
-        TestServerSocket testServerSocket = new TestServerSocket();
-        HttpServerSocket socket = new HttpServerSocketImpl(testServerSocket);
         socket.bind(10000);
         HttpRequest request = socket.accept();
         assertNotNull(request);
@@ -81,8 +87,6 @@ public class HttpServerSocketImplTest {
 
     @Test
     public void testSocketAcceptConnection() throws Exception {
-        TestServerSocket testServerSocket = new TestServerSocket();
-        HttpServerSocket socket = new HttpServerSocketImpl(testServerSocket);
         socket.bind(10000);
         HttpConnection connection = socket.acceptConnection();
         assertNotNull(connection);
