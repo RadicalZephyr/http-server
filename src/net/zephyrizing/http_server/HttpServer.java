@@ -37,6 +37,7 @@ public class HttpServer {
         try (ServerSocket serverSocket = new ServerSocket();
              HttpServerSocket httpSocket = new HttpServerSocketImpl(serverSocket);) {
             HttpServer server = new HttpServer(httpSocket, portNumber, public_root);
+            server.listen();
             server.serve();
         } catch (IOException e) {
             throw new RuntimeException();
@@ -70,7 +71,7 @@ public class HttpServer {
     public void serve() {
         while (acceptingConnections()) {
             try (HttpConnection connection = acceptConnection();) {
-
+                connection.send(null);
             } catch (IOException e) {
 
             }

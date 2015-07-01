@@ -29,13 +29,16 @@ public class HttpConnectionTest {
 
     Socket         socket;
     BufferedReader socketIn;
+    ByteArrayOutputStream outContents;
     PrintWriter    socketOut;
 
     @Before
     public void initialize() {
         socket    = new Socket();
         socketIn  = new BufferedReader(new StringReader(String.join("\r\n", asList(requestStrings))));
-        socketOut = new PrintWriter(new ByteArrayOutputStream());
+
+        outContents = new ByteArrayOutputStream();
+        socketOut = new PrintWriter(outContents);
     }
 
     @Test
@@ -51,5 +54,7 @@ public class HttpConnectionTest {
         HttpRequest request = connection.getRequest();
         HttpResponse response = HttpResponse.responseFor(request);
         connection.send(response);
+
+        assertThat(outContents.toString(), equalTo("HTTP/1.1 200 OK\r\n"));
     }
 }
