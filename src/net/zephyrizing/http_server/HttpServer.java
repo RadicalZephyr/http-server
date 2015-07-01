@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -13,7 +14,7 @@ import static java.util.Arrays.asList;
 
 public class HttpServer {
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         OptionParser parser = new OptionParser();
         OptionSpec<Integer> portOpt = parser.acceptsAll(asList("p", "port"))
             .withRequiredArg().ofType(Integer.class).defaultsTo(5000);
@@ -32,6 +33,8 @@ public class HttpServer {
              HttpServerSocket httpSocket = new HttpServerSocketImpl(serverSocket);) {
             HttpServer server = new HttpServer(httpSocket, portNumber, public_root);
             server.serve();
+        } catch (IOException e) {
+            throw new RuntimeException();
         }
     }
 
