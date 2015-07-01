@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.zephyrizing.http_server.HttpConnection;
 import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpServer;
 import net.zephyrizing.http_server.HttpServerSocket;
@@ -46,6 +47,11 @@ public class HttpServerTest {
         public HttpRequest accept() {
             String[] requestLines = new String[] {"GET / HTTP/1.1\r\n"};
             return new HttpRequest(asList(requestLines));
+        }
+
+        @Override
+        public HttpConnection acceptConnection() {
+            return null;
         }
 
         @Override

@@ -8,6 +8,5 @@ public interface HttpServerSocket extends Closeable {
 
     public HttpRequest accept();
 
-    @Override
-    public void close() throws IOException;
+    public HttpConnection acceptConnection();
 }

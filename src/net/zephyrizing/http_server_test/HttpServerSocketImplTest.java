@@ -10,6 +10,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketAddress;
 
+import net.zephyrizing.http_server.HttpConnection;
 import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpServerSocket;
 import net.zephyrizing.http_server.HttpServerSocketImpl;
@@ -76,5 +77,14 @@ public class HttpServerSocketImplTest {
         socket.bind(10000);
         HttpRequest request = socket.accept();
         assertNotNull(request);
+    }
+
+    @Test
+    public void testSocketAcceptConnection() throws Exception {
+        TestServerSocket testServerSocket = new TestServerSocket();
+        HttpServerSocket socket = new HttpServerSocketImpl(testServerSocket);
+        socket.bind(10000);
+        HttpConnection connection = socket.acceptConnection();
+        assertNotNull(connection);
     }
 }
