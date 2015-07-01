@@ -63,6 +63,10 @@ public class HttpServer {
         return serverSocket.accept();
     }
 
+    public HttpConnection acceptConnection() {
+        return serverSocket.acceptConnection();
+    }
+
     public boolean acceptingRequests() {
         return true;
     }
