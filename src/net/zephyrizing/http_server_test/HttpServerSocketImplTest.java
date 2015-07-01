@@ -19,7 +19,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.*;
 
 public class HttpServerSocketImplTest {
 
@@ -75,20 +76,20 @@ public class HttpServerSocketImplTest {
     public void testBindSocket() throws Exception {
         int port = 10000;
         socket.bind(port);
-        assertEquals(port, testServerSocket.bindCalledWith());
+        assertThat(testServerSocket.bindCalledWith(), equalTo(port));
     }
 
     @Test
     public void testSocketAccept() throws Exception {
         socket.bind(10000);
         HttpRequest request = socket.accept();
-        assertNotNull(request);
+        assertThat(request, notNullValue());
     }
 
     @Test
     public void testSocketAcceptConnection() throws Exception {
         socket.bind(10000);
         HttpConnection connection = socket.acceptConnection();
-        assertNotNull(connection);
+        assertThat(connection, notNullValue());
     }
 }
