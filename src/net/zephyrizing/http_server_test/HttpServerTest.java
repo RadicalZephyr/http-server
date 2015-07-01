@@ -13,6 +13,8 @@ import net.zephyrizing.http_server.HttpServerSocket;
 import org.junit.Before;
 import org.junit.Test;
 
+import static java.util.Arrays.asList;
+
 import static net.zephyrizing.http_server.HttpRequest.Method.*;
 
 import static org.junit.Assert.*;
@@ -43,7 +45,7 @@ public class HttpServerTest {
         @Override
         public HttpRequest accept() {
             String[] requestLines = new String[] {"GET / HTTP/1.1\r\n"};
-            return new HttpRequest(requestLines);
+            return new HttpRequest(asList(requestLines));
         }
 
         @Override
