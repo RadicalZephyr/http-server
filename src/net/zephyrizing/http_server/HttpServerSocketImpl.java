@@ -32,7 +32,7 @@ public class HttpServerSocketImpl implements HttpServerSocket {
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             return new HttpConnectionImpl(socket, in, out);
         } catch (IOException e) {
-            return null;
+            throw new RuntimeException(e);
         }
     }
 
