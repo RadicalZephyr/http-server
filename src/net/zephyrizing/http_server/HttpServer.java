@@ -40,7 +40,7 @@ public class HttpServer {
             server.listen();
             server.serve();
         } catch (IOException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
     }
 
@@ -73,7 +73,7 @@ public class HttpServer {
             try (HttpConnection connection = acceptConnection();) {
                 connection.send(null);
             } catch (IOException e) {
-
+                throw new RuntimeException(e);
             }
         }
     }
