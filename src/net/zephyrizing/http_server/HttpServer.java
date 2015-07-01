@@ -59,21 +59,21 @@ public class HttpServer {
         serverSocket.bind(port);
     }
 
-    public HttpRequest acceptRequest() {
-        return serverSocket.accept();
-    }
-
     public HttpConnection acceptConnection() {
         return serverSocket.acceptConnection();
     }
 
-    public boolean acceptingRequests() {
+    public boolean acceptingConnections() {
         return true;
     }
 
     public void serve() {
-        while (acceptingRequests()) {
-            HttpRequest request = acceptRequest();
+        while (acceptingConnections()) {
+            try (HttpConnection connection = acceptConnection();) {
+
+            } catch (IOException e) {
+
+            }
         }
     }
 }

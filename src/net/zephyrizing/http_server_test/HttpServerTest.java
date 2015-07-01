@@ -49,12 +49,6 @@ public class HttpServerTest {
         }
 
         @Override
-        public HttpRequest accept() {
-            String[] requestLines = new String[] {"GET / HTTP/1.1\r\n"};
-            return new HttpRequest(asList(requestLines));
-        }
-
-        @Override
         public HttpConnection acceptConnection() {
             String httpMessage = "GET / HTTP/1.1\r\n";
             BufferedReader in = new BufferedReader(new StringReader(httpMessage));
@@ -97,19 +91,19 @@ public class HttpServerTest {
         }
 
         @Override
-        public boolean acceptingRequests() {
+        public boolean acceptingConnections() {
             return timesAcceptRequestCalled < acceptThreshold;
         }
 
         @Override
-        public HttpRequest acceptRequest() {
+        public HttpConnection acceptConnection() {
             timesAcceptRequestCalled++;
             return null;
         }
     }
 
     @Test
-    public void serverAcceptsMultipleRequests() {
+    public void serverAcceptsMultipleConnections() {
         AcceptMockedHttpServer server = new AcceptMockedHttpServer(serverSocket, port);
         int numCalls = 3;
         server.setNumberOfAccepts(numCalls);

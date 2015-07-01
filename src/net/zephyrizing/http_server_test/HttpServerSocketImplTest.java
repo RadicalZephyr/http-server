@@ -80,13 +80,6 @@ public class HttpServerSocketImplTest {
     }
 
     @Test
-    public void testSocketAccept() throws Exception {
-        socket.bind(10000);
-        HttpRequest request = socket.accept();
-        assertThat(request, notNullValue());
-    }
-
-    @Test
     public void testSocketAcceptConnection() throws Exception {
         socket.bind(10000);
         HttpConnection connection = socket.acceptConnection();
