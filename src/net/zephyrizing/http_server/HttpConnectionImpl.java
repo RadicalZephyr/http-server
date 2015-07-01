@@ -4,6 +4,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.zephyrizing.http_server.HttpRequest;
 
 public class HttpConnectionImpl implements HttpConnection {
 
@@ -22,5 +26,19 @@ public class HttpConnectionImpl implements HttpConnection {
         socket.close();
         socketIn.close();
         socketOut.close();
+    }
+
+    @Override
+    public HttpRequest getRequest() {
+        List<String> lines = new ArrayList<String>();
+        String line;
+        try {
+            while (null != (line = socketIn.readLine())) {
+                lines.add(line);
+            }
+            return new HttpRequest(lines);
+        } catch (IOException e) {
+            return null;
+        }
     }
 }
