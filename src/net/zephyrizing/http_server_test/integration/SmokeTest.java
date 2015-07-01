@@ -79,7 +79,7 @@ public class SmokeTest {
 
     @Test
     public void runServerWithDirectoryArgument() throws Exception {
-        ServerThread server = new ServerThread("public");
+        ServerThread server = new ServerThread(12000, "public");
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
 
         server.start();
