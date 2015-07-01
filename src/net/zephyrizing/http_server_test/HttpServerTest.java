@@ -13,6 +13,8 @@ import net.zephyrizing.http_server.HttpServerSocket;
 import org.junit.Before;
 import org.junit.Test;
 
+import static net.zephyrizing.http_server.HttpRequest.Method.*;
+
 import static org.junit.Assert.*;
 
 public class HttpServerTest {
@@ -61,7 +63,7 @@ public class HttpServerTest {
         server.listen();
 
         HttpRequest request = server.acceptRequest();
-        assertEquals("GET", request.method());
+        assertEquals(GET, request.method());
     }
 
     public class AcceptMockedHttpServer extends HttpServer {

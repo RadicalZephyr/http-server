@@ -4,6 +4,8 @@ import net.zephyrizing.http_server.HttpRequest;
 
 import org.junit.Test;
 
+import static net.zephyrizing.http_server.HttpRequest.Method.*;
+
 import static org.junit.Assert.*;
 
 public class HttpRequestTest {
@@ -12,7 +14,7 @@ public class HttpRequestTest {
     public void canCreateGETRequest() {
         String[] requestLines = new String[] {"GET / HTTP/1.1"};
         HttpRequest request = new HttpRequest(requestLines);
-        assertEquals("GET", request.method());
+        assertEquals(GET, request.method());
         assertEquals("/", request.path());
         assertEquals("1.1", request.protocolVersion());
     }
@@ -21,7 +23,7 @@ public class HttpRequestTest {
     public void canCreatePOSTRequest() {
         String[] requestLines = new String[] {"POST /root HTTP/1.0"};
         HttpRequest request = new HttpRequest(requestLines);
-        assertEquals("POST", request.method());
+        assertEquals(POST, request.method());
         assertEquals("/root", request.path());
         assertEquals("1.0", request.protocolVersion());
     }
