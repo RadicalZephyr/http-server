@@ -1,6 +1,7 @@
 package net.zephyrizing.http_server_test;
 
 import net.zephyrizing.http_server.HttpRequest;
+import net.zephyrizing.http_server.requests.RequestBuilder;
 
 import org.junit.Test;
 
@@ -15,7 +16,7 @@ public class HttpRequestTest {
     @Test
     public void canCreateGETRequest() {
         String[] requestLines = new String[] {"GET / HTTP/1.1"};
-        HttpRequest request = new HttpRequest(asList(requestLines));
+        HttpRequest request = RequestBuilder.fromLines(asList(requestLines));
         assertEquals(GET, request.method());
         assertEquals("/", request.path());
         assertEquals("1.1", request.protocolVersion());
