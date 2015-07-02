@@ -1,6 +1,6 @@
 (set-env!
  :source-paths #{"src"}
- :dependencies '[[radicalzephyr/boot-junit "0.1.1" :scope "test"]
+ :dependencies '[[radicalzephyr/boot-junit "0.2.0-SNAPSHOT" :scope "test"]
                  [jeluard/boot-notify "0.1.2"      :scope "test"]
                  [net.sf.jopt-simple/jopt-simple "4.9"]])
 
