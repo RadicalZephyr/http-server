@@ -71,7 +71,7 @@ public class HttpServer {
     public void serve() {
         while (acceptingConnections()) {
             try (HttpConnection connection = acceptConnection();) {
-                connection.send(null);
+                connection.send(HttpResponse.responseFor(connection.getRequest()));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
