@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.zephyrizing.http_server.HttpRequest;
-import net.zephyrizing.http_server.HttpProtocol;
 
 public class HttpConnectionImpl implements HttpConnection {
 
