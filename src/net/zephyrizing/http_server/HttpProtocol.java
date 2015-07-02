@@ -1,5 +1,6 @@
 package net.zephyrizing.http_server;
 
+import java.util.Arrays;
 import java.util.List;
 
 import net.zephyrizing.http_server.HttpRequest;
@@ -19,7 +20,7 @@ public class HttpProtocol {
         return new HttpRequest(method, path, protocolVersion);
     }
 
-    public static String responseToString(HttpResponse response) {
-        return "HTTP/1.1 200 OK\r\n";
+    public static List<String> responseToLines(HttpResponse response) {
+        return Arrays.asList(new String[] {"HTTP/1.1 200 OK"});
     }
 }
