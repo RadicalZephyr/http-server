@@ -46,7 +46,7 @@ public class HttpConnectionImpl implements HttpConnection {
 
     @Override
     public void send(HttpResponse response) {
-        socketOut.print("HTTP/1.1 200 OK\r\n");
+        socketOut.print(HttpProtocol.responseToString(response));
         socketOut.flush();
     }
 }
