@@ -20,4 +20,13 @@ public class HttpResponseTest {
         HttpResponse response = HttpResponse.responseFor(request);
         assertThat(response.protocolVersion(), equalTo(request.protocolVersion()));
     }
+
+    @Test
+    public void isProtocolSame10() {
+        String[] lines = {"GET / HTTP/1.0"};
+        HttpRequest request = new HttpRequest(Arrays.asList(lines));
+        HttpResponse response = HttpResponse.responseFor(request);
+        assertThat(response.protocolVersion(), equalTo(request.protocolVersion()));
+    }
+
 }
