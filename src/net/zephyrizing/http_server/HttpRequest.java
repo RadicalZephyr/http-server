@@ -7,9 +7,9 @@ import java.util.List;
 public class HttpRequest {
     public static enum Method {GET, POST};
 
-    private Method method;
-    private String path;
-    private String protocolVersion;
+    private final Method method;
+    private final String path;
+    private final String protocolVersion;
 
     public HttpRequest(Method method, String path, String protocolVersion) {
         this.method          = method;
