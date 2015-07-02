@@ -21,6 +21,6 @@ public class HttpProtocol {
     }
 
     public static List<String> responseToLines(HttpResponse response) {
-        return Arrays.asList(new String[] {"HTTP/1.1 200 OK"});
+        return Arrays.asList(new String[] { String.format("HTTP/%s 200 OK", response.protocolVersion())});
     }
 }
