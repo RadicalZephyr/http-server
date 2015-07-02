@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.zephyrizing.http_server.HttpRequest;
+import net.zephyrizing.http_server.requests.RequestBuilder;
 
 public class HttpConnectionImpl implements HttpConnection {
 
@@ -36,7 +38,7 @@ public class HttpConnectionImpl implements HttpConnection {
             while (null != (line = socketIn.readLine())) {
                 lines.add(line);
             }
-            return new HttpRequest(lines);
+            return RequestBuilder.fromLines(lines);
         } catch (IOException e) {
             return null;
         }

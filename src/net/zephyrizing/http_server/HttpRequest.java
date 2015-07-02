@@ -1,5 +1,7 @@
 package net.zephyrizing.http_server;
 
+import net.zephyrizing.http_server.requests.RequestBuilder;
+
 import java.util.List;
 
 public class HttpRequest {
@@ -9,12 +11,10 @@ public class HttpRequest {
     private String path;
     private String protocolVersion;
 
-    public HttpRequest(List<String> request) {
-        String firstLine = request.get(0);
-        String[] methodPathProto = firstLine.split(" ");
-        this.method          = Method.valueOf(methodPathProto[0]);
-        this.path            = methodPathProto[1];
-        this.protocolVersion = methodPathProto[2].replace("HTTP/", "");
+    public HttpRequest(Method method, String path, String protocolVersion) {
+        this.method          = method;
+        this.path            = path;
+        this.protocolVersion = protocolVersion;
     }
 
     public Method method() {

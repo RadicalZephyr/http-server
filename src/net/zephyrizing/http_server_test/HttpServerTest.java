@@ -13,6 +13,7 @@ import java.util.List;
 import net.zephyrizing.http_server.HttpConnection;
 import net.zephyrizing.http_server.HttpConnectionImpl;
 import net.zephyrizing.http_server.HttpRequest;
+import net.zephyrizing.http_server.HttpRequest.Method;
 import net.zephyrizing.http_server.HttpResponse;
 import net.zephyrizing.http_server.HttpServer;
 import net.zephyrizing.http_server.HttpServerSocket;
@@ -81,7 +82,7 @@ public class HttpServerTest {
         @Override
         public HttpRequest getRequest() {
             String[] lines = {"GET / HTTP/1.1"};
-            return new HttpRequest(Arrays.asList(lines));
+            return new HttpRequest(Method.GET, "/", "1.1");
         }
 
         @Override
