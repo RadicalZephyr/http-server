@@ -1,4 +1,4 @@
-package net.zephyrizing.http_server.requests;
+package net.zephyrizing.http_server;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import net.zephyrizing.http_server.HttpRequest.Method;
 
 import static net.zephyrizing.http_server.HttpRequest.Method.*;
 
-public class RequestBuilder {
+public class HttpProtocol {
     public static HttpRequest fromLines(List<String> lines) {
         String firstLine = lines.get(0);
         String[] methodPathProto = firstLine.split(" ");

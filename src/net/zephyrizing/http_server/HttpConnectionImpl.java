@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.zephyrizing.http_server.HttpRequest;
-import net.zephyrizing.http_server.requests.RequestBuilder;
+import net.zephyrizing.http_server.HttpProtocol;
 
 public class HttpConnectionImpl implements HttpConnection {
 
@@ -38,7 +38,7 @@ public class HttpConnectionImpl implements HttpConnection {
             while (null != (line = socketIn.readLine())) {
                 lines.add(line);
             }
-            return RequestBuilder.fromLines(lines);
+            return HttpProtocol.fromLines(lines);
         } catch (IOException e) {
             return null;
         }
