@@ -38,7 +38,7 @@ public class HttpConnectionImpl implements HttpConnection {
             while (null != (line = socketIn.readLine())) {
                 lines.add(line);
             }
-            return HttpProtocol.fromLines(lines);
+            return HttpProtocol.requestFromLines(lines);
         } catch (IOException e) {
             return null;
         }

@@ -16,7 +16,7 @@ public class HttpRequestTest {
     @Test
     public void canCreateGETRequest() {
         String[] requestLines = new String[] {"GET / HTTP/1.1"};
-        HttpRequest request = HttpProtocol.fromLines(asList(requestLines));
+        HttpRequest request = HttpProtocol.requestFromLines(asList(requestLines));
         assertEquals(GET, request.method());
         assertEquals("/", request.path());
         assertEquals("1.1", request.protocolVersion());
@@ -25,7 +25,7 @@ public class HttpRequestTest {
     @Test
     public void canCreatePOSTRequest() {
         String[] requestLines = new String[] {"POST /root HTTP/1.0"};
-        HttpRequest request = HttpProtocol.fromLines(asList(requestLines));
+        HttpRequest request = HttpProtocol.requestFromLines(asList(requestLines));
         assertEquals(POST, request.method());
         assertEquals("/root", request.path());
         assertEquals("1.0", request.protocolVersion());
