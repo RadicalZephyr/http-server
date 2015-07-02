@@ -79,7 +79,10 @@ public class HttpServerTest {
 
     public class MockHttpConnection implements HttpConnection {
         @Override
-        public HttpRequest getRequest() {return null;}
+        public HttpRequest getRequest() {
+            String[] lines = {"GET / HTTP/1.1"};
+            return new HttpRequest(Arrays.asList(lines));
+        }
 
         @Override
         public void send(HttpResponse response) {}
