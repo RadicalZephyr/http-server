@@ -1,7 +1,5 @@
 package net.zephyrizing.http_server;
 
-import net.zephyrizing.http_server.HttpProtocol;
-
 import java.util.List;
 
 public class HttpRequest {
