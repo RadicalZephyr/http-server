@@ -8,7 +8,7 @@ import net.zephyrizing.http_server.HttpRequest.Method;
 import static net.zephyrizing.http_server.HttpRequest.Method.*;
 
 public class HttpProtocol {
-    public static HttpRequest fromLines(List<String> lines) {
+    public static HttpRequest requestFromLines(List<String> lines) {
         String firstLine = lines.get(0);
         String[] methodPathProto = firstLine.split(" ");
         Method method          = Method.valueOf(methodPathProto[0]);
