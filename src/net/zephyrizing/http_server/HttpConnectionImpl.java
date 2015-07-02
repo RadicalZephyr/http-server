@@ -23,9 +23,9 @@ public class HttpConnectionImpl implements HttpConnection {
 
     @Override
     public void close() throws IOException {
-        socket.close();
         socketIn.close();
         socketOut.close();
+        socket.close();
     }
 
     @Override
