@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpRequest.Method;
+import net.zephyrizing.http_server.HttpResponse;
 
 import static net.zephyrizing.http_server.HttpRequest.Method.*;
 
@@ -16,5 +17,9 @@ public class HttpProtocol {
         String protocolVersion = methodPathProto[2].replace("HTTP/", "");
 
         return new HttpRequest(method, path, protocolVersion);
+    }
+
+    public static String responseToString(HttpResponse response) {
+        return "HTTP/1.1 200 OK\r\n";
     }
 }
