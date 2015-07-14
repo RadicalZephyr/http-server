@@ -20,7 +20,7 @@ public class HttpProtocol {
         return new HttpRequest(method, path, protocolVersion);
     }
 
-    public static List<String> responseToLines(HttpResponse response) {
+    public static Iterable<String> responseToLines(HttpResponse response) {
         return Arrays.asList(new String[] { String.format("HTTP/%s 200 OK", response.protocolVersion())});
     }
 }
