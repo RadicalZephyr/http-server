@@ -34,9 +34,12 @@ public class HttpConnectionImpl implements HttpConnection {
         List<String> lines = new ArrayList<String>();
         String line;
         try {
-            while (null != (line = socketIn.readLine())) {
+            do {
+                line = socketIn.readLine();
+
                 lines.add(line);
-            }
+            } while (!(line == null || line.equals("")));
+
             return HttpProtocol.requestFromLines(lines);
         } catch (IOException e) {
             return null;
