@@ -52,7 +52,7 @@ public class SmokeTest {
     }
 
 
-    @Ignore @Test
+    @Test
     public void runDefaultServer() throws Exception {
         ServerThread server = new ServerThread();
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
@@ -65,7 +65,7 @@ public class SmokeTest {
         server.interrupt();
     }
 
-    @Ignore @Test
+    @Test
     public void runServerWithPortArgument() throws Exception {
         ServerThread server = new ServerThread(10000);
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
@@ -78,7 +78,7 @@ public class SmokeTest {
         server.interrupt();
     }
 
-    @Ignore @Test
+    @Test
     public void runServerWithDirectoryArgument() throws Exception {
         ServerThread server = new ServerThread(12000, "public");
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
