@@ -3,7 +3,9 @@ package net.zephyrizing.http_server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 import joptsimple.OptionParser;
@@ -26,9 +28,9 @@ public class HttpServer {
         int portNumber = options.valueOf(portOpt);
         String public_root_path = options.valueOf(rootOpt);
 
-        Path public_root = FileSystems.getDefault().getPath(public_root_path);
+        Path public_root = Paths.get(public_root_path);
 
-        if (!public_root.toFile().exists()) {
+        if (!Files.isDirectory(public_root)) {
             System.err.println("The directory given must exist!");
             return;
         }
