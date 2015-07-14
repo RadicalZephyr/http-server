@@ -1,7 +1,11 @@
 package net.zephyrizing.http_server_test.integration;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -88,6 +92,34 @@ public class SmokeTest {
 
         assertTrue(server.isAlive());
 
+        server.interrupt();
+    }
+
+    @Test
+    public void runServerAndGetResponse() throws Exception {
+        int port = 14000;
+        ServerThread server = new ServerThread(port, "public");
+        assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
+
+        server.start();
+        Thread.sleep(100);
+
+        try (Socket socket = new Socket("localhost", port);
+             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+             BufferedReader in = new BufferedReader(
+                 new InputStreamReader(socket.getInputStream()));) {
+            out.print("GET / HTTP/1.1\r\n");
+            out.print("Host: localhost\r\n");
+            out.print("\r\n");
+            out.flush();
+
+            System.out.println("Waiting for response...");
+
+            String line;
+            while ((line = in.readLine()) != null) {
+                System.out.println(line);
+            }
+        }
         server.interrupt();
     }
 }
