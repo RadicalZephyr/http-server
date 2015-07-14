@@ -73,7 +73,14 @@ public class HttpServer {
     public void serve() {
         while (acceptingConnections()) {
             try (HttpConnection connection = acceptConnection();) {
-                connection.send(HttpResponse.responseFor(connection.getRequest()));
+                HttpRequest request = connection.getRequest();
+                HttpResponse response = HttpResponse.responseFor(request);
+
+                Path requestedPath = public_root.resolve(request.path());
+                if (Files.exists(requestedPath)) {
+                    response.setContent(requestedPath);
+                }
+                connection.send(response);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
