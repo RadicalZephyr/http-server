@@ -24,7 +24,8 @@
  jar {:file "server.jar"
       :manifest {"Main-Class" "net.zephyrizing.http_server.HttpServer"}}
  sift {:invert true
-       :include #{#"\.java$"}})
+       :include #{#"\.java$"}}
+ junit {:classes #{"UnitTests"}})
 
 ;;; This prevents a name collision WARNING between the test task and
 ;;; clojure.core/test, a function that nobody really uses or cares
