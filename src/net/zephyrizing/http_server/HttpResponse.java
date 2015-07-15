@@ -1,5 +1,7 @@
 package net.zephyrizing.http_server;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
@@ -38,6 +40,13 @@ public class HttpResponse {
     }
 
     public Stream<String> getDataStream() {
+        if (this.content != null) {
+            try {
+                return Files.lines(this.content);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return emptyStringStreamBuilder().build();
     }
 

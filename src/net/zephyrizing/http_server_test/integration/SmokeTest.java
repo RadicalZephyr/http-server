@@ -108,7 +108,7 @@ public class SmokeTest {
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
              BufferedReader in = new BufferedReader(
                  new InputStreamReader(socket.getInputStream()));) {
-            out.print("GET / HTTP/1.1\r\n");
+            out.print("GET /.gitkeep HTTP/1.1\r\n");
             out.print("Host: localhost\r\n");
             out.print("\r\n");
             out.flush();
