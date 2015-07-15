@@ -30,9 +30,7 @@ public class HttpResponse {
     }
 
     public Stream<String> getStatusStream() {
-        return emptyStringStreamBuilder()
-            .add(getStatus())
-            .build();
+        return Stream.of(getStatus());
     }
 
     public Stream<String> getHeaderStream() {
