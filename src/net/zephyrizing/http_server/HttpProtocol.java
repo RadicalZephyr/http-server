@@ -2,6 +2,7 @@ package net.zephyrizing.http_server;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpRequest.Method;
@@ -20,7 +21,11 @@ public class HttpProtocol {
         return new HttpRequest(method, path, protocolVersion);
     }
 
-    public static Iterable<String> responseToLines(HttpResponse response) {
-        return Arrays.asList(new String[] { String.format("HTTP/%s 200 OK", response.protocolVersion())});
+    public static Stream<String> responseToLines(HttpResponse response) {
+        Stream.Builder<String> stb = Stream.builder();
+        Stream<String> statusLine = stb
+            .add(String.format("HTTP/%s 200 OK", response.protocolVersion()))
+            .build();
+        return statusLine;
     }
 }
