@@ -23,9 +23,16 @@ public class HttpProtocol {
 
     public static Stream<String> responseStream(HttpResponse response) {
         Stream.Builder<String> stb = Stream.builder();
+
         Stream<String> statusLine = stb
             .add(String.format("HTTP/%s 200 OK", response.protocolVersion()))
             .build();
-        return statusLine;
+        Stream<String> heading = Stream.concat(statusLine, response.getHeaderStream());
+
+        stb = Stream.builder();
+        Stream<String> body = Stream.concat(stb.add("").build(), response.getDataStream());
+        Stream<String> responseStream = Stream.concat(heading, body);
+
+        return responseStream;
     }
 }
