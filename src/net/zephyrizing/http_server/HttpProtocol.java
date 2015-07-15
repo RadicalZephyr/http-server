@@ -28,9 +28,7 @@ public class HttpProtocol {
         Stream<String> body = Stream.concat(emptyLine(),
                                             response.getDataStream());
 
-        Stream<String> responseStream = Stream.concat(heading, body);
-
-        return responseStream;
+        return Stream.concat(heading, body);
     }
 
     private static Stream<String> emptyLine() {
