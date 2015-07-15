@@ -21,7 +21,7 @@ public class HttpProtocol {
         return new HttpRequest(method, path, protocolVersion);
     }
 
-    public static Stream<String> responseToLines(HttpResponse response) {
+    public static Stream<String> responseStream(HttpResponse response) {
         Stream.Builder<String> stb = Stream.builder();
         Stream<String> statusLine = stb
             .add(String.format("HTTP/%s 200 OK", response.protocolVersion()))

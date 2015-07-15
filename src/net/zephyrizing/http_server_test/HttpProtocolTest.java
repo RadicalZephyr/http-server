@@ -19,7 +19,7 @@ public class HttpProtocolTest {
     public void createOkResponse() {
         HttpRequest request = new HttpRequest(Method.GET, "/", "1.1");
         HttpResponse response = HttpResponse.responseFor(request);
-        assertThat(HttpProtocol.responseToLines(response).collect(Collectors.toList()),
+        assertThat(HttpProtocol.responseStream(response).collect(Collectors.toList()),
                    hasItem(equalTo("HTTP/1.1 200 OK")));
     }
 
@@ -27,7 +27,7 @@ public class HttpProtocolTest {
     public void createOkResponse10() {
         HttpRequest request = new HttpRequest(Method.GET, "/", "1.0");
         HttpResponse response = HttpResponse.responseFor(request);
-        assertThat(HttpProtocol.responseToLines(response).collect(Collectors.toList()),
+        assertThat(HttpProtocol.responseStream(response).collect(Collectors.toList()),
                    hasItem(equalTo("HTTP/1.0 200 OK")));
     }
 }

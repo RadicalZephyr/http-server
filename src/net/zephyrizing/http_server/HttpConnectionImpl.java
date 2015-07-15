@@ -48,7 +48,7 @@ public class HttpConnectionImpl implements HttpConnection {
 
     @Override
     public void send(HttpResponse response) {
-        HttpProtocol.responseToLines(response).forEachOrdered(
+        HttpProtocol.responseStream(response).forEachOrdered(
             (String s) -> {
                 socketOut.print(s);
                 socketOut.print("\r\n");
