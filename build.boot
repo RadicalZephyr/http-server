@@ -34,10 +34,17 @@
   (ns-unmap 'boot.user 'test))
 
 (deftask test
-  "Compile and run my jUnit tests."
+  "Compile and run my jUnit unit tests."
   []
   (comp (javac)
         (junit)))
+
+(deftask test-all
+  "Compile and run all jUnit tests."
+  []
+  (comp (javac)
+        (junit :classes #{"UnitTests"
+                          "IntegrationTests"})))
 
 (deftask build
   "Build my http server."
