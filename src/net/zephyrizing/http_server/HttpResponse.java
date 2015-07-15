@@ -30,20 +30,20 @@ public class HttpResponse {
     }
 
     public Stream<String> getStatusStream() {
-        return emptyStringStream()
+        return emptyStringStreamBuilder()
             .add(getStatus())
             .build();
     }
 
     public Stream<String> getHeaderStream() {
-        return emptyStringStream();
+        return emptyStringStreamBuilder().build();
     }
 
     public Stream<String> getDataStream() {
-        return emptyStringStream();
+        return emptyStringStreamBuilder().build();
     }
 
-    private static Stream.Builder<String> emptyStringStream() {
+    private static Stream.Builder<String> emptyStringStreamBuilder() {
         return Stream.builder();
     }
 }
