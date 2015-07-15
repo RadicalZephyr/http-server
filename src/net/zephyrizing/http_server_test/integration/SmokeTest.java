@@ -35,9 +35,9 @@ public class SmokeTest {
         public void run() {
             PrintStream oldErr = System.err;
             PrintStream newErr = new PrintStream(new ByteArrayOutputStream());
-            //System.setErr(newErr);
+            System.setErr(newErr);
             HttpServer.main(buildOptions());
-            //System.setErr(oldErr);
+            System.setErr(oldErr);
         }
 
         public String[] buildOptions() {
@@ -112,8 +112,6 @@ public class SmokeTest {
             out.print("Host: localhost\r\n");
             out.print("\r\n");
             out.flush();
-
-            System.out.println("Waiting for response...");
 
             String line;
             while ((line = in.readLine()) != null) {
