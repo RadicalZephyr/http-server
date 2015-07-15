@@ -45,4 +45,5 @@
   (comp (javac)
         (pom)
         (sift)
+        (uber)
         (jar)))
