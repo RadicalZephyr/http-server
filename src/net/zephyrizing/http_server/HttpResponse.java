@@ -24,13 +24,26 @@ public class HttpResponse {
         content = file;
     }
 
+    public String getStatus() {
+        return String.format("HTTP/%s %d %s",
+                             protocolVersion(), 200, "OK");
+    }
+
+    public Stream<String> getStatusStream() {
+        return emptyStringStream()
+            .add(getStatus())
+            .build();
+    }
+
     public Stream<String> getHeaderStream() {
-        Stream.Builder<String> stb = Stream.builder();
-        return stb.build();
+        return emptyStringStream();
     }
 
     public Stream<String> getDataStream() {
-        Stream.Builder<String> stb = Stream.builder();
-        return stb.build();
+        return emptyStringStream();
+    }
+
+    private static Stream.Builder<String> emptyStringStream() {
+        return Stream.builder();
     }
 }
