@@ -55,6 +55,6 @@ public class HttpConnectionTest {
         HttpResponse response = HttpResponse.responseFor(request);
         connection.send(response);
 
-        assertThat(outContents.toString(), equalTo("HTTP/1.1 200 OK\r\n"));
+        assertThat(outContents.toString(), equalTo("HTTP/1.1 200 OK\r\n\r\n"));
     }
 }
