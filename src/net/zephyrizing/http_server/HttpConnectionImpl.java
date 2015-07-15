@@ -31,27 +31,14 @@ public class HttpConnectionImpl implements HttpConnection {
 
     @Override
     public HttpRequest getRequest() {
-        List<String> lines = new ArrayList<String>();
-        String line;
-        try {
-            do {
-                line = socketIn.readLine();
-
-                lines.add(line);
-            } while (!(line == null || line.equals("")));
-
-            return HttpProtocol.requestFromLines(lines);
-        } catch (IOException e) {
-            return null;
-        }
+        return HttpProtocol.requestFromLines(socketIn.lines());
     }
 
     @Override
     public void send(HttpResponse response) {
         HttpProtocol.responseStream(response).forEachOrdered(
             (String s) -> {
-                socketOut.print(s);
-                socketOut.print("\r\n");
+                socketOut.append(s).append("\r\n");
             });
 
         socketOut.flush();
