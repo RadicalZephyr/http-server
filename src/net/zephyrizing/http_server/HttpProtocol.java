@@ -32,7 +32,6 @@ public class HttpProtocol {
     }
 
     private static Stream<String> emptyLine() {
-        Stream.Builder<String> stb = Stream.builder();
-        return stb.add("").build();
+        return Stream.of("");
     }
 }
