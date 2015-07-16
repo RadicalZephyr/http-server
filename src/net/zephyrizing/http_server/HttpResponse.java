@@ -5,8 +5,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
+import net.zephyrizing.http_server.page.ContentProvider;
+
 public class HttpResponse {
-    private Path content;
+    private ContentProvider provider;
 
     public static HttpResponse responseFor(HttpRequest request) {
         return new HttpResponse(request.protocolVersion());
@@ -22,8 +24,8 @@ public class HttpResponse {
         return this.protocolVersion;
     }
 
-    public void setContent(Path file) {
-        content = file;
+    public void setContent(ContentProvider provider) {
+        this.provider = provider;
     }
 
     public String getStatus() {
@@ -40,19 +42,8 @@ public class HttpResponse {
     }
 
     public Stream<String> getDataStream() {
-        try {
-            if (this.content == null) {
-                return emptyStringStreamBuilder().build();
-            } else if (Files.isDirectory(this.content)) {
-                return Files.list(this.content)
-                    .map((Path entry) -> String.format("<a href=\"/%s\">%s</a>",
-                                                       entry.toString(),
-                                                       entry.getFileName()));
-            } else if (Files.isRegularFile(this.content)) {
-                return Files.lines(this.content);
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (this.provider != null && this.provider.contentExists()) {
+            return this.provider.getContent();
         }
         return emptyStringStreamBuilder().build();
     }
