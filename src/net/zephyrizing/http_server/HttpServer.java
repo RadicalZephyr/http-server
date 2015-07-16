@@ -76,7 +76,7 @@ public class HttpServer {
                 HttpRequest request = connection.getRequest();
                 HttpResponse response = HttpResponse.responseFor(request);
 
-                Path requestedPath = public_root.resolve(request.path());
+                Path requestedPath = request.getResolvedPath(public_root);
                 if (Files.exists(requestedPath)) {
                     response.setContent(requestedPath);
                 }

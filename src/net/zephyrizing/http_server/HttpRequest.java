@@ -1,5 +1,7 @@
 package net.zephyrizing.http_server;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class HttpRequest {
@@ -21,6 +23,12 @@ public class HttpRequest {
 
     public String path() {
         return path;
+    }
+
+    public Path getResolvedPath(Path root) {
+        Path requestedPath = Paths.get(this.path);
+        Path relativeRequestedPath = Paths.get("/").relativize(requestedPath);
+        return root.resolve(relativeRequestedPath);
     }
 
     public String protocolVersion() {
