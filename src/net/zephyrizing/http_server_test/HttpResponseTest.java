@@ -10,6 +10,7 @@ import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpRequest.Method;
 import net.zephyrizing.http_server.HttpResponse;
 
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -18,8 +19,14 @@ import static org.hamcrest.CoreMatchers.*;
 
 public class HttpResponseTest {
 
-    HttpRequest request = new HttpRequest(Method.GET, "/", "1.1");
-    HttpResponse response = HttpResponse.responseFor(request);
+    HttpRequest  request;
+    HttpResponse response;
+
+    @Before
+    public void initialize() {
+        request = new HttpRequest(Method.GET, "/", "1.1");
+        response = HttpResponse.responseFor(request);
+    }
 
     @Test
     public void isProtocolSame() {
