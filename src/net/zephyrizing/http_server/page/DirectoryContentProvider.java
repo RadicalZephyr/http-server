@@ -7,10 +7,12 @@ import java.util.stream.Stream;
 
 public class DirectoryContentProvider implements ContentProvider {
 
-    private Path content;
+    private final Path root;
+    private final Path content;
 
-    public DirectoryContentProvider(Path content) {
-        this.content = content;
+    public DirectoryContentProvider(Path root, Path content) {
+        this.root = root;
+        this.content = root.resolve(content);
     }
 
     @Override
@@ -23,7 +25,7 @@ public class DirectoryContentProvider implements ContentProvider {
         try {
             return Files.list(this.content)
                 .map((Path entry) -> String.format("<a href=\"/%s\">%s</a><br>",
-                                                   entry.toString(),
+                                                   this.root.relativize(entry).toString(),
                                                    entry.getFileName()));
         } catch (IOException e) {
             throw new RuntimeException(e);
