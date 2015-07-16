@@ -3,6 +3,8 @@ package net.zephyrizing.http_server_test;
 import net.zephyrizing.http_server_test.page.FileContentProviderTest;
 import net.zephyrizing.http_server_test.page.DirectoryContentProviderTest;
 
+import net.zephyrizing.http_server_test.requests.FileSystemHandlerTest;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -15,7 +17,8 @@ import org.junit.runners.Suite;
             HttpServerSocketImplTest.class,
             HttpServerTest.class,
             FileContentProviderTest.class,
-            DirectoryContentProviderTest.class})
+            DirectoryContentProviderTest.class,
+            FileSystemHandlerTest.class})
 public class UnitTests {
 
 }
