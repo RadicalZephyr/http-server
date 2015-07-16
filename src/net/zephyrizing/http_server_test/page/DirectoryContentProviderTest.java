@@ -31,10 +31,11 @@ public class DirectoryContentProviderTest {
         Path contentFile1 = Files.createTempFile(contentDir, "http-response-test", "");
         Path contentFile2 = Files.createTempFile(contentDir, "http-response-test", "");
 
-        String link1 = String.format("<a href=\"/%s\">%s</a>",
+        String format = "<a href=\"/%s\">%s</a><br>";
+        String link1 = String.format(format,
                                      contentFile1.toString(),
                                      contentFile1.getFileName());
-        String link2 = String.format("<a href=\"/%s\">%s</a>",
+        String link2 = String.format(format,
                                      contentFile2.toString(),
                                      contentFile2.getFileName());
 

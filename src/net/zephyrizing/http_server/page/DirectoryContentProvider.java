@@ -22,7 +22,7 @@ public class DirectoryContentProvider implements ContentProvider {
     public Stream<String> getContent() {
         try {
             return Files.list(this.content)
-                .map((Path entry) -> String.format("<a href=\"/%s\">%s</a>",
+                .map((Path entry) -> String.format("<a href=\"/%s\">%s</a><br>",
                                                    entry.toString(),
                                                    entry.getFileName()));
         } catch (IOException e) {
