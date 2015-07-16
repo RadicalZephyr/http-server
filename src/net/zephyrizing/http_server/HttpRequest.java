@@ -8,12 +8,12 @@ public class HttpRequest {
     public static enum Method {GET, POST};
 
     private final Method method;
-    private final String path;
+    private final Path   path;
     private final String protocolVersion;
 
     public HttpRequest(Method method, String path, String protocolVersion) {
         this.method          = method;
-        this.path            = path;
+        this.path            = Paths.get(path);
         this.protocolVersion = protocolVersion;
     }
 
@@ -21,13 +21,12 @@ public class HttpRequest {
         return method;
     }
 
-    public String path() {
+    public Path path() {
         return path;
     }
 
     public Path getResolvedPath(Path root) {
-        Path requestedPath = Paths.get(this.path);
-        Path relativeRequestedPath = Paths.get("/").relativize(requestedPath);
+        Path relativeRequestedPath = Paths.get("/").relativize(this.path);
         return root.resolve(relativeRequestedPath);
     }
 

@@ -23,7 +23,7 @@ public class HttpRequestTest {
         Stream<String> requestLines = Stream.of("GET / HTTP/1.1", "");
         HttpRequest request = HttpProtocol.requestFromLines(requestLines);
         assertEquals(GET, request.method());
-        assertEquals("/", request.path());
+        assertEquals(Paths.get("/"), request.path());
         assertEquals("1.1", request.protocolVersion());
     }
 
@@ -32,7 +32,7 @@ public class HttpRequestTest {
         Stream<String> requestLines = Stream.of("POST /root HTTP/1.0", "");
         HttpRequest request = HttpProtocol.requestFromLines(requestLines);
         assertEquals(POST, request.method());
-        assertEquals("/root", request.path());
+        assertEquals(Paths.get("/root"), request.path());
         assertEquals("1.0", request.protocolVersion());
     }
 
