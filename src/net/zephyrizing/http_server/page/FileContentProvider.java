@@ -13,6 +13,11 @@ public class FileContentProvider implements ContentProvider {
     }
 
     @Override
+    public boolean contentExists() {
+        return Files.exists(this.content);
+    }
+
+    @Override
     public Stream<String> getContent() {
         try {
             return Files.lines(this.content);
