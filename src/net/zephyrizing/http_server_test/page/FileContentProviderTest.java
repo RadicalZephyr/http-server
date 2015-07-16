@@ -3,6 +3,7 @@ package net.zephyrizing.http_server_test.page;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,16 @@ import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
 public class FileContentProviderTest {
+
+    @Test(expected=java.lang.RuntimeException.class)
+    public void testNonExistentFile() throws Exception {
+        Path contentFile = Files.createTempFile("http-response-test", "");
+        Files.deleteIfExists(contentFile);
+
+        ContentProvider provider = new FileContentProvider(contentFile);
+        assertThat(provider.contentExists(), equalTo(false));
+        provider.getContent();
+    }
 
     @Test
     public void testProduceContent() throws Exception {
