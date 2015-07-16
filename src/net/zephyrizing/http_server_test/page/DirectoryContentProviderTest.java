@@ -35,7 +35,7 @@ public class DirectoryContentProviderTest {
         ContentProvider provider = new DirectoryContentProvider(rootDir, relativeDir);
         assertThat(provider.contentExists(), equalTo(true));
         assertThat(provider.getContent().collect(Collectors.toList()),
-                   hasItem("<h1>Index of /</h1>"));
+                   everyItem(anyOf(equalTo("<h1>Index of /</h1>"))));
     }
 
     @Test
@@ -67,5 +67,4 @@ public class DirectoryContentProviderTest {
                                    equalTo(link1),
                                    equalTo(link2))));
     }
-
 }

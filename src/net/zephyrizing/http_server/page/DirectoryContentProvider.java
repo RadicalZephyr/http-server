@@ -25,11 +25,11 @@ public class DirectoryContentProvider implements ContentProvider {
         try {
             Stream<String> headings = Stream.of(String.format("<h1>Index of /%s</h1>",
                                                               relativeToRoot(this.content).getFileName()));
-            Path parentPath = relativeToRoot(this.content.getParent());
-            if (parentPath != null) {
+            Path parentPath = this.content.getParent();
+            if (parentPath.startsWith(this.root)) {
                 headings = Stream.concat(headings,
                                          Stream.of(String.format("<a href=\"/%s\">..</a><br>",
-                                                                 parentPath.toString())));
+                                                                 relativeToRoot(parentPath).toString())));
             }
             return Stream.concat(headings,
                                  Files.list(this.content)
