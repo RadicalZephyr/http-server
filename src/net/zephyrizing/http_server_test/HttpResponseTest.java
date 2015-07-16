@@ -18,25 +18,21 @@ import static org.hamcrest.CoreMatchers.*;
 
 public class HttpResponseTest {
 
+    HttpRequest request = new HttpRequest(Method.GET, "/", "1.1");
+    HttpResponse response = HttpResponse.responseFor(request);
+
     @Test
     public void isProtocolSame() {
-        HttpRequest request = new HttpRequest(Method.GET, "/", "1.1");
-        HttpResponse response = HttpResponse.responseFor(request);
         assertThat(response.protocolVersion(), equalTo(request.protocolVersion()));
     }
 
     @Test
     public void isProtocolSame10() {
-        HttpRequest request = new HttpRequest(Method.GET, "/", "1.0");
-        HttpResponse response = HttpResponse.responseFor(request);
         assertThat(response.protocolVersion(), equalTo(request.protocolVersion()));
     }
 
     @Test
     public void hasFileContent() throws Exception {
-        HttpRequest request = new HttpRequest(Method.GET, "/", "1.0");
-        HttpResponse response = HttpResponse.responseFor(request);
-
         List<String> content = Arrays.asList(new String[] {"abc", "def", "ghi"});
         Path contentFile = Files.createTempFile("http-response-",
                                             "-test");
