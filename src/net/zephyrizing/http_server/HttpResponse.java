@@ -40,12 +40,19 @@ public class HttpResponse {
     }
 
     public Stream<String> getDataStream() {
-        if (this.content != null) {
-            try {
+        try {
+            if (this.content == null) {
+                return emptyStringStreamBuilder().build();
+            } else if (Files.isDirectory(this.content)) {
+                return Files.list(this.content)
+                    .map((Path entry) -> String.format("<a href=\"/%s\">%s</a>",
+                                                       entry.toString(),
+                                                       entry.getFileName()));
+            } else if (Files.isRegularFile(this.content)) {
                 return Files.lines(this.content);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         return emptyStringStreamBuilder().build();
     }
