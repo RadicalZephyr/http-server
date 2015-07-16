@@ -23,9 +23,9 @@ public class DirectoryContentProvider implements ContentProvider {
     @Override
     public Stream<String> getContent() {
         try {
-            Stream<String> headings = Stream.of(String.format("<h1>Index of %s</h1>",
-                                                              this.content.getFileName()));
-            Path parentPath = this.root.relativize(this.content.getParent());
+            Stream<String> headings = Stream.of(String.format("<h1>Index of /%s</h1>",
+                                                              relativeToRoot(this.content).getFileName()));
+            Path parentPath = relativeToRoot(this.content.getParent());
             if (parentPath != null) {
                 headings = Stream.concat(headings,
                                          Stream.of(String.format("<a href=\"/%s\">..</a><br>",
@@ -34,10 +34,14 @@ public class DirectoryContentProvider implements ContentProvider {
             return Stream.concat(headings,
                                  Files.list(this.content)
                                  .map((Path entry) -> String.format("<a href=\"/%s\">%s</a><br>",
-                                                                    this.root.relativize(entry).toString(),
+                                                                    relativeToRoot(entry).toString(),
                                                                     entry.getFileName())));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private Path relativeToRoot(Path branch) {
+        return this.root.relativize(branch);
     }
 }

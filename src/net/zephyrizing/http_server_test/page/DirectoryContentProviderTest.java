@@ -28,14 +28,25 @@ public class DirectoryContentProviderTest {
     }
 
     @Test
+    public void testPublicRoot() throws Exception {
+        Path rootDir = Files.createTempDirectory("test-root");
+
+        Path relativeDir = rootDir.relativize(rootDir);
+        ContentProvider provider = new DirectoryContentProvider(rootDir, relativeDir);
+        assertThat(provider.contentExists(), equalTo(true));
+        assertThat(provider.getContent().collect(Collectors.toList()),
+                   hasItem("<h1>Index of /</h1>"));
+    }
+
+    @Test
     public void testProduceContent() throws Exception {
         Path rootDir = Files.createTempDirectory("test-root");
         Path contentDir = Files.createTempDirectory(rootDir, "http-response-test");
         Path contentFile1 = Files.createTempFile(contentDir, "http-response-test", "");
         Path contentFile2 = Files.createTempFile(contentDir, "http-response-test", "");
 
-        String header = String.format("<h1>Index of %s</h1>",
-                                      contentDir.getFileName());
+        String header = String.format("<h1>Index of /%s</h1>",
+                                      rootDir.relativize(contentDir).getFileName());
         String format = "<a href=\"/%s\">%s</a><br>";
         String upLink = String.format(format,
                                       rootDir.relativize(contentDir.getParent()).toString(),
