@@ -12,6 +12,8 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
+import net.zephyrizing.http_server.requests.FileSystemHandler;
+
 import static java.util.Arrays.asList;
 
 public class HttpServer {
@@ -76,10 +78,8 @@ public class HttpServer {
                 HttpRequest request = connection.getRequest();
                 HttpResponse response = HttpResponse.responseFor(request);
 
-                Path requestedPath = request.getResolvedPath(public_root);
-                if (Files.exists(requestedPath)) {
-                    response.setContent(requestedPath);
-                }
+                FileSystemHandler handler = new FileSystemHandler(this.public_root);
+                response.setContent(handler.getContentFor(Paths.get("/").relativize(request.path())));
                 connection.send(response);
             } catch (IOException e) {
                 throw new RuntimeException(e);
