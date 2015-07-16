@@ -23,10 +23,19 @@ public class DirectoryContentProvider implements ContentProvider {
     @Override
     public Stream<String> getContent() {
         try {
-            return Files.list(this.content)
-                .map((Path entry) -> String.format("<a href=\"/%s\">%s</a><br>",
-                                                   this.root.relativize(entry).toString(),
-                                                   entry.getFileName()));
+            Stream<String> headings = Stream.of(String.format("<h1>Index of %s</h1>",
+                                                              this.content.getFileName()));
+            Path parentPath = this.root.relativize(this.content.getParent());
+            if (parentPath != null) {
+                headings = Stream.concat(headings,
+                                         Stream.of(String.format("<a href=\"/%s\">..</a><br>",
+                                                                 parentPath.toString())));
+            }
+            return Stream.concat(headings,
+                                 Files.list(this.content)
+                                 .map((Path entry) -> String.format("<a href=\"/%s\">%s</a><br>",
+                                                                    this.root.relativize(entry).toString(),
+                                                                    entry.getFileName())));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

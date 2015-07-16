@@ -34,7 +34,12 @@ public class DirectoryContentProviderTest {
         Path contentFile1 = Files.createTempFile(contentDir, "http-response-test", "");
         Path contentFile2 = Files.createTempFile(contentDir, "http-response-test", "");
 
+        String header = String.format("<h1>Index of %s</h1>",
+                                      contentDir.getFileName());
         String format = "<a href=\"/%s\">%s</a><br>";
+        String upLink = String.format(format,
+                                      rootDir.relativize(contentDir.getParent()).toString(),
+                                      "..");
         String link1 = String.format(format,
                                      rootDir.relativize(contentFile1).toString(),
                                      contentFile1.getFileName());
@@ -46,7 +51,10 @@ public class DirectoryContentProviderTest {
         ContentProvider provider = new DirectoryContentProvider(rootDir, relativeDir);
         assertThat(provider.contentExists(), equalTo(true));
         assertThat(provider.getContent().collect(Collectors.toList()),
-                   everyItem(anyOf(equalTo(link1), equalTo(link2))));
+                   everyItem(anyOf(equalTo(header),
+                                   equalTo(upLink),
+                                   equalTo(link1),
+                                   equalTo(link2))));
     }
 
 }
