@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public class FileContentProvider implements ContentProvider {
-    Path content;
+    private final Path content;
 
     public FileContentProvider(Path content) {
         this.content = content;
