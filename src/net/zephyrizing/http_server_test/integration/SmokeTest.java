@@ -116,9 +116,11 @@ public class SmokeTest {
             String line = in.readLine();
             assertThat(line, equalTo("HTTP/1.1 200 OK"));
 
-            while ((line = in.readLine()) != null) {
-                System.out.println(line);
-            }
+            line = in.readLine();
+            assertThat(line, equalTo(""));
+
+            line = in.readLine();
+            assertThat(line, equalTo(null));
         }
         server.interrupt();
     }
