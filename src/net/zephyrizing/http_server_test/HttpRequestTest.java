@@ -1,5 +1,7 @@
 package net.zephyrizing.http_server_test;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -32,5 +34,27 @@ public class HttpRequestTest {
         assertEquals(POST, request.method());
         assertEquals("/root", request.path());
         assertEquals("1.0", request.protocolVersion());
+    }
+
+    @Test
+    public void canResolveTheRootPath() {
+        Stream<String> requestLines = Stream.of("POST / HTTP/1.0", "");
+        HttpRequest request = HttpProtocol.requestFromLines(requestLines);
+
+        Path root = Paths.get("/root/path");
+
+        Path requested = request.getResolvedPath(root);
+        assertEquals(Paths.get("/root/path"), requested);
+    }
+
+    @Test
+    public void canResolvePaths() {
+        Stream<String> requestLines = Stream.of("POST /branch HTTP/1.0", "");
+        HttpRequest request = HttpProtocol.requestFromLines(requestLines);
+
+        Path root = Paths.get("/root/path");
+
+        Path requested = request.getResolvedPath(root);
+        assertEquals(Paths.get("/root/path/branch"), requested);
     }
 }
