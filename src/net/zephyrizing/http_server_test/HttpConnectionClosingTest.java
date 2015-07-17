@@ -3,8 +3,6 @@ package net.zephyrizing.http_server_test;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.Socket;
@@ -33,7 +31,7 @@ public class HttpConnectionClosingTest {
 
     TestSocket socket;
     TestableBufferedReader socketIn;
-    TestablePrintWriter socketOut;
+    TestableByteArrayOutputStream socketOut;
 
     HttpConnection connection;
 
@@ -60,13 +58,13 @@ public class HttpConnectionClosingTest {
         }
     }
 
-    class TestablePrintWriter extends PrintWriter {
-        public TestablePrintWriter(OutputStream out) {
-            super(out);
-        }
+    class TestableByteArrayOutputStream extends ByteArrayOutputStream {
+        public boolean closeCalled = false;
 
-        public boolean isClosed() {
-            return out == null;
+        @Override
+        public void close() throws IOException {
+            super.close();
+            closeCalled = true;
         }
     }
 
@@ -74,7 +72,7 @@ public class HttpConnectionClosingTest {
     public void initialize() throws IOException {
         socket    = new TestSocket();
         socketIn  = new TestableBufferedReader(new StringReader(""));
-        socketOut = new TestablePrintWriter(new ByteArrayOutputStream());
+        socketOut = new TestableByteArrayOutputStream();
 
         try (HttpConnection localConn = new HttpConnectionImpl(socket, socketIn, socketOut);) {
             connection = localConn;
@@ -95,6 +93,6 @@ public class HttpConnectionClosingTest {
 
     @Test
     public void closesWriter() throws Exception {
-        assertThat(socketOut.isClosed(), isTrue);
+        assertThat(socketOut.closeCalled, isTrue);
     }
 }

@@ -2,7 +2,7 @@ package net.zephyrizing.http_server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,9 +14,9 @@ public class HttpConnectionImpl implements HttpConnection {
 
     private Socket         socket;
     private BufferedReader socketIn;
-    private PrintWriter    socketOut;
+    private OutputStream   socketOut;
 
-    public HttpConnectionImpl(Socket socket, BufferedReader socketIn, PrintWriter socketOut) {
+    public HttpConnectionImpl(Socket socket, BufferedReader socketIn, OutputStream socketOut) {
         this.socket = socket;
         this.socketIn = socketIn;
         this.socketOut = socketOut;
@@ -38,9 +38,18 @@ public class HttpConnectionImpl implements HttpConnection {
     public void send(HttpResponse response) {
         HttpProtocol.responseStream(response).forEachOrdered(
             (String s) -> {
-                socketOut.append(s).append("\r\n");
+                try {
+                    socketOut.write(s.getBytes());
+                    socketOut.write("\r\n".getBytes());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             });
 
-        socketOut.flush();
+        try {
+            socketOut.flush();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
