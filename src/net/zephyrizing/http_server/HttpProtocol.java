@@ -16,9 +16,25 @@ import static net.zephyrizing.http_server.HttpRequest.Method.*;
 public class HttpProtocol {
     public static HttpRequest requestFromLines(Stream<String> lines) {
         List<String> linesList = lines.limit(2).collect(Collectors.toList());
+
+        if (linesList.isEmpty()) {
+            return null;
+        }
+
         String firstLine = linesList.get(0);
         String[] methodPathProto = firstLine.split(" ");
-        Method method          = Method.valueOf(methodPathProto[0]);
+
+        if (methodPathProto.length != 3) {
+            return null;
+        }
+
+        Method method;
+        try {
+            method = Method.valueOf(methodPathProto[0]);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+
         String path            = methodPathProto[1];
         String protocolVersion = methodPathProto[2].replace("HTTP/", "");
 
