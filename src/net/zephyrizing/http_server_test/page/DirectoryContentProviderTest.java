@@ -27,6 +27,9 @@ public class DirectoryContentProviderTest {
         ContentProvider provider = new DirectoryContentProvider(rootDir, relativeDir);
         assertThat(provider.contentExists(), equalTo(false));
         provider.getContent();
+
+        Files.delete(contentDir);
+        Files.delete(rootDir);
     }
 
     @Test
@@ -41,6 +44,8 @@ public class DirectoryContentProviderTest {
         assertThat(reader.lines().collect(Collectors.toList()),
                    everyItem(anyOf(equalTo("<!DOCTYPE html>"),
                                    containsString("<h1>Index of /</h1>"))));
+
+        Files.delete(rootDir);
     }
 
     @Test
@@ -74,5 +79,10 @@ public class DirectoryContentProviderTest {
                                    containsString(upLink),
                                    containsString(link1),
                                    containsString(link2))));
+
+        Files.delete(contentFile1);
+        Files.delete(contentFile2);
+        Files.delete(contentDir);
+        Files.delete(rootDir);
     }
 }

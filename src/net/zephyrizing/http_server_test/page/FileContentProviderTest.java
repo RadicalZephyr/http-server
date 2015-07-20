@@ -43,6 +43,8 @@ public class FileContentProviderTest {
 
         assertThat(reader.lines().collect(Collectors.toList()),
                    equalTo(content));
+
+        Files.delete(contentFile);
     }
 
     @Test
@@ -64,5 +66,7 @@ public class FileContentProviderTest {
 
         assertThat(Files.size(tempOutput), equalTo(Files.size(imageFile)));
         assertThat(Files.readAllBytes(tempOutput), equalTo(Files.readAllBytes(imageFile)));
+
+        Files.delete(tempOutput);
     }
 }
