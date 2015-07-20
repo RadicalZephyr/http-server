@@ -1,5 +1,7 @@
 package net.zephyrizing.http_server;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -36,18 +38,19 @@ public class HttpConnectionImpl implements HttpConnection {
 
     @Override
     public void send(HttpResponse response) {
-        HttpProtocol.responseStream(response).forEachOrdered(
-            (String s) -> {
-                try {
-                    socketOut.write(s.getBytes());
-                    socketOut.write("\r\n".getBytes());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+        try (BufferedInputStream inStream = new BufferedInputStream(HttpProtocol.responseStream(response))) {
+            BufferedOutputStream outStream = new BufferedOutputStream(socketOut);
+            int buffSize = 8 * 1024;
+            byte[] buffer = new byte[buffSize];
 
-        try {
-            socketOut.flush();
+
+            int bytesRead = inStream.read(buffer, 0, buffSize);
+            while (bytesRead != -1) {
+                outStream.write(buffer, 0, bytesRead);
+                bytesRead = inStream.read(buffer, 0, buffSize);
+            }
+
+            outStream.flush();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

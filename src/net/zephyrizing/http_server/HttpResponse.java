@@ -1,6 +1,8 @@
 package net.zephyrizing.http_server;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
@@ -41,11 +43,11 @@ public class HttpResponse {
         return emptyStringStreamBuilder().build();
     }
 
-    public Stream<String> getDataStream() {
+    public InputStream getData() {
         if (this.provider != null && this.provider.contentExists()) {
             return this.provider.getContent();
         }
-        return emptyStringStreamBuilder().build();
+        return new ByteArrayInputStream("".getBytes());
     }
 
     private static Stream.Builder<String> emptyStringStreamBuilder() {

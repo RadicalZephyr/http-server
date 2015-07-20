@@ -1,5 +1,7 @@
 package net.zephyrizing.http_server_test.page;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Collectors;
@@ -33,9 +35,12 @@ public class DirectoryContentProviderTest {
 
         Path relativeDir = rootDir.relativize(rootDir);
         ContentProvider provider = new DirectoryContentProvider(rootDir, relativeDir);
+        BufferedReader reader  = new BufferedReader(new InputStreamReader(provider.getContent()));
+
         assertThat(provider.contentExists(), equalTo(true));
-        assertThat(provider.getContent().collect(Collectors.toList()),
-                   everyItem(equalTo("<h1>Index of /</h1>")));
+        assertThat(reader.lines().collect(Collectors.toList()),
+                   everyItem(anyOf(equalTo("<!DOCTYPE html>"),
+                                   containsString("<h1>Index of /</h1>"))));
     }
 
     @Test
@@ -60,11 +65,14 @@ public class DirectoryContentProviderTest {
 
         Path relativeDir = rootDir.relativize(contentDir);
         ContentProvider provider = new DirectoryContentProvider(rootDir, relativeDir);
+        BufferedReader reader  = new BufferedReader(new InputStreamReader(provider.getContent()));
+
         assertThat(provider.contentExists(), equalTo(true));
-        assertThat(provider.getContent().collect(Collectors.toList()),
-                   everyItem(anyOf(equalTo(header),
-                                   equalTo(upLink),
-                                   equalTo(link1),
-                                   equalTo(link2))));
+        assertThat(reader.lines().collect(Collectors.toList()),
+                   everyItem(anyOf(equalTo("<!DOCTYPE html>"),
+                                   containsString(header),
+                                   containsString(upLink),
+                                   containsString(link1),
+                                   containsString(link2))));
     }
 }

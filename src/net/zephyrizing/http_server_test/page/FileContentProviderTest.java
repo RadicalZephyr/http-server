@@ -1,9 +1,11 @@
 package net.zephyrizing.http_server_test.page;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +37,9 @@ public class FileContentProviderTest {
         Files.write(contentFile, content);
 
         ContentProvider provider = new FileContentProvider(contentFile);
-        assertThat(provider.getContent().collect(Collectors.toList()),
+        BufferedReader reader  = new BufferedReader(new InputStreamReader(provider.getContent()));
+
+        assertThat(reader.lines().collect(Collectors.toList()),
                    equalTo(content));
     }
 }

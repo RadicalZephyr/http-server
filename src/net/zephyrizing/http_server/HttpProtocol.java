@@ -1,5 +1,8 @@
 package net.zephyrizing.http_server;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.SequenceInputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,17 +25,14 @@ public class HttpProtocol {
         return new HttpRequest(method, path, protocolVersion);
     }
 
-    public static Stream<String> responseStream(HttpResponse response) {
-        Stream<String> heading = Stream.concat(response.getStatusStream(),
-                                               response.getHeaderStream());
+    public static InputStream responseStream(HttpResponse response) {
+        String headStr = Stream.concat(response.getStatusStream(),
+                                       response.getHeaderStream())
+            .collect(Collectors.joining("\r\n", "", "\r\n\r\n"));
 
-        Stream<String> body = Stream.concat(emptyLine(),
-                                            response.getDataStream());
+        InputStream head = new ByteArrayInputStream(headStr.getBytes());
+        InputStream body = response.getData();
 
-        return Stream.concat(heading, body);
-    }
-
-    private static Stream<String> emptyLine() {
-        return Stream.of("");
+        return new SequenceInputStream(head, body);
     }
 }
