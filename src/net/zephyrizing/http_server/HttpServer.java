@@ -76,6 +76,9 @@ public class HttpServer {
         while (acceptingConnections()) {
             try (HttpConnection connection = acceptConnection();) {
                 HttpRequest request = connection.getRequest();
+                if (request == null) {
+                    continue;
+                }
                 HttpResponse response = HttpResponse.responseFor(request);
 
                 FileSystemHandler handler = new FileSystemHandler(this.public_root);

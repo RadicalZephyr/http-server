@@ -79,10 +79,14 @@ public class HttpServerTest {
     }
 
     public class MockHttpConnection implements HttpConnection {
+        private HttpRequest request;
+
+        MockHttpConnection(HttpRequest request) {
+            this.request = request;
+        }
         @Override
         public HttpRequest getRequest() {
-            String[] lines = {"GET / HTTP/1.1"};
-            return new HttpRequest(Method.GET, "/", "1.1");
+            return request;
         }
 
         @Override
@@ -93,13 +97,14 @@ public class HttpServerTest {
     }
 
     public class AcceptMockedHttpServer extends HttpServer {
+
         public int timesAcceptRequestCalled = 0;
-
         private int acceptThreshold = 1;
+        private HttpRequest request;
 
-
-        public AcceptMockedHttpServer(HttpServerSocket socket, int port) {
+        public AcceptMockedHttpServer(HttpServerSocket socket, int port, HttpRequest request) {
             super(socket, port, public_root);
+            this.request = request;
         }
 
         public void setNumberOfAccepts(int threshold) {
@@ -114,13 +119,14 @@ public class HttpServerTest {
         @Override
         public HttpConnection acceptConnection() {
             timesAcceptRequestCalled++;
-            return new MockHttpConnection();
+            return new MockHttpConnection(request);
         }
     }
 
     @Test
     public void serverAcceptsMultipleConnections() {
-        AcceptMockedHttpServer server = new AcceptMockedHttpServer(serverSocket, port);
+        AcceptMockedHttpServer server = new AcceptMockedHttpServer(serverSocket, port,
+                                                                   new HttpRequest(Method.GET, "/", "1.1"));
         int numCalls = 3;
         server.setNumberOfAccepts(numCalls);
 
@@ -131,7 +137,17 @@ public class HttpServerTest {
 
     @Test
     public void serverSendsResponses() {
-        AcceptMockedHttpServer server = new AcceptMockedHttpServer(serverSocket, port);
+        AcceptMockedHttpServer server = new AcceptMockedHttpServer(serverSocket, port,
+                                                                   new HttpRequest(Method.GET, "/", "1.1"));
+        int numCalls = 1;
+        server.setNumberOfAccepts(numCalls);
+
+        server.serve();
+    }
+
+    @Test
+    public void serverIgnoresMalformedRequests() {
+        AcceptMockedHttpServer server = new AcceptMockedHttpServer(serverSocket, port, null);
         int numCalls = 1;
         server.setNumberOfAccepts(numCalls);
 
