@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import net.zephyrizing.http_server.HttpProtocol;
 import net.zephyrizing.http_server.HttpRequest;
@@ -17,6 +18,30 @@ import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
 public class HttpProtocolTest {
+
+    @Test
+    public void dontFailOnEmpty() {
+        Stream.Builder<String> builder = Stream.builder();
+        Stream<String> lines = builder.build();
+
+        assertThat(HttpProtocol.requestFromLines(lines), equalTo(null));
+    }
+
+    @Test
+    public void dontFailOnBlank() {
+        Stream.Builder<String> builder = Stream.builder();
+        Stream<String> lines = builder.add("").build();
+
+        assertThat(HttpProtocol.requestFromLines(lines), equalTo(null));
+    }
+
+    @Test
+    public void dontFailOnIncompleteStatus() {
+        Stream.Builder<String> builder = Stream.builder();
+        Stream<String> lines = builder.add("GET /").build();
+
+        assertThat(HttpProtocol.requestFromLines(lines), equalTo(null));
+    }
 
     @Test
     public void createOkResponse() {
