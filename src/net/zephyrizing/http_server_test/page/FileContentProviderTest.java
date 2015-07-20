@@ -1,9 +1,11 @@
 package net.zephyrizing.http_server_test.page;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,5 +43,26 @@ public class FileContentProviderTest {
 
         assertThat(reader.lines().collect(Collectors.toList()),
                    equalTo(content));
+    }
+
+    @Test
+    public void testProduceBinaryContent() throws Exception {
+        Path imageFile = Paths.get("resources/flyingcat.jpeg");
+
+        assertThat(Files.exists(imageFile), equalTo(true));
+        assertThat(Files.isRegularFile(imageFile), equalTo(true));
+
+        ContentProvider provider = new FileContentProvider(imageFile);
+
+        assertThat(provider.contentExists(), equalTo(true));
+
+        Path tempOutput = Files.createTempFile("http-response-test-", "-image");
+        Files.delete(tempOutput);
+        assertThat(Files.exists(tempOutput), equalTo(false));
+
+        Files.copy(provider.getContent(), tempOutput);
+
+        assertThat(Files.size(tempOutput), equalTo(Files.size(imageFile)));
+        assertThat(Files.readAllBytes(tempOutput), equalTo(Files.readAllBytes(imageFile)));
     }
 }
