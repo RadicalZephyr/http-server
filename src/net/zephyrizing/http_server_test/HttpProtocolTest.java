@@ -1,5 +1,8 @@
 package net.zephyrizing.http_server_test;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.stream.Collectors;
 
 import net.zephyrizing.http_server.HttpProtocol;
@@ -19,7 +22,11 @@ public class HttpProtocolTest {
     public void createOkResponse() {
         HttpRequest request = new HttpRequest(Method.GET, "/", "1.1");
         HttpResponse response = HttpResponse.responseFor(request);
-        assertThat(HttpProtocol.responseStream(response).collect(Collectors.toList()),
+
+        InputStream responseStream  = HttpProtocol.responseStream(response);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream));
+
+        assertThat(reader.lines().collect(Collectors.toList()),
                    hasItem(equalTo("HTTP/1.1 200 OK")));
     }
 
@@ -27,7 +34,11 @@ public class HttpProtocolTest {
     public void createOkResponse10() {
         HttpRequest request = new HttpRequest(Method.GET, "/", "1.0");
         HttpResponse response = HttpResponse.responseFor(request);
-        assertThat(HttpProtocol.responseStream(response).collect(Collectors.toList()),
+
+        InputStream responseStream  = HttpProtocol.responseStream(response);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream));
+
+        assertThat(reader.lines().collect(Collectors.toList()),
                    hasItem(equalTo("HTTP/1.0 200 OK")));
     }
 }
