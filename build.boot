@@ -1,4 +1,5 @@
 (set-env!
+ :resource-paths #{"resources"}
  :source-paths #{"src"}
  :dependencies '[[radicalzephyr/bootlaces  "0.1.14"         :scope "test"]
                  [radicalzephyr/boot-junit "0.2.1-SNAPSHOT" :scope "test"]
