@@ -1,5 +1,6 @@
 package net.zephyrizing.http_server_test;
 
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -9,6 +10,9 @@ import java.util.stream.Collectors;
 import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpRequest.Method;
 import net.zephyrizing.http_server.HttpResponse;
+
+import net.zephyrizing.http_server.page.ContentProvider;
+import net.zephyrizing.http_server.page.EmptyContentProvider;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -36,5 +40,16 @@ public class HttpResponseTest {
     @Test
     public void isProtocolSame10() {
         assertThat(response.protocolVersion(), equalTo(request.protocolVersion()));
+    }
+
+    @Test
+    public void isOk() {
+        response.setContent(new EmptyContentProvider());
+        assertThat(response.getStatus(), equalTo("HTTP/1.1 200 OK"));
+    }
+
+    @Test
+    public void isFourOhFour() {
+        assertThat(response.getStatus(), equalTo("HTTP/1.1 404 Not Found"));
     }
 }
