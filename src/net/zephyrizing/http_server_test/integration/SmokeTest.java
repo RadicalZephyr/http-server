@@ -59,12 +59,24 @@ public class SmokeTest {
             }
             return opts.toArray(new String[0]);
         }
-    }
 
-    public void pingServer(int port) throws IOException {
-        try (Socket s = new Socket(InetAddress.getLocalHost(), port);
-             PrintWriter out = new PrintWriter(s.getOutputStream())) {
-            out.append("\r\n").append("\r\n").append("\r\n");
+        private void pingServer(int port) throws IOException {
+            try (Socket s = new Socket(InetAddress.getLocalHost(), port);
+                 PrintWriter out = new PrintWriter(s.getOutputStream())) {
+                out.append("\r\n").append("\r\n").append("\r\n");
+            }
+        }
+
+        public void shutdownServer() {
+            this.interrupt();
+            try {
+                int port = 5000;
+                if (this.port != null) {
+                    port = this.port;
+                }
+                pingServer(port);
+            } catch (IOException e) {
+            }
         }
     }
 
@@ -78,8 +90,7 @@ public class SmokeTest {
 
         assertTrue(server.isAlive());
 
-        server.interrupt();
-        pingServer(5000);
+        server.shutdownServer();
     }
 
     @Test
@@ -93,13 +104,12 @@ public class SmokeTest {
 
         assertTrue(server.isAlive());
 
-        server.interrupt();
-        pingServer(port);
+        server.shutdownServer();
     }
 
     @Test
     public void runServerWithDirectoryArgument() throws Exception {
-        int port = 12000;
+        int port = 10000;
         ServerThread server = new ServerThread(port, "public");
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
 
@@ -108,13 +118,12 @@ public class SmokeTest {
 
         assertTrue(server.isAlive());
 
-        server.interrupt();
-        pingServer(port);
+        server.shutdownServer();
     }
 
     @Test
     public void runServerAndGetResponse() throws Exception {
-        int port = 12000;
+        int port = 10000;
         ServerThread server = new ServerThread(port, "public");
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
 
@@ -139,7 +148,6 @@ public class SmokeTest {
             line = in.readLine();
             assertThat(line, equalTo(null));
         }
-        server.interrupt();
-        pingServer(port);
+        server.shutdownServer();
     }
 }
