@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -40,7 +42,8 @@ public class HttpServer {
         System.err.format("Starting server on port %d...", portNumber);
         try (ServerSocket serverSocket = new ServerSocket();
              HttpServerSocket httpSocket = new HttpServerSocketImpl(serverSocket);) {
-            HttpServer server = new HttpServer(httpSocket, portNumber, public_root);
+            Executor executor = Executors.newFixedThreadPool(24);
+            HttpServer server = new HttpServer(executor, httpSocket, portNumber, public_root);
             server.listen();
             server.serve();
         } catch (IOException e) {
@@ -50,11 +53,13 @@ public class HttpServer {
 
     // Actual class begins
 
+    private Executor executor;
     private HttpServerSocket serverSocket;
     private int port;
     private Path public_root;
 
-    public HttpServer(HttpServerSocket serverSocket, int port, Path public_root) {
+    public HttpServer(Executor executor, HttpServerSocket serverSocket, int port, Path public_root) {
+        this.executor = executor;
         this.serverSocket = serverSocket;
         this.port = port;
         this.public_root = public_root;
@@ -106,7 +111,7 @@ public class HttpServer {
                 throw new InterruptedException();
             }
             ConnectionProcessor processor = new ConnectionProcessor(acceptConnection());
-            new Thread(processor).start();
+            executor.execute(processor);
         }
     }
 }
