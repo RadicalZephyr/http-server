@@ -124,7 +124,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void serverAcceptsMultipleConnections() {
+    public void serverAcceptsMultipleConnections() throws Exception {
         AcceptMockedHttpServer server = new AcceptMockedHttpServer(serverSocket, port,
                                                                    new HttpRequest(Method.GET, "/", "1.1"));
         int numCalls = 3;
@@ -136,7 +136,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void serverSendsResponses() {
+    public void serverSendsResponses() throws Exception {
         AcceptMockedHttpServer server = new AcceptMockedHttpServer(serverSocket, port,
                                                                    new HttpRequest(Method.GET, "/", "1.1"));
         int numCalls = 1;
@@ -146,7 +146,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void serverIgnoresMalformedRequests() {
+    public void serverIgnoresMalformedRequests() throws Exception {
         AcceptMockedHttpServer server = new AcceptMockedHttpServer(serverSocket, port, null);
         int numCalls = 1;
         server.setNumberOfAccepts(numCalls);

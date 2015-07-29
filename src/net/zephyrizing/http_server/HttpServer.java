@@ -18,7 +18,7 @@ import static java.util.Arrays.asList;
 
 public class HttpServer {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         OptionParser parser = new OptionParser();
         OptionSpec<Integer> portOpt = parser.acceptsAll(asList("p", "port"))
             .withRequiredArg().ofType(Integer.class).defaultsTo(5000);
@@ -72,8 +72,13 @@ public class HttpServer {
         return true;
     }
 
-    public void serve() {
+    public void serve() throws InterruptedException {
         while (acceptingConnections()) {
+            // This is here to support testing the server via
+            // threads that get cleaned up.
+            if (Thread.interrupted()) {
+                throw new InterruptedException();
+            }
             try (HttpConnection connection = acceptConnection();) {
                 HttpRequest request = connection.getRequest();
                 if (request == null) {
