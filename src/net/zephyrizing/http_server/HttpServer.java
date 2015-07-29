@@ -26,11 +26,14 @@ public class HttpServer {
             .withRequiredArg().ofType(Integer.class).defaultsTo(5000);
         OptionSpec<String>  rootOpt = parser.acceptsAll(asList("d", "directory"))
             .withRequiredArg().ofType(String.class).defaultsTo("/Users/geoff/src/cob_spec/public/");
+        OptionSpec<Integer> threadsOpt = parser.acceptsAll(asList("t", "threads"))
+            .withRequiredArg().ofType(Integer.class).defaultsTo(24);
 
         OptionSet options = parser.parse(args);
 
         int portNumber = options.valueOf(portOpt);
         String public_root_path = options.valueOf(rootOpt);
+        int threadPoolSize = options.valueOf(threadsOpt);
 
         Path public_root = Paths.get(public_root_path);
 
@@ -42,7 +45,7 @@ public class HttpServer {
         System.err.format("Starting server on port %d...", portNumber);
         try (ServerSocket serverSocket = new ServerSocket();
              HttpServerSocket httpSocket = new HttpServerSocketImpl(serverSocket);) {
-            Executor executor = Executors.newFixedThreadPool(24);
+            Executor executor = Executors.newFixedThreadPool(threadPoolSize);
             HttpServer server = new HttpServer(executor, httpSocket, portNumber, public_root);
             server.listen();
             server.serve();
