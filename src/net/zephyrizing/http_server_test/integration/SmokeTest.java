@@ -2,9 +2,11 @@ package net.zephyrizing.http_server_test.integration;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,8 +38,12 @@ public class SmokeTest {
             PrintStream oldErr = System.err;
             PrintStream newErr = new PrintStream(new ByteArrayOutputStream());
             System.setErr(newErr);
-            HttpServer.main(buildOptions());
-            System.setErr(oldErr);
+            try {
+                HttpServer.main(buildOptions());
+            } catch (InterruptedException e) {
+            } finally {
+                System.setErr(oldErr);
+            }
         }
 
         public String[] buildOptions() {
@@ -55,6 +61,12 @@ public class SmokeTest {
         }
     }
 
+    public void pingServer(int port) throws IOException {
+        try (Socket s = new Socket(InetAddress.getLocalHost(), port);
+             PrintWriter out = new PrintWriter(s.getOutputStream())) {
+            out.append("\r\n").append("\r\n").append("\r\n");
+        }
+    }
 
     @Test
     public void runDefaultServer() throws Exception {
@@ -67,11 +79,13 @@ public class SmokeTest {
         assertTrue(server.isAlive());
 
         server.interrupt();
+        pingServer(5000);
     }
 
     @Test
     public void runServerWithPortArgument() throws Exception {
-        ServerThread server = new ServerThread(10000);
+        int port = 10000;
+        ServerThread server = new ServerThread(port);
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
 
         server.start();
@@ -80,11 +94,13 @@ public class SmokeTest {
         assertTrue(server.isAlive());
 
         server.interrupt();
+        pingServer(port);
     }
 
     @Test
     public void runServerWithDirectoryArgument() throws Exception {
-        ServerThread server = new ServerThread(12000, "public");
+        int port = 12000;
+        ServerThread server = new ServerThread(port, "public");
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
 
         server.start();
@@ -93,11 +109,12 @@ public class SmokeTest {
         assertTrue(server.isAlive());
 
         server.interrupt();
+        pingServer(port);
     }
 
     @Test
     public void runServerAndGetResponse() throws Exception {
-        int port = 14000;
+        int port = 12000;
         ServerThread server = new ServerThread(port, "public");
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
 
@@ -123,5 +140,6 @@ public class SmokeTest {
             assertThat(line, equalTo(null));
         }
         server.interrupt();
+        pingServer(port);
     }
 }
