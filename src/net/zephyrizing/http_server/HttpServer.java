@@ -72,6 +72,32 @@ public class HttpServer {
         return true;
     }
 
+    private class ConnectionProcessor implements Runnable {
+        private HttpConnection connection;
+
+        public ConnectionProcessor(HttpConnection connection) {
+            this.connection = connection;
+        }
+
+        @Override
+        public void run() {
+            try (HttpConnection connection = this.connection) {
+                HttpRequest request = connection.getRequest();
+                if (request == null) {
+                    return;
+                }
+                HttpResponse response = HttpResponse.responseFor(request);
+
+                FileSystemHandler handler = new FileSystemHandler(public_root);
+                response.setContent(handler.getContentFor(Paths.get("/").relativize(request.path())));
+                connection.send(response);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     public void serve() throws InterruptedException {
         while (acceptingConnections()) {
             // This is here to support testing the server via
@@ -79,19 +105,8 @@ public class HttpServer {
             if (Thread.interrupted()) {
                 throw new InterruptedException();
             }
-            try (HttpConnection connection = acceptConnection();) {
-                HttpRequest request = connection.getRequest();
-                if (request == null) {
-                    continue;
-                }
-                HttpResponse response = HttpResponse.responseFor(request);
-
-                FileSystemHandler handler = new FileSystemHandler(this.public_root);
-                response.setContent(handler.getContentFor(Paths.get("/").relativize(request.path())));
-                connection.send(response);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            ConnectionProcessor processor = new ConnectionProcessor(acceptConnection());
+            new Thread(processor).start();
         }
     }
 }
