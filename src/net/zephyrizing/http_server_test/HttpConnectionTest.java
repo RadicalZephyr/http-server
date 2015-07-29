@@ -11,6 +11,9 @@ import net.zephyrizing.http_server.HttpConnectionImpl;
 import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpResponse;
 
+import net.zephyrizing.http_server.page.ContentProvider;
+import net.zephyrizing.http_server.page.EmptyContentProvider;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -51,6 +54,7 @@ public class HttpConnectionTest {
         HttpConnection connection = new HttpConnectionImpl(socket, socketIn, socketOut);
         HttpRequest request = connection.getRequest();
         HttpResponse response = HttpResponse.responseFor(request);
+        response.setContent(new EmptyContentProvider());
         connection.send(response);
 
         assertThat(socketOut.toString(), equalTo("HTTP/1.1 200 OK\r\n\r\n"));

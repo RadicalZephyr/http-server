@@ -1,6 +1,7 @@
 package net.zephyrizing.http_server_test;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.stream.Collectors;
@@ -10,6 +11,9 @@ import net.zephyrizing.http_server.HttpProtocol;
 import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpRequest.Method;
 import net.zephyrizing.http_server.HttpResponse;
+
+import net.zephyrizing.http_server.page.ContentProvider;
+import net.zephyrizing.http_server.page.EmptyContentProvider;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -47,6 +51,7 @@ public class HttpProtocolTest {
     public void createOkResponse() {
         HttpRequest request = new HttpRequest(Method.GET, "/", "1.1");
         HttpResponse response = HttpResponse.responseFor(request);
+        response.setContent(new EmptyContentProvider());
 
         InputStream responseStream  = HttpProtocol.responseStream(response);
         BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream));
@@ -59,6 +64,7 @@ public class HttpProtocolTest {
     public void createOkResponse10() {
         HttpRequest request = new HttpRequest(Method.GET, "/", "1.0");
         HttpResponse response = HttpResponse.responseFor(request);
+        response.setContent(new EmptyContentProvider());
 
         InputStream responseStream  = HttpProtocol.responseStream(response);
         BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream));
