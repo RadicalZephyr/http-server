@@ -11,8 +11,8 @@ import net.zephyrizing.http_server.HttpConnectionImpl;
 import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpResponse;
 
-import net.zephyrizing.http_server.page.ContentProvider;
-import net.zephyrizing.http_server.page.EmptyContentProvider;
+import net.zephyrizing.http_server.content.ContentProvider;
+import net.zephyrizing.http_server.content.EmptyContentProvider;
 
 import org.junit.Before;
 import org.junit.Ignore;

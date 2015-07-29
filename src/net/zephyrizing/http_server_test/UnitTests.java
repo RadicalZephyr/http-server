@@ -1,7 +1,7 @@
 package net.zephyrizing.http_server_test;
 
-import net.zephyrizing.http_server_test.page.FileContentProviderTest;
-import net.zephyrizing.http_server_test.page.DirectoryContentProviderTest;
+import net.zephyrizing.http_server_test.content.FileContentProviderTest;
+import net.zephyrizing.http_server_test.content.DirectoryContentProviderTest;
 
 import net.zephyrizing.http_server_test.requests.FileSystemHandlerTest;
 
