@@ -9,6 +9,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import net.zephyrizing.http_server.HttpConnection;
 import net.zephyrizing.http_server.HttpConnectionImpl;
@@ -37,7 +39,8 @@ public class HttpServerTest {
     @Before
     public void initialize() {
         serverSocket = new MockHttpServerSocket();
-        server = new HttpServer(serverSocket, port, public_root);
+        Executor executor = Executors.newSingleThreadExecutor();
+        server = new HttpServer(executor, serverSocket, port, public_root);
     }
 
     public class MockHttpServerSocket implements HttpServerSocket {
@@ -103,7 +106,7 @@ public class HttpServerTest {
         private HttpRequest request;
 
         public AcceptMockedHttpServer(HttpServerSocket socket, int port, HttpRequest request) {
-            super(socket, port, public_root);
+            super(Executors.newSingleThreadExecutor(), socket, port, public_root);
             this.request = request;
         }
 
