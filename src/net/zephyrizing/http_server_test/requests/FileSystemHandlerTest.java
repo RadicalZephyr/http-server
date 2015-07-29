@@ -3,8 +3,8 @@ package net.zephyrizing.http_server_test.requests;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import net.zephyrizing.http_server.page.ContentProvider;
-import net.zephyrizing.http_server.page.FileContentProvider;
+import net.zephyrizing.http_server.content.ContentProvider;
+import net.zephyrizing.http_server.content.FileContentProvider;
 
 import net.zephyrizing.http_server.requests.FileSystemHandler;
 

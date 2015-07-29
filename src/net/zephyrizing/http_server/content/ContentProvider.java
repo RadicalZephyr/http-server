@@ -1,4 +1,4 @@
-package net.zephyrizing.http_server.page;
+package net.zephyrizing.http_server.content;
 
 import java.io.InputStream;
 

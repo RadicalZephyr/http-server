@@ -3,9 +3,9 @@ package net.zephyrizing.http_server.requests;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import net.zephyrizing.http_server.page.ContentProvider;
-import net.zephyrizing.http_server.page.FileContentProvider;
-import net.zephyrizing.http_server.page.DirectoryContentProvider;
+import net.zephyrizing.http_server.content.ContentProvider;
+import net.zephyrizing.http_server.content.FileContentProvider;
+import net.zephyrizing.http_server.content.DirectoryContentProvider;
 
 public class FileSystemHandler {
     private final Path root;

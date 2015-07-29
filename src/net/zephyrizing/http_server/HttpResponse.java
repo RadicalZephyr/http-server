@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import net.zephyrizing.http_server.page.ContentProvider;
+import net.zephyrizing.http_server.content.ContentProvider;
 
 public class HttpResponse {
 

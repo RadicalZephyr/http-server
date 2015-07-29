@@ -1,4 +1,4 @@
-package net.zephyrizing.http_server_test.page;
+package net.zephyrizing.http_server_test.content;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -11,8 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import net.zephyrizing.http_server.page.ContentProvider;
-import net.zephyrizing.http_server.page.FileContentProvider;
+import net.zephyrizing.http_server.content.ContentProvider;
+import net.zephyrizing.http_server.content.FileContentProvider;
 
 import org.junit.Ignore;
 import org.junit.Test;
