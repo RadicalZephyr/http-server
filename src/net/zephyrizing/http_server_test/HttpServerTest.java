@@ -37,14 +37,13 @@ public class HttpServerTest {
     MockHttpServerSocket serverSocket;
     int port = 7070;
     HttpServer server;
-    Path public_root = FileSystems.getDefault().getPath("../public");
 
     @Before
     public void initialize() {
         serverSocket = new MockHttpServerSocket();
         Executor executor = Executors.newSingleThreadExecutor();
         Handler handler = new NullHandler();
-        server = new HttpServer(executor, serverSocket, port, public_root, handler);
+        server = new HttpServer(executor, serverSocket, port, handler);
     }
 
     public class MockHttpServerSocket implements HttpServerSocket {
@@ -110,7 +109,7 @@ public class HttpServerTest {
         private HttpRequest request;
 
         public AcceptMockedHttpServer(HttpServerSocket socket, int port, HttpRequest request) {
-            super(Executors.newSingleThreadExecutor(), socket, port, public_root, new NullHandler());
+            super(Executors.newSingleThreadExecutor(), socket, port, new NullHandler());
             this.request = request;
         }
 
