@@ -67,6 +67,14 @@ public class SmokeTest {
             }
         }
 
+        public void startServer() {
+            this.start();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+            }
+        }
+
         public void shutdownServer() {
             this.interrupt();
             try {
@@ -84,13 +92,13 @@ public class SmokeTest {
         }
     }
 
+
     @Test
     public void runDefaultServer() throws Exception {
         ServerThread server = new ServerThread();
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
 
-        server.start();
-        Thread.sleep(100);
+        server.startServer();
 
         assertTrue(server.isAlive());
 
@@ -103,8 +111,7 @@ public class SmokeTest {
         ServerThread server = new ServerThread(port);
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
 
-        server.start();
-        Thread.sleep(100);
+        server.startServer();
 
         assertTrue(server.isAlive());
 
@@ -117,8 +124,7 @@ public class SmokeTest {
         ServerThread server = new ServerThread(port, "public");
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
 
-        server.start();
-        Thread.sleep(100);
+        server.startServer();
 
         assertTrue(server.isAlive());
 
@@ -131,8 +137,7 @@ public class SmokeTest {
         ServerThread server = new ServerThread(port, "public");
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
 
-        server.start();
-        Thread.sleep(100);
+        server.startServer();
 
         try (Socket socket = new Socket("localhost", port);
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
