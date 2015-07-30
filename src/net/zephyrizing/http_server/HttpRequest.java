@@ -1,5 +1,7 @@
 package net.zephyrizing.http_server;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -10,11 +12,17 @@ public class HttpRequest {
     private final Method method;
     private final Path   path;
     private final String protocolVersion;
+    private final InputStream body;
 
     public HttpRequest(Method method, String path, String protocolVersion) {
+        this(method, path, protocolVersion, new ByteArrayInputStream(new byte[0]));
+    }
+
+    public HttpRequest(Method method, String path, String protocolVersion, InputStream body) {
         this.method          = method;
         this.path            = Paths.get(path);
         this.protocolVersion = protocolVersion;
+        this.body            = body;
     }
 
     public Method method() {
@@ -32,5 +40,9 @@ public class HttpRequest {
 
     public String protocolVersion() {
         return protocolVersion;
+    }
+
+    public InputStream body() {
+        return this.body;
     }
 }

@@ -1,10 +1,16 @@
 package net.zephyrizing.http_server.handlers;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 
 import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpResponse;
 import static net.zephyrizing.http_server.HttpRequest.Method.*;
+import net.zephyrizing.http_server.content.ContentProvider;
 
 public class CobSpecHandler implements Handler {
     Handler handler;
@@ -27,8 +33,9 @@ public class CobSpecHandler implements Handler {
         testHandler.addHandler(POST, "/method_options", nullHandler);
         testHandler.addHandler(PUT,  "/method_options", nullHandler);
 
-        testHandler.addHandler(POST, "/form", nullHandler);
-        testHandler.addHandler(PUT,  "/form", nullHandler);
+        testHandler.addHandler(GET,  "/form", this::getData);
+        testHandler.addHandler(POST, "/form", this::storeData);
+        testHandler.addHandler(PUT,  "/form", this::storeData);
 
         this.handler = new SequentialHandler(testHandler, fileHandler);
     }
@@ -36,5 +43,26 @@ public class CobSpecHandler implements Handler {
     @Override
     public HttpResponse handle(HttpRequest r) {
         return handler.handle(r);
+    }
+
+    private String data = "";
+
+    public HttpResponse getData(HttpRequest r) {
+        HttpResponse response = HttpResponse.responseFor(r);
+        response.setContent(new ContentProvider() {
+                @Override
+                public boolean contentExists() { return true;}
+
+                @Override
+                public InputStream getContent() { return new ByteArrayInputStream(data.getBytes());}
+            });
+
+        return response;
+    }
+
+    public HttpResponse storeData(HttpRequest request) {
+        BufferedReader r = new BufferedReader(new InputStreamReader(request.body()));
+        this.data = r.lines().collect(Collectors.joining());
+        return HttpResponse.responseFor(request);
     }
 }
