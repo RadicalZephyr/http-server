@@ -19,6 +19,9 @@ public class CobSpecHandler implements Handler {
         testHandler.addHandler(POST, "/method_options", nullHandler);
         testHandler.addHandler(PUT,  "/method_options", nullHandler);
 
+        testHandler.addHandler(POST,  "/form", nullHandler);
+        testHandler.addHandler(PUT,  "/form", nullHandler);
+
         this.handler = new SequentialHandler(testHandler, fileHandler);
     }
 

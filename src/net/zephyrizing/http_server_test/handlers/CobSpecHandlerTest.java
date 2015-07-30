@@ -37,6 +37,24 @@ public class CobSpecHandlerTest {
     }
 
     @Test
+    public void simplePut() {
+        HttpRequest request = new HttpRequest(PUT, "/form", "1.1");
+        HttpResponse response = handler.handle(request);
+
+        assertThat(response, notNullValue());
+        assertThat(response.status(), equalTo(200));
+    }
+
+    @Test
+    public void simplePost() {
+        HttpRequest request = new HttpRequest(POST, "/form", "1.1");
+        HttpResponse response = handler.handle(request);
+
+        assertThat(response, notNullValue());
+        assertThat(response.status(), equalTo(200));
+    }
+
+    @Test
     public void simpleOptions() {
         HttpRequest request = new HttpRequest(OPTIONS, "/method_options", "1.1");
         HttpResponse response = handler.handle(request);
