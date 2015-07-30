@@ -69,4 +69,10 @@ public class RouterTest {
         assertThat(router.handle(request2), equalTo(response2));
 
     }
+
+    @Test
+    public void failsGracefullyWithNoMatch() {
+        HttpRequest request = new HttpRequest(POST, "/", "1.1");
+        assertThat(router.handle(request), nullValue());
+    }
 }
