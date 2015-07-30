@@ -51,4 +51,22 @@ public class RouterTest {
         assertThat(router.handle(request2), equalTo(response2));
     }
 
+    @Test
+    public void canDifferentiateBetweenMethods() throws Exception {
+        HttpRequest request = new HttpRequest(POST, "/", "1.1");
+        final HttpResponse response = HttpResponse.responseFor(request);
+        router.addHandler(POST, "/", (HttpRequest iRequest) -> {
+                return response;
+            });
+
+        HttpRequest request2 = new HttpRequest(GET, "/", "1.1");
+        final HttpResponse response2 = HttpResponse.responseFor(request2);
+        router.addHandler(GET, "/", (HttpRequest iRequest) -> {
+                return response2;
+            });
+
+        assertThat(router.handle(request), equalTo(response));
+        assertThat(router.handle(request2), equalTo(response2));
+
+    }
 }
