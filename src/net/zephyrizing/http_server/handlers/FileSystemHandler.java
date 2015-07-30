@@ -17,6 +17,7 @@ public class FileSystemHandler implements Handler {
         this.root = root;
     }
 
+    @Override
     public HttpResponse handle(HttpRequest request) {
         HttpResponse response = HttpResponse.responseFor(request);
         response.setContent(getContentFor(Paths.get("/").relativize(request.path())));
