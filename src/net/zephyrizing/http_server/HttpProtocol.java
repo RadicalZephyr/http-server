@@ -42,7 +42,7 @@ public class HttpProtocol {
     }
 
     public static InputStream responseStream(HttpResponse response) {
-        String headStr = Stream.concat(response.getStatusStream(),
+        String headStr = Stream.concat(response.getStatusLineStream(),
                                        response.getHeaderStream())
             .collect(Collectors.joining("\r\n", "", "\r\n\r\n"));
 
