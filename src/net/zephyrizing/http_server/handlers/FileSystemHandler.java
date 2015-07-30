@@ -1,4 +1,4 @@
-package net.zephyrizing.http_server.routing;
+package net.zephyrizing.http_server.handlers;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

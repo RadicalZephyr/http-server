@@ -1,4 +1,4 @@
-package net.zephyrizing.http_server_test.routing;
+package net.zephyrizing.http_server_test.handlers;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import net.zephyrizing.http_server.content.ContentProvider;
 import net.zephyrizing.http_server.content.FileContentProvider;
 
-import net.zephyrizing.http_server.routing.FileSystemHandler;
+import net.zephyrizing.http_server.handlers.FileSystemHandler;
 
 import org.junit.Ignore;
 import org.junit.Test;

@@ -3,7 +3,7 @@ package net.zephyrizing.http_server_test;
 import net.zephyrizing.http_server_test.content.FileContentProviderTest;
 import net.zephyrizing.http_server_test.content.DirectoryContentProviderTest;
 
-import net.zephyrizing.http_server_test.routing.FileSystemHandlerTest;
+import net.zephyrizing.http_server_test.handlers.FileSystemHandlerTest;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
