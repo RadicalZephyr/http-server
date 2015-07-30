@@ -5,7 +5,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import net.zephyrizing.http_server.HttpRequest;
+import net.zephyrizing.http_server.HttpRequest.Method;
 import net.zephyrizing.http_server.HttpResponse;
+
 import net.zephyrizing.http_server.content.ContentProvider;
 import net.zephyrizing.http_server.content.DirectoryContentProvider;
 import net.zephyrizing.http_server.content.FileContentProvider;
@@ -19,9 +21,13 @@ public class FileSystemHandler implements Handler {
 
     @Override
     public HttpResponse handle(HttpRequest request) {
-        HttpResponse response = HttpResponse.responseFor(request);
-        response.setContent(getContentFor(Paths.get("/").relativize(request.path())));
-        return response;
+        if (request.method() == Method.GET) {
+            HttpResponse response = HttpResponse.responseFor(request);
+            response.setContent(getContentFor(Paths.get("/").relativize(request.path())));
+            return response;
+        } else {
+            return null;
+        }
     }
 
     public ContentProvider getContentFor(Path path) {
