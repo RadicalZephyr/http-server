@@ -22,8 +22,14 @@ public class FileSystemHandler implements Handler {
     @Override
     public HttpResponse handle(HttpRequest request) {
         if (request.method() == Method.GET) {
+            Path relativeRequestPath = Paths.get("/").relativize(request.path());
             HttpResponse response = HttpResponse.responseFor(request);
-            response.setContent(getContentFor(Paths.get("/").relativize(request.path())));
+            ContentProvider cp = getContentFor(relativeRequestPath);
+            if (cp == null) {
+                response.setStatus(404);
+            } else {
+                response.setContent(cp);
+            }
             return response;
         } else {
             return null;
