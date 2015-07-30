@@ -48,7 +48,7 @@ public class HttpServer {
              HttpServerSocket httpSocket = new HttpServerSocketImpl(serverSocket);) {
             Executor executor = Executors.newFixedThreadPool(threadPoolSize);
             Handler handler = new FileSystemHandler(public_root);
-            HttpServer server = new HttpServer(executor, httpSocket, portNumber, public_root, handler);
+            HttpServer server = new HttpServer(executor, httpSocket, portNumber, handler);
             server.listen();
             server.serve();
         } catch (IOException e) {
@@ -61,14 +61,12 @@ public class HttpServer {
     private Executor executor;
     private HttpServerSocket serverSocket;
     private int port;
-    private Path public_root;
     private Handler handler;
 
-    public HttpServer(Executor executor, HttpServerSocket serverSocket, int port, Path public_root, Handler handler) {
+    public HttpServer(Executor executor, HttpServerSocket serverSocket, int port, Handler handler) {
         this.executor = executor;
         this.serverSocket = serverSocket;
         this.port = port;
-        this.public_root = public_root;
         this.handler = handler;
     }
 
