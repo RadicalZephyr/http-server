@@ -33,6 +33,18 @@ public class HttpResponseTest {
     }
 
     @Test
+    public void hasStatusCode() {
+        assertThat(response.status(), equalTo(200));
+    }
+
+    @Test
+    public void hasSettableStatusCode() {
+        int status = 500;
+        response.setStatus(status);
+        assertThat(response.status(), equalTo(status));
+    }
+
+    @Test
     public void isProtocolSame() {
         assertThat(response.protocolVersion(), equalTo(request.protocolVersion()));
     }
@@ -50,6 +62,7 @@ public class HttpResponseTest {
 
     @Test
     public void isFourOhFour() {
+        response.setStatus(404);
         assertThat(response.getStatus(), equalTo("HTTP/1.1 404 Not Found"));
     }
 }

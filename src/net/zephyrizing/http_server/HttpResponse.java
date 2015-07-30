@@ -26,6 +26,7 @@ public class HttpResponse {
         RESPONSE_DESCRIPTIONS = Collections.unmodifiableMap(descriptions);
     }
 
+    private int status;
     private Map<String, List<String>> headers;
     private ContentProvider provider;
 
@@ -36,12 +37,13 @@ public class HttpResponse {
     private String protocolVersion;
 
     public HttpResponse(String protocolVersion) {
+        this.status = 200;
         this.protocolVersion = protocolVersion;
         this.headers = new HashMap<String, List<String>>();
     }
 
     public int status() {
-        return 200;
+        return this.status;
     }
 
     public Map<String, List<String>> headers() {
@@ -50,6 +52,10 @@ public class HttpResponse {
 
     public String protocolVersion() {
         return this.protocolVersion;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public void addHeader(String key, String... values) {
@@ -66,14 +72,10 @@ public class HttpResponse {
     }
 
     public String getStatus() {
-        int responseCode = 200;
-        if (this.provider == null || !this.provider.contentExists()) {
-            responseCode = 404;
-        }
         return String.format("HTTP/%s %d %s",
                              protocolVersion(),
-                             responseCode,
-                             RESPONSE_DESCRIPTIONS.get(responseCode));
+                             this.status,
+                             RESPONSE_DESCRIPTIONS.get(this.status));
     }
 
     public Stream<String> getStatusStream() {
