@@ -65,4 +65,11 @@ public class HttpResponseTest {
         response.setStatus(404);
         assertThat(response.getStatusLine(), equalTo("HTTP/1.1 404 Not Found"));
     }
+
+    @Test
+    public void hasHeaders() {
+        response.addHeader("Accept", "NOTHING");
+        assertThat(response.getHeaderStream().collect(Collectors.toList()),
+                   hasItem(equalTo("Accept: NOTHING")));
+    }
 }
