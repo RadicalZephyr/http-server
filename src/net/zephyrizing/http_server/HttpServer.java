@@ -14,6 +14,7 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
+import net.zephyrizing.http_server.handlers.Handler;
 import net.zephyrizing.http_server.handlers.FileSystemHandler;
 
 import static java.util.Arrays.asList;
@@ -46,7 +47,8 @@ public class HttpServer {
         try (ServerSocket serverSocket = new ServerSocket();
              HttpServerSocket httpSocket = new HttpServerSocketImpl(serverSocket);) {
             Executor executor = Executors.newFixedThreadPool(threadPoolSize);
-            HttpServer server = new HttpServer(executor, httpSocket, portNumber, public_root);
+            Handler handler = new FileSystemHandler(public_root);
+            HttpServer server = new HttpServer(executor, httpSocket, portNumber, public_root, handler);
             server.listen();
             server.serve();
         } catch (IOException e) {
@@ -60,12 +62,14 @@ public class HttpServer {
     private HttpServerSocket serverSocket;
     private int port;
     private Path public_root;
+    private Handler handler;
 
-    public HttpServer(Executor executor, HttpServerSocket serverSocket, int port, Path public_root) {
+    public HttpServer(Executor executor, HttpServerSocket serverSocket, int port, Path public_root, Handler handler) {
         this.executor = executor;
         this.serverSocket = serverSocket;
         this.port = port;
         this.public_root = public_root;
+        this.handler = handler;
     }
 
     public void listen() throws IOException {
@@ -94,11 +98,7 @@ public class HttpServer {
                 if (request == null) {
                     return;
                 }
-                HttpResponse response = HttpResponse.responseFor(request);
-
-                FileSystemHandler handler = new FileSystemHandler(public_root);
-                response.setContent(handler.getContentFor(Paths.get("/").relativize(request.path())));
-                connection.send(response);
+                connection.send(handler.handle(request));
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
