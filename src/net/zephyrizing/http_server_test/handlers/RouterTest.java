@@ -1,5 +1,7 @@
 package net.zephyrizing.http_server_test.handlers;
 
+import java.nio.file.Paths;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -74,5 +76,15 @@ public class RouterTest {
     public void failsGracefullyWithNoMatch() {
         HttpRequest request = new HttpRequest(POST, "/", "1.1");
         assertThat(router.handle(request), nullValue());
+    }
+
+    @Test
+    public void canGenerateOptionsForRoute() {
+        router.addHandler(GET, "/", (HttpRequest iRequest) -> null);
+        router.addHandler(PUT, "/", (HttpRequest iRequest) -> null);
+
+        HttpRequest request = new HttpRequest(OPTIONS, "/", "1.1");
+        HttpResponse response = router.handle(request);
+        assertThat(response.headers().get("Allow"), hasItems("GET", "PUT"));
     }
 }
