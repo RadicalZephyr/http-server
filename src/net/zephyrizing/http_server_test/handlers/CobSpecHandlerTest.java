@@ -28,6 +28,15 @@ public class CobSpecHandlerTest {
     }
 
     @Test
+    public void notFound() {
+        HttpRequest request = new HttpRequest(GET, "/foobar", "1.1");
+        HttpResponse response = handler.handle(request);
+
+        assertThat(response, notNullValue());
+        assertThat(response.status(), equalTo(404));
+    }
+
+    @Test
     public void simpleOptions() {
         HttpRequest request = new HttpRequest(OPTIONS, "/method_options", "1.1");
         HttpResponse response = handler.handle(request);
