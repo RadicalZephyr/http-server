@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import net.zephyrizing.http_server.content.ContentProvider;
@@ -83,7 +84,15 @@ public class HttpResponse {
     }
 
     public Stream<String> getHeaderStream() {
-        return emptyStringStreamBuilder().build();
+        if (this.headers.containsKey("Accept")) {
+            return Stream.of(getAcceptHeader());
+        } else {
+            return emptyStringStreamBuilder().build();
+        }
+    }
+
+    private String getAcceptHeader() {
+        return this.headers.get("Accept").stream().collect(Collectors.joining(", ", "Accept: ", ""));
     }
 
     public InputStream getData() {
