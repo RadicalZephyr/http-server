@@ -15,7 +15,7 @@ import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
 import net.zephyrizing.http_server.handlers.Handler;
-import net.zephyrizing.http_server.handlers.FileSystemHandler;
+import net.zephyrizing.http_server.handlers.CobSpecHandler;
 
 import static java.util.Arrays.asList;
 
@@ -47,7 +47,7 @@ public class HttpServer {
         try (ServerSocket serverSocket = new ServerSocket();
              HttpServerSocket httpSocket = new HttpServerSocketImpl(serverSocket);) {
             Executor executor = Executors.newFixedThreadPool(threadPoolSize);
-            Handler handler = new FileSystemHandler(public_root);
+            Handler handler = new CobSpecHandler(public_root);
             HttpServer server = new HttpServer(executor, httpSocket, portNumber, handler);
             server.listen();
             server.serve();
