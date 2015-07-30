@@ -77,6 +77,10 @@ public class SmokeTest {
                 pingServer(port);
             } catch (IOException e) {
             }
+            try {
+                this.join();
+            } catch (InterruptedException e) {
+            }
         }
     }
 
