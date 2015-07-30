@@ -12,12 +12,12 @@ public class CobSpecHandler implements Handler {
     public CobSpecHandler(Path public_root) {
         Handler fileHandler = new FileSystemHandler(public_root);
         Router testHandler = new Router();
-        testHandler.addHandler(OPTIONS, "/method_options",
-                               (HttpRequest r) -> {
-                                   HttpResponse response = HttpResponse.responseFor(r);
-                                   response.addHeader("Allow", "GET", "HEAD", "POST", "OPTIONS", "PUT");
-                                   return response;
-                               });
+        Handler nullHandler = new NullHandler();
+
+        testHandler.addHandler(GET,  "/method_options", nullHandler);
+        testHandler.addHandler(HEAD, "/method_options", nullHandler);
+        testHandler.addHandler(POST, "/method_options", nullHandler);
+        testHandler.addHandler(PUT,  "/method_options", nullHandler);
 
         this.handler = new SequentialHandler(testHandler, fileHandler);
     }

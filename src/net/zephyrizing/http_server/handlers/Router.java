@@ -2,8 +2,11 @@ package net.zephyrizing.http_server.handlers;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import java.util.stream.Collectors;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.zephyrizing.http_server.HttpRequest;
@@ -21,7 +24,10 @@ public class Router implements Handler {
     }
 
     public void addHandler(Method method, String path, Handler handler) {
-        forMethod(method).put(Paths.get(path), handler);
+        if (method != Method.OPTIONS) {
+            forMethod(method).put(Paths.get(path), handler);
+            forMethod(Method.OPTIONS).putIfAbsent(Paths.get(path), this::handleOptions);
+        }
     }
 
     @Override
@@ -32,6 +38,24 @@ public class Router implements Handler {
         } else {
             return null;
         }
+    }
+
+    private HttpResponse handleOptions(HttpRequest request) {
+        HttpResponse response = HttpResponse.responseFor(request);
+        response.addHeader("Allow", optionsForRoute(request.path()));
+        return response;
+    }
+
+    private String[] optionsForRoute(Path route) {
+        return this.handlers.entrySet().stream()
+            .filter((Map.Entry<Method, Map<Path, Handler>> entry) -> hasRoute(entry, route))
+            .map((Map.Entry<Method, Map<Path, Handler>> entry) -> entry.getKey().toString())
+            .collect(Collectors.toList())
+            .toArray(new String[0]);
+    }
+
+    private static boolean hasRoute(Map.Entry<Method, Map<Path, Handler>> entry, Path route) {
+        return entry.getValue().containsKey(route);
     }
 
     private Map<Path, Handler> forMethod(Method m) {
