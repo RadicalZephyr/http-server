@@ -12,7 +12,6 @@ import net.zephyrizing.http_server.HttpResponse;
 
 public class Router implements Handler {
 
-
     private Map<Method, Map<Path, Handler>> handlers = new EnumMap<Method, Map<Path, Handler>>(Method.class);
 
     public Router() {
@@ -27,7 +26,12 @@ public class Router implements Handler {
 
     @Override
     public HttpResponse handle(HttpRequest request) {
-        return forMethod(request.method()).get(request.path()).handle(request);
+        Handler h = forMethod(request.method()).get(request.path());
+        if (h != null) {
+            return h.handle(request);
+        } else {
+            return null;
+        }
     }
 
     private Map<Path, Handler> forMethod(Method m) {
