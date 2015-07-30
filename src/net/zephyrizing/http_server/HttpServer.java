@@ -14,7 +14,7 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
-import net.zephyrizing.http_server.routing.FileSystemHandler;
+import net.zephyrizing.http_server.handlers.FileSystemHandler;
 
 import static java.util.Arrays.asList;
 
