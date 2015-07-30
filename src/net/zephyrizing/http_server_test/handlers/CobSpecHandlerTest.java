@@ -37,6 +37,19 @@ public class CobSpecHandlerTest {
     }
 
     @Test
+    public void redirectPath() {
+        HttpRequest request = new HttpRequest(GET, "/redirect", "1.1");
+        HttpResponse response = handler.handle(request);
+
+        assertThat(response, notNullValue());
+        assertThat(response.status(), equalTo(302));
+        Map<String, List<String>> headers = response.headers();
+        assertThat(headers, notNullValue());
+        assertThat(headers.containsKey("Location"), equalTo(true));
+        assertThat(headers.get("Location"), hasItems("http://localhost:5000/"));
+    }
+
+    @Test
     public void simplePut() {
         HttpRequest request = new HttpRequest(PUT, "/form", "1.1");
         HttpResponse response = handler.handle(request);
