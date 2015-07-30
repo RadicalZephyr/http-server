@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -24,6 +26,7 @@ public class HttpResponse {
         RESPONSE_DESCRIPTIONS = Collections.unmodifiableMap(descriptions);
     }
 
+    private Map<String, List<String>> headers;
     private ContentProvider provider;
 
     public static HttpResponse responseFor(HttpRequest request) {
@@ -34,10 +37,28 @@ public class HttpResponse {
 
     public HttpResponse(String protocolVersion) {
         this.protocolVersion = protocolVersion;
+        this.headers = new HashMap<String, List<String>>();
+    }
+
+    public int status() {
+        return 200;
+    }
+
+    public Map<String, List<String>> headers() {
+        return this.headers;
     }
 
     public String protocolVersion() {
         return this.protocolVersion;
+    }
+
+    public void addHeader(String key, String... values) {
+        if (values.length != 0) {
+            if (this.headers.get(key) == null) {
+                this.headers.put(key, new ArrayList<String>());
+            }
+            Collections.addAll(this.headers.get(key), values);
+        }
     }
 
     public void setContent(ContentProvider provider) {
