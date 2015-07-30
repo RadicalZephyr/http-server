@@ -5,7 +5,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class HttpRequest {
-    public static enum Method {GET, POST};
+    public static enum Method {OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE};
 
     private final Method method;
     private final Path   path;
