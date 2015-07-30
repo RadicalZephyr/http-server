@@ -108,11 +108,14 @@ public class HttpServer {
 
     public void serve() throws InterruptedException {
         while (acceptingConnections()) {
-            // This is here to support testing the server via
-            // threads that get cleaned up.
+            // This is here to support testing the server via same
+            // process threads. If there is no check of
+            // Thread.interrupted(), then the server thread will never
+            // quit, and thus never clean up it's bound sockets
             if (Thread.interrupted()) {
                 throw new InterruptedException();
             }
+
             ConnectionProcessor processor = new ConnectionProcessor(acceptConnection());
             executor.execute(processor);
         }
