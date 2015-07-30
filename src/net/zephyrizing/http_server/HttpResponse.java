@@ -71,15 +71,15 @@ public class HttpResponse {
         this.provider = provider;
     }
 
-    public String getStatus() {
+    public String getStatusLine() {
         return String.format("HTTP/%s %d %s",
                              protocolVersion(),
                              this.status,
                              RESPONSE_DESCRIPTIONS.get(this.status));
     }
 
-    public Stream<String> getStatusStream() {
-        return Stream.of(getStatus());
+    public Stream<String> getStatusLineStream() {
+        return Stream.of(getStatusLine());
     }
 
     public Stream<String> getHeaderStream() {

@@ -57,12 +57,12 @@ public class HttpResponseTest {
     @Test
     public void isOk() {
         response.setContent(new EmptyContentProvider());
-        assertThat(response.getStatus(), equalTo("HTTP/1.1 200 OK"));
+        assertThat(response.getStatusLine(), equalTo("HTTP/1.1 200 OK"));
     }
 
     @Test
     public void isFourOhFour() {
         response.setStatus(404);
-        assertThat(response.getStatus(), equalTo("HTTP/1.1 404 Not Found"));
+        assertThat(response.getStatusLine(), equalTo("HTTP/1.1 404 Not Found"));
     }
 }
