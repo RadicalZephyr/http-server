@@ -84,15 +84,7 @@ public class HttpResponse {
     }
 
     public Stream<String> getHeaderStream() {
-        if (this.headers.containsKey("Accept")) {
-            return Stream.of(getAcceptHeader());
-        } else {
-            return emptyStringStreamBuilder().build();
-        }
-    }
-
-    private String getAcceptHeader() {
-        return this.headers.get("Accept").stream().collect(Collectors.joining(", ", "Accept: ", ""));
+        return this.headers.entrySet().stream().map(HttpResponse::renderHeader);
     }
 
     public InputStream getData() {
@@ -100,6 +92,11 @@ public class HttpResponse {
             return this.provider.getContent();
         }
         return new ByteArrayInputStream("".getBytes());
+    }
+
+    private static String renderHeader(Map.Entry<String, List<String>> entry) {
+        String prefix = String.format("%s: ", entry.getKey());
+        return entry.getValue().stream().collect(Collectors.joining(", ", prefix, ""));
     }
 
     private static Stream.Builder<String> emptyStringStreamBuilder() {

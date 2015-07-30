@@ -69,7 +69,9 @@ public class HttpResponseTest {
     @Test
     public void hasHeaders() {
         response.addHeader("Accept", "NOTHING");
+        response.addHeader("Wrong", "Things");
         assertThat(response.getHeaderStream().collect(Collectors.toList()),
-                   hasItem(equalTo("Accept: NOTHING")));
+                   hasItems("Accept: NOTHING",
+                            "Wrong: Things"));
     }
 }
