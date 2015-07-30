@@ -60,10 +60,10 @@ public class HttpResponse {
 
     public void addHeader(String key, String... values) {
         if (values.length != 0) {
-            if (this.headers.get(key) == null) {
-                this.headers.put(key, new ArrayList<String>());
-            }
-            Collections.addAll(this.headers.get(key), values);
+            List<String> headerValues = this.headers.getOrDefault(key, new ArrayList<String>());
+            Collections.addAll(headerValues,
+                               values);
+            this.headers.putIfAbsent(key, headerValues);
         }
     }
 
