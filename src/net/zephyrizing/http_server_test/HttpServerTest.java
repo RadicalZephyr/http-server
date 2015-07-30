@@ -20,6 +20,9 @@ import net.zephyrizing.http_server.HttpResponse;
 import net.zephyrizing.http_server.HttpServer;
 import net.zephyrizing.http_server.HttpServerSocket;
 
+import net.zephyrizing.http_server.handlers.Handler;
+import net.zephyrizing.http_server.handlers.NullHandler;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,7 +43,8 @@ public class HttpServerTest {
     public void initialize() {
         serverSocket = new MockHttpServerSocket();
         Executor executor = Executors.newSingleThreadExecutor();
-        server = new HttpServer(executor, serverSocket, port, public_root);
+        Handler handler = new NullHandler();
+        server = new HttpServer(executor, serverSocket, port, public_root, handler);
     }
 
     public class MockHttpServerSocket implements HttpServerSocket {
@@ -106,7 +110,7 @@ public class HttpServerTest {
         private HttpRequest request;
 
         public AcceptMockedHttpServer(HttpServerSocket socket, int port, HttpRequest request) {
-            super(Executors.newSingleThreadExecutor(), socket, port, public_root);
+            super(Executors.newSingleThreadExecutor(), socket, port, public_root, new NullHandler());
             this.request = request;
         }
 
