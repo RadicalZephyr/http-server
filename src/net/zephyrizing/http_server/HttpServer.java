@@ -80,10 +80,10 @@ public class HttpServer {
         return true;
     }
 
-    private class ConnectionProcessor implements Runnable {
+    private class Worker implements Runnable {
         private HttpConnection connection;
 
-        public ConnectionProcessor(HttpConnection connection) {
+        public Worker(HttpConnection connection) {
             this.connection = connection;
         }
 
@@ -116,8 +116,8 @@ public class HttpServer {
                 throw new InterruptedException();
             }
 
-            ConnectionProcessor processor = new ConnectionProcessor(acceptConnection());
-            executor.execute(processor);
+            Worker worker = new Worker(acceptConnection());
+            executor.execute(worker);
         }
     }
 }
