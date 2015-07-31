@@ -96,7 +96,7 @@ public class HttpResponse {
 
     private static String renderHeader(Map.Entry<String, List<String>> entry) {
         String prefix = String.format("%s: ", entry.getKey());
-        return entry.getValue().stream().collect(Collectors.joining(", ", prefix, ""));
+        return entry.getValue().stream().collect(Collectors.joining(",", prefix, ""));
     }
 
     private static Stream.Builder<String> emptyStringStreamBuilder() {
