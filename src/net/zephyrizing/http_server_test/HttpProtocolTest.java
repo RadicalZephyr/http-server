@@ -72,4 +72,14 @@ public class HttpProtocolTest {
         assertThat(reader.lines().collect(Collectors.toList()),
                    hasItem(equalTo("HTTP/1.0 200 OK")));
     }
+
+    @Ignore @Test
+    public void readHeaders() {
+
+    }
+
+    @Ignore @Test
+    public void readBody() {
+
+    }
 }
