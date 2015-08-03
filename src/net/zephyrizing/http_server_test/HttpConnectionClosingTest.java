@@ -1,6 +1,7 @@
 package net.zephyrizing.http_server_test;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Reader;
@@ -30,7 +31,7 @@ public class HttpConnectionClosingTest {
                                              "" };
 
     TestSocket socket;
-    TestableBufferedReader socketIn;
+    TestableByteArrayInputStream socketIn;
     TestableByteArrayOutputStream socketOut;
 
     HttpConnection connection;
@@ -44,12 +45,12 @@ public class HttpConnectionClosingTest {
         }
     }
 
-    class TestableBufferedReader extends BufferedReader {
-        public TestableBufferedReader(Reader in) {
-            super(in);
-        }
-
+    class TestableByteArrayInputStream extends ByteArrayInputStream {
         public boolean closeCalled = false;
+
+        public TestableByteArrayInputStream(byte[] bytes) {
+            super(bytes);
+        }
 
         @Override
         public void close() throws IOException {
@@ -71,7 +72,7 @@ public class HttpConnectionClosingTest {
     @Before
     public void initialize() throws IOException {
         socket    = new TestSocket();
-        socketIn  = new TestableBufferedReader(new StringReader(""));
+        socketIn  = new TestableByteArrayInputStream("".getBytes());
         socketOut = new TestableByteArrayOutputStream();
 
         try (HttpConnection localConn = new HttpConnectionImpl(socket, socketIn, socketOut);) {

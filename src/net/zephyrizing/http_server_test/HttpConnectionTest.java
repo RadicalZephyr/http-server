@@ -1,16 +1,18 @@
 package net.zephyrizing.http_server_test;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.net.Socket;
+import java.util.Arrays;
 
 import net.zephyrizing.http_server.HttpConnection;
 import net.zephyrizing.http_server.HttpConnectionImpl;
 import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpResponse;
-
 import net.zephyrizing.http_server.content.ContentProvider;
 import net.zephyrizing.http_server.content.EmptyContentProvider;
 
@@ -30,14 +32,14 @@ public class HttpConnectionTest {
     String[] requestStrings = new String[] { "GET / HTTP/1.1",
                                              "" };
 
-    Socket         socket;
-    BufferedReader socketIn;
+    Socket                socket;
+    InputStream           socketIn;
     ByteArrayOutputStream socketOut;
 
     @Before
     public void initialize() {
         socket    = new Socket();
-        socketIn  = new BufferedReader(new StringReader(String.join("\r\n", asList(requestStrings))));
+        socketIn  = new ByteArrayInputStream(String.join("\r\n", asList(requestStrings)).getBytes());
 
         socketOut = new ByteArrayOutputStream();
     }

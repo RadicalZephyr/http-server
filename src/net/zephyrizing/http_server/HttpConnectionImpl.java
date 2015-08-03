@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -14,11 +15,11 @@ import net.zephyrizing.http_server.HttpRequest;
 
 public class HttpConnectionImpl implements HttpConnection {
 
-    private Socket         socket;
-    private BufferedReader socketIn;
-    private OutputStream   socketOut;
+    private Socket       socket;
+    private InputStream  socketIn;
+    private OutputStream socketOut;
 
-    public HttpConnectionImpl(Socket socket, BufferedReader socketIn, OutputStream socketOut) {
+    public HttpConnectionImpl(Socket socket, InputStream socketIn, OutputStream socketOut) {
         this.socket = socket;
         this.socketIn = socketIn;
         this.socketOut = socketOut;
@@ -33,7 +34,7 @@ public class HttpConnectionImpl implements HttpConnection {
 
     @Override
     public HttpRequest getRequest() {
-        return HttpProtocol.requestFromLines(socketIn.lines());
+        return HttpProtocol.requestFromInputStream(socketIn);
     }
 
     @Override
