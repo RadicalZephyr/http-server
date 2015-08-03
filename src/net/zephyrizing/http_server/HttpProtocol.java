@@ -24,7 +24,15 @@ public class HttpProtocol {
         }
 
         String requestLine = linesList.get(0);
-        return parseRequestLine(requestLine);
+        RequestBuilder b = new RequestBuilder();
+
+        try {
+            parseRequestLine(b, requestLine);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+
+        return b.build();
     }
 
     public static InputStream responseStream(HttpResponse response) {
@@ -38,23 +46,15 @@ public class HttpProtocol {
         return new SequenceInputStream(head, body);
     }
 
-    private static HttpRequest parseRequestLine(String requestLine) {
+    private static void parseRequestLine(RequestBuilder b, String requestLine) {
         String[] methodPathProto = requestLine.split(" ");
 
         if (methodPathProto.length != 3) {
-            return null;
+            throw new IllegalArgumentException();
         }
 
-        Method method;
-        try {
-            method = Method.valueOf(methodPathProto[0]);
-        } catch (IllegalArgumentException e) {
-            return null;
-        }
-
-        String path            = methodPathProto[1];
-        String protocolVersion = methodPathProto[2].replace("HTTP/", "");
-
-        return new HttpRequest(method, path, protocolVersion);
+        b.method(Method.valueOf(methodPathProto[0]))
+            .path(methodPathProto[1])
+            .protocolVersion(methodPathProto[2].replace("HTTP/", ""));
     }
 }
