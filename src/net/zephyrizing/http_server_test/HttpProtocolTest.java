@@ -98,6 +98,6 @@ public class HttpProtocolTest {
     }
 
     private ByteArrayInputStream bytesFromStream(Stream<String> lines) {
-        return new ByteArrayInputStream(lines.collect(Collectors.joining("\r\n", "", "\r\n")).getBytes());
+        return new ByteArrayInputStream(lines.collect(HttpProtocol.collectAsHttpHeader).getBytes());
     }
 }
