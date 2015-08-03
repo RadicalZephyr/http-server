@@ -27,14 +27,14 @@ public class HttpProtocolTest {
     public void createBasicRequest() {
         Stream<String> lines = Stream.of("GET / HTTP/1.1");
 
-        assertThat(HttpProtocol.requestFromLines(lines), notNullValue());
+        assertThat(HttpProtocol.requestFromInputStream(bytesFromStream(lines)), notNullValue());
     }
 
     @Test
     public void ignoreLeadingBlankLines() {
         Stream<String> lines = Stream.of("", "GET / HTTP/1.1");
 
-        assertThat(HttpProtocol.requestFromLines(lines), notNullValue());
+        assertThat(HttpProtocol.requestFromInputStream(bytesFromStream(lines)), notNullValue());
     }
 
     @Test
@@ -42,7 +42,7 @@ public class HttpProtocolTest {
         Stream.Builder<String> builder = Stream.builder();
         Stream<String> lines = builder.build();
 
-        assertThat(HttpProtocol.requestFromLines(lines), equalTo(null));
+        assertThat(HttpProtocol.requestFromInputStream(bytesFromStream(lines)), equalTo(null));
     }
 
     @Test
@@ -50,7 +50,7 @@ public class HttpProtocolTest {
         Stream.Builder<String> builder = Stream.builder();
         Stream<String> lines = builder.add("").build();
 
-        assertThat(HttpProtocol.requestFromLines(lines), equalTo(null));
+        assertThat(HttpProtocol.requestFromInputStream(bytesFromStream(lines)), equalTo(null));
     }
 
     @Test
@@ -58,7 +58,7 @@ public class HttpProtocolTest {
         Stream.Builder<String> builder = Stream.builder();
         Stream<String> lines = builder.add("GET /").build();
 
-        assertThat(HttpProtocol.requestFromLines(lines), equalTo(null));
+        assertThat(HttpProtocol.requestFromInputStream(bytesFromStream(lines)), equalTo(null));
     }
 
     @Test
@@ -95,5 +95,9 @@ public class HttpProtocolTest {
     @Ignore @Test
     public void readBody() {
 
+    }
+
+    private ByteArrayInputStream bytesFromStream(Stream<String> lines) {
+        return new ByteArrayInputStream(lines.collect(Collectors.joining("\r\n", "", "\r\n")).getBytes());
     }
 }

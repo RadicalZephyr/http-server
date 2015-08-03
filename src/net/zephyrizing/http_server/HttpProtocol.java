@@ -1,7 +1,10 @@
 package net.zephyrizing.http_server;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.SequenceInputStream;
 import java.util.List;
 import java.util.function.Predicate;
@@ -31,6 +34,35 @@ public class HttpProtocol {
         } catch (IllegalArgumentException e) {
             return null;
         }
+
+        return b.build();
+    }
+
+    public static HttpRequest requestFromInputStream(InputStream stream) {
+        BufferedReader r = new BufferedReader(new InputStreamReader(stream));
+        RequestBuilder b = new RequestBuilder();
+
+        try {
+            String s = r.readLine();
+            while ("".equals(s)) {
+                s = r.readLine();
+            }
+            if (s == null) {
+                return null;
+            }
+            parseRequestLine(b, s);
+        } catch (IOException e) {
+            return null;
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+
+        // List<String> headerLines = new ArrayList<String>();
+        // String s = r.readLine();
+        // while (!"".equals(s)) {
+        //     headerLines.put(s);
+        //     s = r.readLine();
+        // }
 
         return b.build();
     }
