@@ -7,9 +7,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.SequenceInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -83,6 +85,16 @@ public class HttpProtocol {
     }
 
     private static void parseRequestHeaders(RequestBuilder b, List<String> headerLines) {
-        b.header("Content-Length", Collections.singletonList("0"));
+        headerLines.forEach(s -> parseRequestHeader(b, s));
+    }
+
+    private static void parseRequestHeader(RequestBuilder b,  String headerLine) {
+        Matcher m = HEADER_RE.matcher(headerLine);
+        if (m.matches()) {
+            String headerKey = m.group(1);
+            String headerValueStr = m.group(2);
+            String headerValues[] = headerValueStr.split("\\s*,\\s*");
+            b.header(headerKey, Arrays.asList(headerValues));
+        }
     }
 }
