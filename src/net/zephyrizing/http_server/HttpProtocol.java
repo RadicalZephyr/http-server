@@ -23,8 +23,23 @@ public class HttpProtocol {
             return null;
         }
 
-        String firstLine = linesList.get(0);
-        String[] methodPathProto = firstLine.split(" ");
+        String requestLine = linesList.get(0);
+        return parseRequestLine(requestLine);
+    }
+
+    public static InputStream responseStream(HttpResponse response) {
+        String headStr = Stream.concat(response.getStatusLineStream(),
+                                       response.getHeaderStream())
+            .collect(Collectors.joining("\r\n", "", "\r\n\r\n"));
+
+        InputStream head = new ByteArrayInputStream(headStr.getBytes());
+        InputStream body = response.getData();
+
+        return new SequenceInputStream(head, body);
+    }
+
+    private static HttpRequest parseRequestLine(String requestLine) {
+        String[] methodPathProto = requestLine.split(" ");
 
         if (methodPathProto.length != 3) {
             return null;
@@ -41,16 +56,5 @@ public class HttpProtocol {
         String protocolVersion = methodPathProto[2].replace("HTTP/", "");
 
         return new HttpRequest(method, path, protocolVersion);
-    }
-
-    public static InputStream responseStream(HttpResponse response) {
-        String headStr = Stream.concat(response.getStatusLineStream(),
-                                       response.getHeaderStream())
-            .collect(Collectors.joining("\r\n", "", "\r\n\r\n"));
-
-        InputStream head = new ByteArrayInputStream(headStr.getBytes());
-        InputStream body = response.getData();
-
-        return new SequenceInputStream(head, body);
     }
 }
