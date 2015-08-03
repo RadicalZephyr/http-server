@@ -1,7 +1,9 @@
 package net.zephyrizing.http_server_test;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.net.Socket;
 import java.nio.file.FileSystems;
@@ -19,7 +21,6 @@ import net.zephyrizing.http_server.HttpRequest.Method;
 import net.zephyrizing.http_server.HttpResponse;
 import net.zephyrizing.http_server.HttpServer;
 import net.zephyrizing.http_server.HttpServerSocket;
-
 import net.zephyrizing.http_server.handlers.Handler;
 import net.zephyrizing.http_server.handlers.NullHandler;
 
@@ -59,7 +60,7 @@ public class HttpServerTest {
         @Override
         public HttpConnection acceptConnection() {
             String httpMessage = "GET / HTTP/1.1\r\n";
-            BufferedReader in = new BufferedReader(new StringReader(httpMessage));
+            InputStream in = new ByteArrayInputStream(httpMessage.getBytes());
             return new HttpConnectionImpl(new Socket(), in, null);
         }
 

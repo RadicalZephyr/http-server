@@ -2,6 +2,7 @@ package net.zephyrizing.http_server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -28,8 +29,7 @@ public class HttpServerSocketImpl implements HttpServerSocket {
     public HttpConnection acceptConnection() {
         try {
             Socket socket = serverSocket.accept();
-            BufferedReader in = new BufferedReader(
-                new InputStreamReader(socket.getInputStream()));
+            InputStream  in  = socket.getInputStream();
             OutputStream out = socket.getOutputStream();
             return new HttpConnectionImpl(socket, in, out);
         } catch (IOException e) {
