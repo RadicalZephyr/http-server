@@ -22,7 +22,21 @@ need just a SocketAdapter interface that I can mock.
 
 HttpSocket might be a reasonable interface, not sure what it needs.
 
+------
 
+# My Server interface could be called Jax, or Jack, or Jacks
+
+Anyhow, the code should be partitioned into several different
+libraries. There should be the http-server itself, which contains the
+code needed to run the actual server, there should be the Jack library
+which is mostly just the interfaces and HttpRequest and HttpResponse
+classes. Then there are web app client libraries.  The cool thing is
+that I could write an adapter Jack handler for wrapping ring or rack
+handlers.
+
+I'll finish making the changes to the HttpRequest and Response objects
+needed to complete the server, and then pull them out into a separate
+library.
 
 ------
 
