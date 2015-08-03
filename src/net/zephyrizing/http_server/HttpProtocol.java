@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.SequenceInputStream;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,7 +16,8 @@ import static net.zephyrizing.http_server.HttpRequest.Method.*;
 
 public class HttpProtocol {
     public static HttpRequest requestFromLines(Stream<String> lines) {
-        List<String> linesList = lines.limit(2).collect(Collectors.toList());
+        List<String> linesList = lines.filter(Predicate.isEqual("").negate())
+            .limit(1).collect(Collectors.toList());
 
         if (linesList.isEmpty()) {
             return null;
