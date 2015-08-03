@@ -20,6 +20,8 @@ public class CobSpecHandler implements Handler {
         Router testHandler = new Router();
         Handler nullHandler = new NullHandler();
 
+        testHandler.addHandler(GET,  "/", (HttpRequest r) -> HttpResponse.responseFor(r));
+
         testHandler.addHandler(GET,  "/redirect",
                                (HttpRequest r) -> {
                                    HttpResponse response = HttpResponse.responseFor(r);
