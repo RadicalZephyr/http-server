@@ -1,9 +1,13 @@
 package net.zephyrizing.http_server_test;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpRequest.Method;
 import net.zephyrizing.http_server.RequestBuilder;
-import static  net.zephyrizing.http_server.HttpRequest.Method.*;
+import static net.zephyrizing.http_server.HttpRequest.Method.*;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -19,15 +23,40 @@ public class RequestBuilderTest {
         String p = "/";
         String v = "1.1";
 
-        HttpRequest request = new RequestBuilder()
+        RequestBuilder b = new RequestBuilder()
             .method(m)
             .path(p)
-            .protocolVersion(v)
-            .build();
+            .protocolVersion(v);
+
+        HttpRequest request = b.build();
 
         assertThat(request.method(),          equalTo(m));
         assertThat(request.path().toString(), equalTo(p));
         assertThat(request.protocolVersion(), equalTo(v));
     }
 
+    @Test
+    public void canAddHeaders() {
+        Method m = GET;
+        String p = "/";
+        String v = "1.1";
+
+        RequestBuilder b = new RequestBuilder()
+            .method(m)
+            .path(p)
+            .protocolVersion(v);
+
+        String key = "Content-Length";
+        List<String> val = Arrays.asList("A", "B");
+        b.header(key, val);
+
+        HttpRequest request = b.build();
+
+        assertThat(request, notNullValue());
+
+        Map<String, List<String>> headers = request.headers();
+        assertThat(headers, notNullValue());
+        assertThat(headers.keySet(), hasItem(key));
+        assertThat(headers.get(key), equalTo(val));
+    }
 }

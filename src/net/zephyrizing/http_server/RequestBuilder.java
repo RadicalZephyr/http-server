@@ -1,5 +1,9 @@
 package net.zephyrizing.http_server;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import net.zephyrizing.http_server.HttpRequest.Method;
 
 public class RequestBuilder {
@@ -7,6 +11,8 @@ public class RequestBuilder {
     private Method m;
     private String p;
     private String v;
+
+    private Map<String, List<String>> headers = new HashMap<String, List<String>>();
 
     public RequestBuilder method(Method m) {
         this.m = m;
@@ -23,11 +29,16 @@ public class RequestBuilder {
         return this;
     }
 
+    public RequestBuilder header(String key, List<String> values) {
+        this.headers.put(key, values);
+        return this;
+    }
+
     public HttpRequest build() {
         assertNotNull(this.m, "Request method must be set");
         assertNotNull(this.p, "Request path must be set");
         assertNotNull(this.v, "Protocol version must be set");
-        return new HttpRequest(this.m, this.p, this.v);
+        return new HttpRequest(this.m, this.p, this.v, this.headers, null);
     }
 
     private void assertNotNull(Object o, String message) {
