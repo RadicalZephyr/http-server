@@ -22,11 +22,11 @@ public class HttpInputStream {
         this.stream = stream;
     }
 
-    public ByteBuffer readBody(int length) throws IOException {
+    public ByteBuffer readBody(long length) throws IOException {
         if (!textSectionEnded) return null;
 
-        byte buff[] = new byte[length];
-        int bytesRead = this.stream.read(buff, 0, length);
+        byte buff[] = new byte[(int)length];
+        int bytesRead = this.stream.read(buff, 0, (int)length);
 
         return ByteBuffer.wrap(buff, 0, bytesRead);
     }

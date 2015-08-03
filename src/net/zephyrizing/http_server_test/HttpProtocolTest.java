@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -137,9 +138,30 @@ public class HttpProtocolTest {
             });
     }
 
-    @Ignore @Test
+    @Test
     public void readBody() {
+        String key = "Content-Length";
+        String bodyText = "testing123";
+        String lengthHeader = String.format("%s: %s",
+                                            key, bodyText.length());
 
+        Stream<String> lines = Stream.of("GET / HTTP/1.1",
+                                         lengthHeader,
+                                         "",
+                                         bodyText);
+
+        HttpRequest request = HttpProtocol.requestFromInputStream(bytesFromStream(lines));
+        assertThat(request, notNullValue());
+
+        Map<String, List<String>> headers = request.headers();
+        assertThat(headers, notNullValue());
+        assertThat(headers.keySet(), hasItem(key));
+        String bodyLengthStr = Integer.toString(bodyText.length());
+        assertThat(headers.get(key), hasItem(bodyLengthStr));
+
+        ByteBuffer bodyBytes = request.body();
+        assertThat(bodyBytes, notNullValue());
+        assertThat(bodyBytes.array(), equalTo(bodyText.getBytes()));
     }
 
     private ByteArrayInputStream bytesFromStream(Stream<String> lines) {
