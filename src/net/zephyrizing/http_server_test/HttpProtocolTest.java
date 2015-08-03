@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -87,9 +89,20 @@ public class HttpProtocolTest {
                    hasItem(equalTo("HTTP/1.0 200 OK")));
     }
 
-    @Ignore @Test
+    @Test
     public void readHeaders() {
+        String key = "Content-Length";
+        String val = "0";
+        String header = String.format("%s: %s", key, val);
+        Stream<String> lines = Stream.of("GET / HTTP/1.1", header);
 
+        HttpRequest request = HttpProtocol.requestFromInputStream(bytesFromStream(lines));
+        assertThat(request, notNullValue());
+
+        Map<String, List<String>> headers = request.headers();
+        assertThat(headers, notNullValue());
+        assertThat(headers.keySet(), hasItem(key));
+        assertThat(headers.get(key), hasItem(val));
     }
 
     @Ignore @Test

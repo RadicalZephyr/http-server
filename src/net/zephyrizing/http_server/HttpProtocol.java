@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.SequenceInputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collector;
@@ -36,18 +38,20 @@ public class HttpProtocol {
                 return null;
             }
             parseRequestLine(b, s);
+
+            List<String> headerLines = new ArrayList<String>();
+            s = r.readLine();
+            while (!"".equals(s) && s != null) {
+                headerLines.add(s);
+                s = r.readLine();
+            }
+            parseRequestHeaders(b, headerLines);
+
         } catch (IOException e) {
             return null;
         } catch (IllegalArgumentException e) {
             return null;
         }
-
-        // List<String> headerLines = new ArrayList<String>();
-        // String s = r.readLine();
-        // while (!"".equals(s)) {
-        //     headerLines.put(s);
-        //     s = r.readLine();
-        // }
 
         return b.build();
     }
@@ -73,5 +77,9 @@ public class HttpProtocol {
         b.method(Method.valueOf(methodPathProto[0]))
             .path(methodPathProto[1])
             .protocolVersion(methodPathProto[2].replace("HTTP/", ""));
+    }
+
+    private static void parseRequestHeaders(RequestBuilder b, List<String> headerLines) {
+        b.header("Content-Length", Collections.singletonList("0"));
     }
 }
