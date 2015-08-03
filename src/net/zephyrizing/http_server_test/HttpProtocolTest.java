@@ -4,8 +4,11 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -103,6 +106,29 @@ public class HttpProtocolTest {
         assertThat(headers, notNullValue());
         assertThat(headers.keySet(), hasItem(key));
         assertThat(headers.get(key), hasItem(val));
+    }
+
+    @Test
+    public void regexMatchingHeaders() {
+        List<String> headers = Arrays.asList("Location: https://other-place.com",
+                                             "Content-Length: 1234",
+                                             "Accept-Encoding: gzip,deflate",
+                                             "Connection: Keep-Alive");
+
+        headers.forEach(s -> {
+                Matcher m = HttpProtocol.HEADER_RE.matcher(s);
+                assertThat(m.matches(), equalTo(true));
+                assertThat(m.group(1), both(notNullValue()).and(
+                               anyOf(equalTo("Location"),
+                                     equalTo("Content-Length"),
+                                     equalTo("Accept-Encoding"),
+                                     equalTo("Connection"))));
+                assertThat(m.group(2), both(notNullValue()).and(
+                               anyOf(equalTo("https://other-place.com"),
+                                     equalTo("1234"),
+                                     equalTo("gzip,deflate"),
+                                     equalTo("Keep-Alive"))));
+            });
     }
 
     @Ignore @Test
