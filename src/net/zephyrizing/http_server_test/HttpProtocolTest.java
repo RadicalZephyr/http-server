@@ -24,6 +24,20 @@ import static org.hamcrest.CoreMatchers.*;
 public class HttpProtocolTest {
 
     @Test
+    public void createBasicRequest() {
+        Stream<String> lines = Stream.of("GET / HTTP/1.1");
+
+        assertThat(HttpProtocol.requestFromLines(lines), notNullValue());
+    }
+
+    @Test
+    public void ignoreLeadingBlankLines() {
+        Stream<String> lines = Stream.of("", "GET / HTTP/1.1");
+
+        assertThat(HttpProtocol.requestFromLines(lines), notNullValue());
+    }
+
+    @Test
     public void dontFailOnEmpty() {
         Stream.Builder<String> builder = Stream.builder();
         Stream<String> lines = builder.build();
