@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.SequenceInputStream;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -19,7 +20,10 @@ import static net.zephyrizing.http_server.HttpRequest.Method.*;
 
 public class HttpProtocol {
 
+    public static final Collector<CharSequence, ?, String> collectAsHttpHeader = Collectors.joining("\r\n", "", "\r\n\r\n");
+
     public static HttpRequest requestFromInputStream(InputStream stream) {
+
         BufferedReader r = new BufferedReader(new InputStreamReader(stream));
         RequestBuilder b = new RequestBuilder();
 
@@ -51,7 +55,7 @@ public class HttpProtocol {
     public static InputStream responseStream(HttpResponse response) {
         String headStr = Stream.concat(response.getStatusLineStream(),
                                        response.getHeaderStream())
-            .collect(Collectors.joining("\r\n", "", "\r\n\r\n"));
+            .collect(collectAsHttpHeader);
 
         InputStream head = new ByteArrayInputStream(headStr.getBytes());
         InputStream body = response.getData();
