@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.nio.file.Paths;
 
 import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Before;
@@ -55,7 +56,9 @@ public class CobSpecHandlerTest {
     @Test
     public void formGetThenput() throws Exception {
         String data = "data=fatcat";
-        HttpRequest request = new HttpRequest(PUT, "/form", "1.1", new ByteArrayInputStream(data.getBytes()));
+        HttpRequest request = new HttpRequest(PUT, "/form", "1.1",
+                                              new HashMap<String, List<String>>(),
+                                              new ByteArrayInputStream(data.getBytes()));
         HttpResponse response = handler.handle(request);
         assertThat(response.status(), equalTo(200));
 
