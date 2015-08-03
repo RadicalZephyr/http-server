@@ -20,8 +20,7 @@ public class HttpRequestTest {
 
     @Test
     public void canCreateGETRequest() {
-        Stream<String> requestLines = Stream.of("GET / HTTP/1.1", "");
-        HttpRequest request = HttpProtocol.requestFromLines(requestLines);
+        HttpRequest request = new HttpRequest(GET, "/", "1.1");
         assertEquals(GET, request.method());
         assertEquals(Paths.get("/"), request.path());
         assertEquals("1.1", request.protocolVersion());
@@ -29,8 +28,7 @@ public class HttpRequestTest {
 
     @Test
     public void canCreatePOSTRequest() {
-        Stream<String> requestLines = Stream.of("POST /root HTTP/1.0", "");
-        HttpRequest request = HttpProtocol.requestFromLines(requestLines);
+        HttpRequest request = new HttpRequest(POST, "/root", "1.0");
         assertEquals(POST, request.method());
         assertEquals(Paths.get("/root"), request.path());
         assertEquals("1.0", request.protocolVersion());
@@ -38,8 +36,7 @@ public class HttpRequestTest {
 
     @Test
     public void canResolveTheRootPath() {
-        Stream<String> requestLines = Stream.of("POST / HTTP/1.0", "");
-        HttpRequest request = HttpProtocol.requestFromLines(requestLines);
+        HttpRequest request = new HttpRequest(POST, "/", "1.0");
 
         Path root = Paths.get("/root/path");
 
@@ -49,8 +46,7 @@ public class HttpRequestTest {
 
     @Test
     public void canResolvePaths() {
-        Stream<String> requestLines = Stream.of("POST /branch HTTP/1.0", "");
-        HttpRequest request = HttpProtocol.requestFromLines(requestLines);
+        HttpRequest request = new HttpRequest(POST, "/branch", "1.0");
 
         Path root = Paths.get("/root/path");
 
