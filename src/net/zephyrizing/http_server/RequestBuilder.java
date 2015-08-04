@@ -9,6 +9,7 @@ import net.zephyrizing.http_server.HttpRequest.Method;
 public class RequestBuilder {
 
     private static final String CONTENT_LENGTH_HEADER = "Content-Length";
+
     private Method m;
     private String p;
     private String v;
