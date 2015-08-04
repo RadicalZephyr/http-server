@@ -10,6 +10,8 @@ public class HttpInputStream {
     private int buffLen;
     private BufferedInputStream stream;
 
+    private boolean textSectionEnded = false;
+
     public HttpInputStream(BufferedInputStream stream) {
         this(1024*4, stream);
     }
@@ -20,6 +22,8 @@ public class HttpInputStream {
     }
 
     public String readLine() throws IOException {
+        if (textSectionEnded) return null;
+
         StringBuilder line = new StringBuilder();
         byte buff[] = new byte[buffLen];
         int crlfIndex = Integer.MAX_VALUE;
@@ -48,6 +52,7 @@ public class HttpInputStream {
         if (lineLength != 0) {
             return line.substring(0, lineLength);
         } else {
+            textSectionEnded = true;
             return null;
         }
     }
