@@ -2,11 +2,11 @@ package net.zephyrizing.http_server_test.handlers;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.ByteArrayInputStream;
+import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
 import java.nio.file.Paths;
-
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
@@ -19,9 +19,8 @@ import static org.hamcrest.CoreMatchers.*;
 import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpResponse;
 import static net.zephyrizing.http_server.HttpRequest.Method.*;
-
-import net.zephyrizing.http_server.handlers.Handler;
 import net.zephyrizing.http_server.handlers.CobSpecHandler;
+import net.zephyrizing.http_server.handlers.Handler;
 
 public class CobSpecHandlerTest {
     Handler handler;
@@ -56,16 +55,18 @@ public class CobSpecHandlerTest {
     @Test
     public void formGetThenput() throws Exception {
         String data = "data=fatcat";
-        HttpRequest request = new HttpRequest(PUT, "/form", "1.1",
-                                              new HashMap<String, List<String>>(),
-                                              new ByteArrayInputStream(data.getBytes()));
+        HttpRequest request =
+            new HttpRequest(PUT, "/form", "1.1",
+                            new HashMap<String, List<String>>(),
+                            ByteBuffer.wrap(data.getBytes()));
         HttpResponse response = handler.handle(request);
         assertThat(response.status(), equalTo(200));
 
         request = new HttpRequest(GET, "/form", "1.1");
         response = handler.handle(request);
         assertThat(response.status(), equalTo(200));
-        BufferedReader r = new BufferedReader(new InputStreamReader(response.getData()));
+        BufferedReader r = new BufferedReader(
+            new InputStreamReader(response.getData()));
         String bodyContent = r.readLine();
         assertThat(bodyContent, equalTo(data));
     }
