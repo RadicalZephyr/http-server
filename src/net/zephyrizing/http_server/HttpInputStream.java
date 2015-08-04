@@ -21,6 +21,13 @@ public class HttpInputStream {
         this.stream = stream;
     }
 
+    public ByteBuffer readBody(int length) throws IOException {
+        byte buff[] = new byte[length];
+        int bytesRead = this.stream.read(buff, 0, length);
+
+        return ByteBuffer.wrap(buff, 0, bytesRead);
+    }
+
     public String readLine() throws IOException {
         if (textSectionEnded) return null;
 

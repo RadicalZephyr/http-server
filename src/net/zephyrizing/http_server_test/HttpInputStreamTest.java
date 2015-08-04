@@ -2,6 +2,7 @@ package net.zephyrizing.http_server_test;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.nio.ByteBuffer;
 
 import net.zephyrizing.http_server.HttpInputStream;
 
@@ -48,7 +49,6 @@ public class HttpInputStreamTest {
                 new BufferedInputStream(
                     new ByteArrayInputStream(content.getBytes())));
 
-        System.out.println("twiceAsLongTest");
         assertThat(s.readLine(), equalTo("muchtoolong!"));
     }
 
@@ -82,7 +82,7 @@ public class HttpInputStreamTest {
 
     @Test
     public void stopsReadingByLinesAfterBlankLine() throws Exception {
-        String content = "line\r\n\r\notherthings\r\nthatareneverread\r\n";
+        String content = "line\r\n\r\notherthings";
         HttpInputStream s =
             new HttpInputStream(
                 12,
@@ -93,5 +93,9 @@ public class HttpInputStreamTest {
         assertThat(s.readLine(), nullValue());
         assertThat(s.readLine(), nullValue());
         assertThat(s.readLine(), nullValue());
+
+        String bodyContent = "otherthings";
+        ByteBuffer bodyBytes = ByteBuffer.wrap(bodyContent.getBytes());
+        assertThat(s.readBody(bodyContent.length()), equalTo(bodyBytes));
     }
 }
