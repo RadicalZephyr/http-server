@@ -22,6 +22,8 @@ public class HttpInputStream {
     }
 
     public ByteBuffer readBody(int length) throws IOException {
+        if (!textSectionEnded) return null;
+
         byte buff[] = new byte[length];
         int bytesRead = this.stream.read(buff, 0, length);
 
