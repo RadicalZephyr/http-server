@@ -98,4 +98,18 @@ public class HttpInputStreamTest {
         ByteBuffer bodyBytes = ByteBuffer.wrap(bodyContent.getBytes());
         assertThat(s.readBody(bodyContent.length()), equalTo(bodyBytes));
     }
+
+    @Test
+    public void cantReadBodyUntilBlankLineRead() throws Exception {
+        String content = "line\r\n\r\notherthings";
+        HttpInputStream s =
+            new HttpInputStream(
+                12,
+                new BufferedInputStream(
+                    new ByteArrayInputStream(content.getBytes())));
+
+        assertThat(s.readBody(1), nullValue());
+        assertThat(s.readBody(5), nullValue());
+        assertThat(s.readBody(1000), nullValue());
+    }
 }
