@@ -1,5 +1,6 @@
 package net.zephyrizing.http_server_test;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +64,18 @@ public class RequestBuilderTest {
 
         assertThat(b.hasContentHeader(), equalTo(true));
         assertThat(b.contentLength(), equalTo(10L));
+    }
+
+    @Test
+    public void canAddBody() {
+        RequestBuilder rb = baseRequestBuilder();
+
+        ByteBuffer bb = ByteBuffer.allocate(10);
+        rb.body(bb);
+
+        HttpRequest request = rb.build();
+
+        assertThat(request.body(), sameInstance(bb));
     }
 
     private RequestBuilder baseRequestBuilder() {
