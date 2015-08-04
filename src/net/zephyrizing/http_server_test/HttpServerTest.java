@@ -59,7 +59,7 @@ public class HttpServerTest {
 
         @Override
         public HttpConnection acceptConnection() {
-            String httpMessage = "GET / HTTP/1.1\r\n";
+            String httpMessage = "GET / HTTP/1.1\r\n\r\n";
             InputStream in = new ByteArrayInputStream(httpMessage.getBytes());
             return new HttpConnectionImpl(new Socket(), in, null);
         }
