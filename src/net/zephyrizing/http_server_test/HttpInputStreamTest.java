@@ -18,6 +18,7 @@ public class HttpInputStreamTest {
         String content = "hello\r\nworld\r\n";
         HttpInputStream s =
             new HttpInputStream(
+                5,
                 new BufferedInputStream(
                     new ByteArrayInputStream(content.getBytes())));
 
