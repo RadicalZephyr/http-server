@@ -43,6 +43,9 @@ public class HttpInputStream {
             lastMark = line.length();
 
             int bytesRead = this.stream.read(buff, 0, buffLen);
+            if (bytesRead == -1) {
+                throw new IOException("Unexpected end of input.");
+            }
             line.append(decode(buff, bytesRead));
 
             crlfIndex = line.indexOf("\r\n");

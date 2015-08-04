@@ -2,6 +2,7 @@ package net.zephyrizing.http_server_test;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import net.zephyrizing.http_server.HttpInputStream;
@@ -13,6 +14,18 @@ import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
 public class HttpInputStreamTest {
+
+    @Test(expected=IOException.class)
+    public void throwsWhenNoNewlineAvailable() throws Exception {
+        String content = "hello";
+        HttpInputStream s =
+            new HttpInputStream(
+                5,
+                new BufferedInputStream(
+                    new ByteArrayInputStream(content.getBytes())));
+
+        s.readLine();
+    }
 
     @Test
     public void canReadNetworkLines() throws Exception {
