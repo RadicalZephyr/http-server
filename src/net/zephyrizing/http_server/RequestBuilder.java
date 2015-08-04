@@ -1,5 +1,6 @@
 package net.zephyrizing.http_server;
 
+import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ public class RequestBuilder {
     private Method m;
     private String p;
     private String v;
+    private ByteBuffer buff;
 
     private Map<String, List<String>> headers = new HashMap<String, List<String>>();
 
@@ -44,11 +46,17 @@ public class RequestBuilder {
         return Integer.parseInt(this.headers.get(CONTENT_LENGTH_HEADER).get(0));
     }
 
+    public RequestBuilder body(ByteBuffer buff) {
+        this.buff = buff;
+        return this;
+    }
+
     public HttpRequest build() {
         assertNotNull(this.m, "Request method must be set");
         assertNotNull(this.p, "Request path must be set");
         assertNotNull(this.v, "Protocol version must be set");
-        return new HttpRequest(this.m, this.p, this.v, this.headers, null);
+        return new HttpRequest(this.m, this.p, this.v,
+                               this.headers, this.buff);
     }
 
     private void assertNotNull(Object o, String message) {
