@@ -25,4 +25,17 @@ public class HttpInputStreamTest {
         assertThat(s.readLine(), equalTo("hello"));
         assertThat(s.readLine(), equalTo("world"));
     }
+
+    @Test
+    public void canReadVaryingLengthLines() throws Exception {
+        String content = "short\r\ntoolong\r\n";
+        HttpInputStream s =
+            new HttpInputStream(
+                7,
+                new BufferedInputStream(
+                    new ByteArrayInputStream(content.getBytes())));
+
+        assertThat(s.readLine(), equalTo("short"));
+        assertThat(s.readLine(), equalTo("toolong"));
+    }
 }

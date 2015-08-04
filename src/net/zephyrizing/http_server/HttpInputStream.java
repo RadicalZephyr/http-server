@@ -20,12 +20,25 @@ public class HttpInputStream {
     }
 
     public String readLine() throws IOException {
+        this.stream.mark(buffLen);
+
+        StringBuilder line = new StringBuilder();
         byte buff[] = new byte[buffLen];
 
         int bytesRead = this.stream.read(buff, 0, buffLen);
+        line.append(decode(buff, bytesRead)).toString();
 
-        this.stream.skip(2);
-        return new StringBuilder().append(decode(buff, bytesRead)).toString();
+        int crlfIndex = line.indexOf("\r\n");
+        if (crlfIndex == -1) {
+            crlfIndex = Integer.MAX_VALUE;
+        }
+
+        int lineLength = Math.min(crlfIndex, bytesRead);
+
+        this.stream.reset();
+        this.stream.skip(lineLength+2);
+
+        return line.substring(0, lineLength);
     }
 
     private CharSequence decode(byte buff[], int len) {
