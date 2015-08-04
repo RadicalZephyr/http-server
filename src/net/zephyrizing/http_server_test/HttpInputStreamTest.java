@@ -66,4 +66,32 @@ public class HttpInputStreamTest {
         assertThat(s.readLine(), equalTo("line3"));
         assertThat(s.readLine(), nullValue());
     }
+
+    @Test
+    public void canReadCRAndLFInSeparateBuffers() throws Exception {
+        String content = "line\r\notherstuff\r\n";
+        HttpInputStream s =
+            new HttpInputStream(
+                5,
+                new BufferedInputStream(
+                    new ByteArrayInputStream(content.getBytes())));
+
+        assertThat(s.readLine(), equalTo("line"));
+        assertThat(s.readLine(), equalTo("otherstuff"));
+    }
+
+    @Test
+    public void stopsReadingByLinesAfterBlankLine() throws Exception {
+        String content = "line\r\n\r\notherthings\r\nthatareneverread\r\n";
+        HttpInputStream s =
+            new HttpInputStream(
+                12,
+                new BufferedInputStream(
+                    new ByteArrayInputStream(content.getBytes())));
+
+        assertThat(s.readLine(), equalTo("line"));
+        assertThat(s.readLine(), nullValue());
+        assertThat(s.readLine(), nullValue());
+        assertThat(s.readLine(), nullValue());
+    }
 }
