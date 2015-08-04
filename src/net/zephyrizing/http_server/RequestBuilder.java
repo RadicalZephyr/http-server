@@ -8,6 +8,7 @@ import net.zephyrizing.http_server.HttpRequest.Method;
 
 public class RequestBuilder {
 
+    private static final String CONTENT_LENGTH_HEADER = "Content-Length";
     private Method m;
     private String p;
     private String v;
@@ -32,6 +33,14 @@ public class RequestBuilder {
     public RequestBuilder header(String key, List<String> values) {
         this.headers.put(key, values);
         return this;
+    }
+
+    public boolean hasContentHeader() {
+        return this.headers.containsKey(CONTENT_LENGTH_HEADER);
+    }
+
+    public long contentLength() {
+        return Integer.parseInt(this.headers.get(CONTENT_LENGTH_HEADER).get(0));
     }
 
     public HttpRequest build() {

@@ -59,4 +59,23 @@ public class RequestBuilderTest {
         assertThat(headers.keySet(), hasItem(key));
         assertThat(headers.get(key), equalTo(val));
     }
+
+    @Test
+    public void canReturnContentLength() {
+        Method m = GET;
+        String p = "/";
+        String v = "1.1";
+
+        RequestBuilder b = new RequestBuilder()
+            .method(m)
+            .path(p)
+            .protocolVersion(v);
+
+        String key = "Content-Length";
+        List<String> val = Arrays.asList("10");
+        b.header(key, val);
+
+        assertThat(b.hasContentHeader(), equalTo(true));
+        assertThat(b.contentLength(), equalTo(10L));
+    }
 }
