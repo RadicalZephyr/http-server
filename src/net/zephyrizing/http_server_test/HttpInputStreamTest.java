@@ -38,4 +38,32 @@ public class HttpInputStreamTest {
         assertThat(s.readLine(), equalTo("short"));
         assertThat(s.readLine(), equalTo("toolong"));
     }
+
+    @Test
+    public void canReadLinesTwiceAsBigAsBuffer() throws Exception {
+        String content = "muchtoolong!\r\n";
+        HttpInputStream s =
+            new HttpInputStream(
+                7,
+                new BufferedInputStream(
+                    new ByteArrayInputStream(content.getBytes())));
+
+        System.out.println("twiceAsLongTest");
+        assertThat(s.readLine(), equalTo("muchtoolong!"));
+    }
+
+    @Test
+    public void returnsNullOnEmptyLineRead() throws Exception {
+        String content = "line1\r\nline2\r\nline3\r\n\r\n";
+        HttpInputStream s =
+            new HttpInputStream(
+                12,
+                new BufferedInputStream(
+                    new ByteArrayInputStream(content.getBytes())));
+
+        assertThat(s.readLine(), equalTo("line1"));
+        assertThat(s.readLine(), equalTo("line2"));
+        assertThat(s.readLine(), equalTo("line3"));
+        assertThat(s.readLine(), nullValue());
+    }
 }
