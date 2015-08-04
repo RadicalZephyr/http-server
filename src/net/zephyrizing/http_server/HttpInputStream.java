@@ -11,6 +11,7 @@ public class HttpInputStream {
     private BufferedInputStream stream;
 
     private boolean textSectionEnded = false;
+    private boolean readFirstLine = false;
 
     public HttpInputStream(BufferedInputStream stream) {
         this(1024*4, stream);
@@ -62,9 +63,14 @@ public class HttpInputStream {
         this.stream.skip(skipLength+2);
 
         if (lineLength != 0) {
+            readFirstLine = true;
             return line.substring(0, lineLength);
         } else {
-            textSectionEnded = true;
+            if (!readFirstLine) {
+                return readLine();
+            } else {
+                textSectionEnded = true;
+            }
             return null;
         }
     }
