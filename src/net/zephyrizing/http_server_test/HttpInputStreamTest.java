@@ -79,6 +79,19 @@ public class HttpInputStreamTest {
     }
 
     @Test
+    public void silentlyEatsAnInitialBlankLine() throws Exception {
+        String content = "\r\nline1\r\n\r\n";
+        HttpInputStream s =
+            new HttpInputStream(
+                2,
+                new BufferedInputStream(
+                    new ByteArrayInputStream(content.getBytes())));
+
+        assertThat(s.readLine(), equalTo("line1"));
+        assertThat(s.readLine(), nullValue());
+    }
+
+    @Test
     public void returnsNullOnEmptyLineRead() throws Exception {
         String content = "line1\r\nline2\r\nline3\r\n\r\n";
         HttpInputStream s =
