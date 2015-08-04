@@ -30,7 +30,7 @@ import static org.hamcrest.CoreMatchers.*;
 public class HttpConnectionTest {
 
     String[] requestStrings = new String[] { "GET / HTTP/1.1",
-                                             "" };
+                                             "\r\n" };
 
     Socket                socket;
     InputStream           socketIn;
