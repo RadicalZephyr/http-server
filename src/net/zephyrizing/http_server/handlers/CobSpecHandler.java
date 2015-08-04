@@ -62,9 +62,9 @@ public class CobSpecHandler implements Handler {
         return response;
     }
 
+
     public HttpResponse storeData(HttpRequest request) {
-        BufferedReader r = new BufferedReader(new InputStreamReader(request.body()));
-        this.data = r.lines().collect(Collectors.joining());
+        this.data = request.bodyAsText();
         return HttpResponse.responseFor(request);
     }
 }

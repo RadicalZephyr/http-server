@@ -1,7 +1,8 @@
 package net.zephyrizing.http_server;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -15,17 +16,17 @@ public class HttpRequest {
     private final Path   path;
     private final String protocolVersion;
     private Map<String, List<String>> headers;
-    private final InputStream body;
+    private final ByteBuffer body;
 
     public HttpRequest(Method method, String path, String protocolVersion) {
         this(method, path, protocolVersion,
              new HashMap<String, List<String>>(),
-             new ByteArrayInputStream(new byte[0]));
+             ByteBuffer.allocate(0));
     }
 
     public HttpRequest(Method method, String path, String protocolVersion,
                        Map<String, List<String>> headers,
-                       InputStream body) {
+                       ByteBuffer body) {
         this.method          = method;
         this.path            = Paths.get(path);
         this.protocolVersion = protocolVersion;
@@ -54,7 +55,18 @@ public class HttpRequest {
         return this.headers;
     }
 
-    public InputStream body() {
+    public ByteBuffer body() {
         return this.body;
+    }
+
+    public String bodyAsText() {
+        byte[] bytes;
+        if(this.body.hasArray()) {
+            bytes = this.body.array();
+        } else {
+            bytes = new byte[this.body.remaining()];
+            this.body.get(bytes);
+        }
+        return new String(bytes, StandardCharsets.UTF_8);
     }
 }
