@@ -55,7 +55,7 @@ public class HttpConnectionTest {
     public void sendsAResponse() {
         HttpConnection connection = new HttpConnectionImpl(socket, socketIn, socketOut);
         HttpRequest request = connection.getRequest();
-        HttpResponse response = HttpResponse.responseFor(request);
+        HttpResponse response = new HttpResponse();
         response.setContent(new EmptyContentProvider());
         connection.send(response);
 

@@ -23,7 +23,7 @@ public class FileSystemHandler implements Handler {
     public HttpResponse handle(HttpRequest request) {
         if (request.method() == Method.GET) {
             Path relativeRequestPath = Paths.get("/").relativize(request.path());
-            HttpResponse response = HttpResponse.responseFor(request);
+            HttpResponse response = new HttpResponse();
             ContentProvider cp = getContentFor(relativeRequestPath);
             if (cp == null) {
                 response.setStatus(404);
@@ -32,11 +32,11 @@ public class FileSystemHandler implements Handler {
             }
             return response;
         } else if (request.method() == Method.OPTIONS) {
-            HttpResponse response = HttpResponse.responseFor(request);
+            HttpResponse response = new HttpResponse();
             response.addHeader("Allow", "GET");
             return response;
         } else {
-            HttpResponse response = HttpResponse.responseFor(request);
+            HttpResponse response = new HttpResponse();
             response.setStatus(405);
             return response;
         }

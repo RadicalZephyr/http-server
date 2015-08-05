@@ -35,10 +35,10 @@ public class SequentialHandlerTest {
 
     @Test
     public void skipsTheFirstHandlerWhenNullResult() throws Exception {
-        HttpRequest request = new HttpRequest(GET, "/", "1.1");
-        final HttpResponse response = HttpResponse.responseFor(request);
+        final HttpResponse response = new HttpResponse();
         Handler handler = new SequentialHandler((HttpRequest r) -> null,
                                                 (HttpRequest r) -> response);
+        HttpRequest request = new HttpRequest(GET, "/", "1.1");
 
         assertThat(handler.handle(request), equalTo(response));
     }

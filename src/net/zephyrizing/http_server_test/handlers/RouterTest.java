@@ -27,7 +27,7 @@ public class RouterTest {
     @Test
     public void canAddARoute() throws Exception {
         HttpRequest request = new HttpRequest(GET, "/", "1.1");
-        final HttpResponse response = HttpResponse.responseFor(request);
+        final HttpResponse response = new HttpResponse();
         router.addHandler(GET, "/", (HttpRequest iRequest) -> {
                 return response;
             });
@@ -38,13 +38,13 @@ public class RouterTest {
     @Test
     public void canAddMultipleRoutes() throws Exception {
         HttpRequest request = new HttpRequest(GET, "/root-beer", "1.1");
-        final HttpResponse response = HttpResponse.responseFor(request);
+        final HttpResponse response = new HttpResponse();
         router.addHandler(GET, "/root-beer", (HttpRequest iRequest) -> {
                 return response;
             });
 
         HttpRequest request2 = new HttpRequest(GET, "/", "1.1");
-        final HttpResponse response2 = HttpResponse.responseFor(request2);
+        final HttpResponse response2 = new HttpResponse();
         router.addHandler(GET, "/", (HttpRequest iRequest) -> {
                 return response2;
             });
@@ -56,13 +56,13 @@ public class RouterTest {
     @Test
     public void canDifferentiateBetweenMethods() throws Exception {
         HttpRequest request = new HttpRequest(POST, "/", "1.1");
-        final HttpResponse response = HttpResponse.responseFor(request);
+        final HttpResponse response = new HttpResponse();
         router.addHandler(POST, "/", (HttpRequest iRequest) -> {
                 return response;
             });
 
         HttpRequest request2 = new HttpRequest(GET, "/", "1.1");
-        final HttpResponse response2 = HttpResponse.responseFor(request2);
+        final HttpResponse response2 = new HttpResponse();
         router.addHandler(GET, "/", (HttpRequest iRequest) -> {
                 return response2;
             });

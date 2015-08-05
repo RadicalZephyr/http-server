@@ -22,7 +22,7 @@ public class CobSpecHandler implements Handler {
 
         testHandler.addHandler(GET,  "/redirect",
                                (HttpRequest r) -> {
-                                   HttpResponse response = HttpResponse.responseFor(r);
+                                   HttpResponse response = new HttpResponse();
                                    response.setStatus(302);
                                    response.addHeader("Location", "http://localhost:5000/");
                                    return response;
@@ -49,7 +49,7 @@ public class CobSpecHandler implements Handler {
     private String data = "";
 
     public HttpResponse getData(HttpRequest r) {
-        HttpResponse response = HttpResponse.responseFor(r);
+        HttpResponse response = new HttpResponse();
         response.setContent(new ContentProvider() {
                 @Override
                 public boolean contentExists() { return true;}
@@ -64,11 +64,11 @@ public class CobSpecHandler implements Handler {
 
     public HttpResponse storeData(HttpRequest request) {
         this.data = request.bodyAsText();
-        return HttpResponse.responseFor(request);
+        return new HttpResponse();
     }
 
     public HttpResponse deleteData(HttpRequest request) {
         this.data = "";
-        return HttpResponse.responseFor(request);
+        return new HttpResponse();
     }
 }

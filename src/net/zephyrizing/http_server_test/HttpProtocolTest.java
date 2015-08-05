@@ -64,8 +64,7 @@ public class HttpProtocolTest {
 
     @Test
     public void createOkResponse() {
-        HttpRequest request = new HttpRequest(Method.GET, "/", "1.1");
-        HttpResponse response = HttpResponse.responseFor(request);
+        HttpResponse response = new HttpResponse();
         response.setContent(new EmptyContentProvider());
 
         InputStream responseStream  = HttpProtocol.responseStream(response);

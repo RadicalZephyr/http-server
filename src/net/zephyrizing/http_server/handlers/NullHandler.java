@@ -7,6 +7,6 @@ public class NullHandler implements Handler {
 
     @Override
     public HttpResponse handle(HttpRequest request) {
-        return HttpResponse.responseFor(request);
+        return new HttpResponse();
     }
 }
