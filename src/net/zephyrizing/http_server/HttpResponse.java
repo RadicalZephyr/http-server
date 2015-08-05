@@ -32,14 +32,11 @@ public class HttpResponse {
     private ContentProvider provider;
 
     public static HttpResponse responseFor(HttpRequest request) {
-        return new HttpResponse(request.protocolVersion());
+        return new HttpResponse();
     }
 
-    private String protocolVersion;
-
-    public HttpResponse(String protocolVersion) {
+    public HttpResponse() {
         this.status = 200;
-        this.protocolVersion = protocolVersion;
         this.headers = new HashMap<String, List<String>>();
     }
 
@@ -49,10 +46,6 @@ public class HttpResponse {
 
     public Map<String, List<String>> headers() {
         return this.headers;
-    }
-
-    public String protocolVersion() {
-        return this.protocolVersion;
     }
 
     public void setStatus(int status) {
@@ -92,6 +85,12 @@ public class HttpResponse {
             return this.provider.getContent();
         }
         return new ByteArrayInputStream("".getBytes());
+    }
+
+    private static String protocolVersion() {
+        return String.format("%s.%s",
+                             HttpProtocol.MAJOR_VERSION,
+                             HttpProtocol.MINOR_VERSION);
     }
 
     private static String renderHeader(Map.Entry<String, List<String>> entry) {

@@ -76,19 +76,6 @@ public class HttpProtocolTest {
     }
 
     @Test
-    public void createOkResponse10() {
-        HttpRequest request = new HttpRequest(Method.GET, "/", "1.0");
-        HttpResponse response = HttpResponse.responseFor(request);
-        response.setContent(new EmptyContentProvider());
-
-        InputStream responseStream  = HttpProtocol.responseStream(response);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream));
-
-        assertThat(reader.lines().collect(Collectors.toList()),
-                   hasItem(equalTo("HTTP/1.0 200 OK")));
-    }
-
-    @Test
     public void readHeaders() {
         String key = "Content-Length";
         String val = "0";

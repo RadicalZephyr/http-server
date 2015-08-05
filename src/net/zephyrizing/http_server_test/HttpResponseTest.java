@@ -46,11 +46,6 @@ public class HttpResponseTest {
     }
 
     @Test
-    public void isProtocolSame() {
-        assertThat(response.protocolVersion(), equalTo(request.protocolVersion()));
-    }
-
-    @Test
     public void isOk() {
         response.setContent(new EmptyContentProvider());
 
