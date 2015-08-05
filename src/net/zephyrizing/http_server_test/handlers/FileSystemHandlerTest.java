@@ -3,6 +3,8 @@ package net.zephyrizing.http_server_test.handlers;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import net.zephyrizing.http_server.HttpRequest;
+import net.zephyrizing.http_server.HttpResponse;
 import net.zephyrizing.http_server.content.ContentProvider;
 import net.zephyrizing.http_server.content.FileContentProvider;
 
@@ -11,6 +13,7 @@ import net.zephyrizing.http_server.handlers.FileSystemHandler;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static net.zephyrizing.http_server.HttpRequest.Method.*;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
@@ -44,4 +47,29 @@ public class FileSystemHandlerTest {
         assertThat(provider.contentExists(), equalTo(true));
     }
 
+    @Test
+    public void testReportsOptionsAsOnlyGET() throws Exception {
+        Path rootDir = Files.createTempDirectory("test-root");
+        Path contentDir = Files.createTempDirectory(rootDir, "http-response-test");
+
+        FileSystemHandler handler = new FileSystemHandler(rootDir);
+
+        HttpRequest request = new HttpRequest(OPTIONS, "/", "1.1");
+        HttpResponse response = handler.handle(request);
+
+        assertThat(response.headers().get("Allow"), hasItem("GET"));
+    }
+
+    @Test
+    public void testReportsMethodNotAllowed() throws Exception {
+        Path rootDir = Files.createTempDirectory("test-root");
+        Path contentDir = Files.createTempDirectory(rootDir, "http-response-test");
+
+        FileSystemHandler handler = new FileSystemHandler(rootDir);
+
+        HttpRequest request = new HttpRequest(POST, "/things", "1.1");
+        HttpResponse response = handler.handle(request);
+
+        assertThat(response.status(), equalTo(405));
+    }
 }
