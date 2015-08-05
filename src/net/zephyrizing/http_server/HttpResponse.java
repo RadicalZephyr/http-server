@@ -32,7 +32,11 @@ public class HttpResponse {
     private ContentProvider provider;
 
     public HttpResponse() {
-        this.status = 200;
+        this(200);
+    }
+
+    public HttpResponse(int status) {
+        this.status = status;
         this.headers = new HashMap<String, List<String>>();
     }
 
