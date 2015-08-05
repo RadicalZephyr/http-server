@@ -24,11 +24,14 @@ import static java.util.Arrays.asList;
 public class HttpServer {
 
     public static void main(String[] args) throws InterruptedException {
+        String defaultPublicRoot = String.format("%s/src/cob_spec/public/",
+                                                 System.getenv("HOME"));
+
         OptionParser parser = new OptionParser();
         OptionSpec<Integer> portOpt = parser.acceptsAll(asList("p", "port"))
             .withRequiredArg().ofType(Integer.class).defaultsTo(5000);
         OptionSpec<String>  rootOpt = parser.acceptsAll(asList("d", "directory"))
-            .withRequiredArg().ofType(String.class).defaultsTo("/Users/geoff/src/cob_spec/public/");
+            .withRequiredArg().ofType(String.class).defaultsTo(defaultPublicRoot);
         OptionSpec<Integer> threadsOpt = parser.acceptsAll(asList("t", "threads"))
             .withRequiredArg().ofType(Integer.class).defaultsTo(24);
 
