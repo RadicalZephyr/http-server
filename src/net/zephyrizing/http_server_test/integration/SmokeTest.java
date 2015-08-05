@@ -37,12 +37,12 @@ public class SmokeTest {
         public void run() {
             PrintStream oldErr = System.err;
             PrintStream newErr = new PrintStream(new ByteArrayOutputStream());
-            System.setErr(newErr);
+            //System.setErr(newErr);
             try {
                 HttpServer.main(buildOptions());
             } catch (InterruptedException e) {
             } finally {
-                System.setErr(oldErr);
+                //System.setErr(oldErr);
             }
         }
 
@@ -97,6 +97,7 @@ public class SmokeTest {
     public void runDefaultServer() throws Exception {
         ServerThread server = new ServerThread();
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
+        System.err.println("default");
 
         server.startServer();
 
@@ -110,6 +111,7 @@ public class SmokeTest {
         int port = 10000;
         ServerThread server = new ServerThread(port);
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
+        System.err.println("withPort");
 
         server.startServer();
 
@@ -123,6 +125,7 @@ public class SmokeTest {
         int port = 10000;
         ServerThread server = new ServerThread(port, "public");
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
+        System.err.println("withPortAndDir");
 
         server.startServer();
 
@@ -136,6 +139,7 @@ public class SmokeTest {
         int port = 10000;
         ServerThread server = new ServerThread(port, "public");
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
+        System.err.println("getResponse");
 
         server.startServer();
 
