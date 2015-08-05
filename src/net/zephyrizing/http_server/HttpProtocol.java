@@ -27,7 +27,7 @@ public class HttpProtocol {
 
     public static final Collector<CharSequence, ?, String> collectAsHttpHeader = Collectors.joining("\r\n", "", "\r\n\r\n");
 
-    public static final Pattern HEADER_RE = Pattern.compile("^([^:]+):\\s*(.*)$");
+    public static final Pattern HEADER_RE = Pattern.compile("^([^\\s:]+):\\s*(.*?)\\s*$");
 
     public static HttpRequest requestFromInputStream(InputStream stream) {
 
@@ -96,6 +96,8 @@ public class HttpProtocol {
         if (m.matches()) {
             String headerKey = m.group(1);
             String headerValueStr = m.group(2);
+
+            // This shouldn't really be done here. Header splitting isn't quite this generic
             String headerValues[] = headerValueStr.split("\\s*,\\s*");
             b.header(headerKey, Arrays.asList(headerValues));
         }
