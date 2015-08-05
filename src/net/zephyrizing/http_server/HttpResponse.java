@@ -31,10 +31,6 @@ public class HttpResponse {
     private Map<String, List<String>> headers;
     private ContentProvider provider;
 
-    public static HttpResponse responseFor(HttpRequest request) {
-        return new HttpResponse();
-    }
-
     public HttpResponse() {
         this.status = 200;
         this.headers = new HashMap<String, List<String>>();

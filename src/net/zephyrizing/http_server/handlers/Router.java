@@ -41,7 +41,7 @@ public class Router implements Handler {
     }
 
     private HttpResponse handleOptions(HttpRequest request) {
-        HttpResponse response = HttpResponse.responseFor(request);
+        HttpResponse response = new HttpResponse();
         response.addHeader("Allow", optionsForRoute(request.path()));
         return response;
     }
