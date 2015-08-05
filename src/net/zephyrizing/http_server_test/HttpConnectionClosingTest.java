@@ -30,13 +30,13 @@ public class HttpConnectionClosingTest {
     String[] requestStrings = new String[] { "GET / HTTP/1.1",
                                              "" };
 
-    TestSocket socket;
+    TestableSocket socket;
     TestableByteArrayInputStream socketIn;
     TestableByteArrayOutputStream socketOut;
 
     HttpConnection connection;
 
-    class TestSocket extends Socket {
+    class TestableSocket extends Socket {
         public boolean closeCalled = false;
 
         @Override
@@ -71,7 +71,7 @@ public class HttpConnectionClosingTest {
 
     @Before
     public void initialize() throws IOException {
-        socket    = new TestSocket();
+        socket    = new TestableSocket();
         socketIn  = new TestableByteArrayInputStream("".getBytes());
         socketOut = new TestableByteArrayOutputStream();
 
