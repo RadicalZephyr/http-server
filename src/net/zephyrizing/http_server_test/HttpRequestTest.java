@@ -21,6 +21,7 @@ public class HttpRequestTest {
     @Test
     public void canCreateGETRequest() {
         HttpRequest request = new HttpRequest(GET, "/", "1.1");
+
         assertEquals(GET, request.method());
         assertEquals(Paths.get("/"), request.path());
         assertEquals("1.1", request.protocolVersion());
@@ -29,6 +30,7 @@ public class HttpRequestTest {
     @Test
     public void canCreatePOSTRequest() {
         HttpRequest request = new HttpRequest(POST, "/root", "1.0");
+
         assertEquals(POST, request.method());
         assertEquals(Paths.get("/root"), request.path());
         assertEquals("1.0", request.protocolVersion());
