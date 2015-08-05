@@ -44,21 +44,24 @@ public class HttpResponse {
         return this.headers;
     }
 
-    public void setStatus(int status) {
+    public HttpResponse setStatus(int status) {
         this.status = status;
+        return this;
     }
 
-    public void addHeader(String key, String... values) {
+    public HttpResponse addHeader(String key, String... values) {
         if (values.length != 0) {
             List<String> headerValues = this.headers.getOrDefault(key, new ArrayList<String>());
             Collections.addAll(headerValues,
                                values);
             this.headers.putIfAbsent(key, headerValues);
         }
+        return this;
     }
 
-    public void setContent(ContentProvider provider) {
+    public HttpResponse setContent(ContentProvider provider) {
         this.provider = provider;
+        return this;
     }
 
     public String getStatusLine() {
