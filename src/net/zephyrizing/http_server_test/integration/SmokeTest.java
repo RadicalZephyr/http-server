@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,25 +26,28 @@ public class SmokeTest {
     public class ServerThread extends Thread {
         Integer port;
         String directory;
+        private boolean withOutput = false;
+        private PrintStream oldErr = System.err;
 
-        public ServerThread() { this(null, null); }
-        public ServerThread(Integer port) { this(port, null); }
-        public ServerThread(String directory) { this(null, directory); }
-        public ServerThread(Integer port, String directory) {
+        public ServerThread(String name) { this(name, null, null); }
+        public ServerThread(String name, Integer port) { this(name, port, null); }
+        public ServerThread(String name, String directory) { this(name, null, directory); }
+        public ServerThread(String name, Integer port, String directory) {
+            this.setName(name);
             this.port = port;
             this.directory = directory;
         }
 
+        public void print(String message) {
+            System.err.format("%d-%s: %s\n", getId(), getName(), message);
+        }
+
         @Override
         public void run() {
-            PrintStream oldErr = System.err;
-            PrintStream newErr = new PrintStream(new ByteArrayOutputStream());
-            //System.setErr(newErr);
+
             try {
                 HttpServer.main(buildOptions());
             } catch (InterruptedException e) {
-            } finally {
-                //System.setErr(oldErr);
             }
         }
 
@@ -60,34 +65,52 @@ public class SmokeTest {
             return opts.toArray(new String[0]);
         }
 
-        private void pingServer(int port) throws IOException {
+        private int port() {
+            return (this.port == null) ? 5000 : this.port;
+        }
+
+        private void pingServer(int port) {
             try (Socket s = new Socket(InetAddress.getLocalHost(), port);
                  PrintWriter out = new PrintWriter(s.getOutputStream())) {
                 out.append("\r\n").append("\r\n").append("\r\n");
+            } catch (IOException e) {
             }
         }
 
         public void startServer() {
-            this.start();
+            if (!withOutput) {
+                PrintStream newErr = new PrintStream(new ByteArrayOutputStream());
+                System.setErr(newErr);
+            }
             try {
-                Thread.sleep(100);
+                while(!available(port())) {
+                    Thread.sleep(10);
+                    print("waiting to start server");
+                }
+                this.start();
+                while(available(port())) {
+                    Thread.sleep(10);
+                    print("waiting for server to start");
+                }
             } catch (InterruptedException e) {
             }
+            print("server started");
         }
 
         public void shutdownServer() {
-            this.interrupt();
             try {
-                int port = 5000;
-                if (this.port != null) {
-                    port = this.port;
+                this.interrupt();
+                pingServer(port());
+                try {
+                    print("waiting for server thread to quit");
+                    this.join();
+                    print("joined server thread.");
+                } catch (InterruptedException e) {
                 }
-                pingServer(port);
-            } catch (IOException e) {
-            }
-            try {
-                this.join();
-            } catch (InterruptedException e) {
+            } finally {
+                if(!withOutput) {
+                    System.setErr(oldErr);
+                }
             }
         }
     }
@@ -95,9 +118,8 @@ public class SmokeTest {
 
     @Test
     public void runDefaultServer() throws Exception {
-        ServerThread server = new ServerThread();
+        ServerThread server = new ServerThread("default");
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
-        System.err.println("default");
 
         server.startServer();
 
@@ -109,9 +131,8 @@ public class SmokeTest {
     @Test
     public void runServerWithPortArgument() throws Exception {
         int port = 10000;
-        ServerThread server = new ServerThread(port);
+        ServerThread server = new ServerThread("withPort", port);
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
-        System.err.println("withPort");
 
         server.startServer();
 
@@ -123,9 +144,8 @@ public class SmokeTest {
     @Test
     public void runServerWithDirectoryArgument() throws Exception {
         int port = 10000;
-        ServerThread server = new ServerThread(port, "public");
+        ServerThread server = new ServerThread("withPortAndDir", port, "public");
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
-        System.err.println("withPortAndDir");
 
         server.startServer();
 
@@ -137,9 +157,8 @@ public class SmokeTest {
     @Test
     public void runServerAndGetResponse() throws Exception {
         int port = 10000;
-        ServerThread server = new ServerThread(port, "public");
+        ServerThread server = new ServerThread("getResponse", port, "public");
         assertThat(Arrays.asList(server.buildOptions()), everyItem(notNullValue(String.class)));
-        System.err.println("getResponse");
 
         server.startServer();
 
@@ -160,7 +179,36 @@ public class SmokeTest {
 
             line = in.readLine();
             assertThat(line, equalTo(null));
+        } finally {
+            server.shutdownServer();
         }
-        server.shutdownServer();
+    }
+
+    // From Apache Camel
+    public boolean available(int port) {
+        ServerSocket ss = null;
+        DatagramSocket ds = null;
+        try {
+            ss = new ServerSocket(port);
+            ss.setReuseAddress(true);
+            ds = new DatagramSocket(port);
+            ds.setReuseAddress(true);
+            return true;
+        } catch (IOException e) {
+        } finally {
+            if (ds != null) {
+                ds.close();
+            }
+
+            if (ss != null) {
+                try {
+                    ss.close();
+                } catch (IOException e) {
+                    /* should not be thrown */
+                }
+            }
+        }
+
+        return false;
     }
 }
