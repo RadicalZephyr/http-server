@@ -15,6 +15,7 @@ import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpResponse;
 import net.zephyrizing.http_server.content.ContentProvider;
 import net.zephyrizing.http_server.content.EmptyContentProvider;
+import net.zephyrizing.http_server.exceptions.HttpServerException;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -45,14 +46,14 @@ public class HttpConnectionTest {
     }
 
     @Test
-    public void constructsARequest() {
+    public void constructsARequest() throws Exception {
         HttpConnection connection = new HttpConnectionImpl(socket, socketIn, socketOut);
         HttpRequest request = connection.getRequest();
         assertThat(request.method(), equalTo(GET));
     }
 
     @Test
-    public void sendsAResponse() {
+    public void sendsAResponse() throws Exception {
         HttpConnection connection = new HttpConnectionImpl(socket, socketIn, socketOut);
         HttpRequest request = connection.getRequest();
         HttpResponse response = new HttpResponse();

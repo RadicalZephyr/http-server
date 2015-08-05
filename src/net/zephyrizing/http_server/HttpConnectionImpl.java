@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.zephyrizing.http_server.HttpRequest;
+import net.zephyrizing.http_server.exceptions.HttpServerException;
 
 public class HttpConnectionImpl implements HttpConnection {
 
@@ -33,7 +34,7 @@ public class HttpConnectionImpl implements HttpConnection {
     }
 
     @Override
-    public HttpRequest getRequest() {
+    public HttpRequest getRequest() throws HttpServerException {
         return HttpProtocol.requestFromInputStream(socketIn);
     }
 
