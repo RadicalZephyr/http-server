@@ -31,8 +31,14 @@ public class FileSystemHandler implements Handler {
                 response.setContent(cp);
             }
             return response;
+        } else if (request.method() == Method.OPTIONS) {
+            HttpResponse response = HttpResponse.responseFor(request);
+            response.addHeader("Allow", "GET");
+            return response;
         } else {
-            return null;
+            HttpResponse response = HttpResponse.responseFor(request);
+            response.setStatus(405);
+            return response;
         }
     }
 
