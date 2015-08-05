@@ -11,10 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
@@ -23,6 +19,10 @@ import net.zephyrizing.http_server.HttpResponse;
 import static net.zephyrizing.http_server.HttpRequest.Method.*;
 import net.zephyrizing.http_server.handlers.CobSpecHandler;
 import net.zephyrizing.http_server.handlers.Handler;
+
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 public class CobSpecHandlerTest {
     Handler handler;
