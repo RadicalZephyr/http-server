@@ -14,8 +14,19 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import net.zephyrizing.http_server.content.ContentProvider;
+import net.zephyrizing.http_server.content.StringContentProvider;
 
 public class HttpResponse {
+
+    private static final String ERROR_MESSAGE_FMT =
+        "<!DOCTYPE html>\n"+
+        "<html><head>"+
+        "<title>%s - %s</title>"+
+        "</head><body>"+
+        "<h1>%s</h1>"+
+        "<article><p>An error occurred while processing.</p>"+
+        "<p>%s</p></article>"+
+        "</body></html>";;
 
     private static final Map<Integer, String> RESPONSE_DESCRIPTIONS;
     static {
@@ -61,6 +72,18 @@ public class HttpResponse {
             this.headers.putIfAbsent(key, headerValues);
         }
         return this;
+    }
+
+    public HttpResponse setContent(Throwable error) {
+        return setContent(String.format(ERROR_MESSAGE_FMT,
+                                        this.status,
+                                        RESPONSE_DESCRIPTIONS.get(this.status),
+                                        error.toString(),
+                                        error.getLocalizedMessage()));
+    }
+
+    public HttpResponse setContent(String content) {
+        return setContent(new StringContentProvider(content));
     }
 
     public HttpResponse setContent(ContentProvider provider) {
