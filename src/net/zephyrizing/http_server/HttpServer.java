@@ -14,6 +14,8 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
+import net.zephyrizing.http_server.exceptions.HttpServerException;
+import net.zephyrizing.http_server.exceptions.BadRequestException;
 import net.zephyrizing.http_server.handlers.Handler;
 import net.zephyrizing.http_server.handlers.CobSpecHandler;
 
@@ -97,6 +99,8 @@ public class HttpServer {
                     return;
                 }
                 connection.send(handler.handle(request));
+
+            } catch (HttpServerException e) {
 
             } catch (IOException e) {
                 throw new RuntimeException(e);

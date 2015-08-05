@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpRequest.Method;
 import net.zephyrizing.http_server.HttpResponse;
+import net.zephyrizing.http_server.exceptions.HttpServerException;
 
 import static net.zephyrizing.http_server.HttpRequest.Method.*;
 
@@ -32,7 +33,8 @@ public class HttpProtocol {
 
     public static final Pattern HEADER_RE = Pattern.compile("^([^\\s:]+):\\s*(.*?)\\s*$");
 
-    public static HttpRequest requestFromInputStream(InputStream stream) {
+    public static HttpRequest requestFromInputStream(InputStream stream)
+        throws HttpServerException {
 
         HttpInputStream r =
             new HttpInputStream(

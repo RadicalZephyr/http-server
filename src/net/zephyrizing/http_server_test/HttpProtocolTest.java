@@ -30,40 +30,40 @@ import static org.hamcrest.CoreMatchers.*;
 public class HttpProtocolTest {
 
     @Test
-    public void createBasicRequest() {
+    public void createBasicRequest() throws Exception {
         Stream<String> lines = Stream.of("GET / HTTP/1.1");
 
         assertThat(HttpProtocol.requestFromInputStream(bytesFromStream(lines)), notNullValue());
     }
 
     @Test
-    public void ignoreLeadingBlankLines() {
+    public void ignoreLeadingBlankLines() throws Exception {
         Stream<String> lines = Stream.of("", "GET / HTTP/1.1");
 
         assertThat(HttpProtocol.requestFromInputStream(bytesFromStream(lines)), notNullValue());
     }
 
     @Test
-    public void dontFailOnEmpty() {
+    public void dontFailOnEmpty() throws Exception {
         assertThat(HttpProtocol.requestFromInputStream(new ByteArrayInputStream(new byte[0])), equalTo(null));
     }
 
     @Test
-    public void dontFailOnBlank() {
+    public void dontFailOnBlank() throws Exception {
         Stream<String> lines = Stream.of("");
 
         assertThat(HttpProtocol.requestFromInputStream(bytesFromStream(lines)), equalTo(null));
     }
 
     @Test
-    public void dontFailOnIncompleteStatus() {
+    public void dontFailOnIncompleteStatus() throws Exception {
         Stream<String> lines = Stream.of("GET /");
 
         assertThat(HttpProtocol.requestFromInputStream(bytesFromStream(lines)), equalTo(null));
     }
 
     @Test
-    public void createOkResponse() {
+    public void createOkResponse() throws Exception {
         HttpResponse response = new HttpResponse();
         response.setContent(new EmptyContentProvider());
 
@@ -75,7 +75,7 @@ public class HttpProtocolTest {
     }
 
     @Test
-    public void readHeaders() {
+    public void readHeaders() throws Exception {
         String key = "Content-Length";
         String val = "0";
         String header = String.format("%s: %s", key, val);
@@ -97,7 +97,7 @@ public class HttpProtocolTest {
     }
 
     @Test
-    public void regexMatchingHeaders() {
+    public void regexMatchingHeaders() throws Exception {
         List<String> headers = Arrays.asList("Location: https://other-place.com",
                                              "Content-Length: 1234",
                                              "Accept-Encoding: gzip,deflate",
@@ -129,7 +129,7 @@ public class HttpProtocolTest {
     }
 
     @Test
-    public void regexFailingHeaders() {
+    public void regexFailingHeaders() throws Exception {
         List<String> headers = Arrays.asList("  NoPrecedingWhitespace: bad-stuff",
                                              "NoNameColonWhitespace   : more-bad-things");
 
@@ -140,7 +140,7 @@ public class HttpProtocolTest {
     }
 
     @Test
-    public void readBody() {
+    public void readBody() throws Exception {
         String key = "Content-Length";
         String bodyText = "testing123";
         String lengthHeader = String.format("%s: %s",
