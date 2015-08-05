@@ -41,6 +41,7 @@ public class HttpResponseTest {
     public void hasSettableStatusCode() {
         int status = 500;
         response.setStatus(status);
+
         assertThat(response.status(), equalTo(status));
     }
 
@@ -50,19 +51,16 @@ public class HttpResponseTest {
     }
 
     @Test
-    public void isProtocolSame10() {
-        assertThat(response.protocolVersion(), equalTo(request.protocolVersion()));
-    }
-
-    @Test
     public void isOk() {
         response.setContent(new EmptyContentProvider());
+
         assertThat(response.getStatusLine(), equalTo("HTTP/1.1 200 OK"));
     }
 
     @Test
     public void isFourOhFour() {
         response.setStatus(404);
+
         assertThat(response.getStatusLine(), equalTo("HTTP/1.1 404 Not Found"));
     }
 
@@ -71,6 +69,7 @@ public class HttpResponseTest {
         response.addHeader("Accept", "NOTHING");
         response.addHeader("Accept", "ToIt");
         response.addHeader("Wrong", "Things");
+
         assertThat(response.getHeaderStream().collect(Collectors.toList()),
                    hasItems("Accept: NOTHING,ToIt",
                             "Wrong: Things"));
