@@ -100,6 +100,8 @@ public class HttpServer {
                 }
                 connection.send(handler.handle(request));
 
+            } catch (BadRequestException e) {
+                connection.send(new HttpResponse(400).setContent(e));
             } catch (HttpServerException e) {
 
             } catch (IOException e) {
