@@ -45,24 +45,19 @@ public class HttpProtocolTest {
 
     @Test
     public void dontFailOnEmpty() {
-        Stream.Builder<String> builder = Stream.builder();
-        Stream<String> lines = builder.build();
-
-        assertThat(HttpProtocol.requestFromInputStream(bytesFromStream(lines)), equalTo(null));
+        assertThat(HttpProtocol.requestFromInputStream(new ByteArrayInputStream(new byte[0])), equalTo(null));
     }
 
     @Test
     public void dontFailOnBlank() {
-        Stream.Builder<String> builder = Stream.builder();
-        Stream<String> lines = builder.add("").build();
+        Stream<String> lines = Stream.of("");
 
         assertThat(HttpProtocol.requestFromInputStream(bytesFromStream(lines)), equalTo(null));
     }
 
     @Test
     public void dontFailOnIncompleteStatus() {
-        Stream.Builder<String> builder = Stream.builder();
-        Stream<String> lines = builder.add("GET /").build();
+        Stream<String> lines = Stream.of("GET /");
 
         assertThat(HttpProtocol.requestFromInputStream(bytesFromStream(lines)), equalTo(null));
     }
