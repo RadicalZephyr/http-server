@@ -18,11 +18,7 @@ public class HttpInputStreamTest {
     @Test(expected=IOException.class)
     public void throwsWhenNoNewlineAvailable() throws Exception {
         String content = "hello";
-        HttpInputStream s =
-            new HttpInputStream(
-                5,
-                new BufferedInputStream(
-                    new ByteArrayInputStream(content.getBytes())));
+        HttpInputStream s = httpInputStream(5, content);
 
         s.readLine();
     }
@@ -30,11 +26,7 @@ public class HttpInputStreamTest {
     @Test
     public void canReadNetworkLines() throws Exception {
         String content = "hello\r\nworld\r\n";
-        HttpInputStream s =
-            new HttpInputStream(
-                5,
-                new BufferedInputStream(
-                    new ByteArrayInputStream(content.getBytes())));
+        HttpInputStream s = httpInputStream(5, content);
 
         assertThat(s.readLine(), equalTo("hello"));
         assertThat(s.readLine(), equalTo("world"));
@@ -43,11 +35,7 @@ public class HttpInputStreamTest {
     @Test
     public void canReadWithSingleCharBuffer() throws Exception {
         String content = "hello\r\nworld\r\n";
-        HttpInputStream s =
-            new HttpInputStream(
-                1,
-                new BufferedInputStream(
-                    new ByteArrayInputStream(content.getBytes())));
+        HttpInputStream s = httpInputStream(1, content);
 
         assertThat(s.readLine(), equalTo("hello"));
         assertThat(s.readLine(), equalTo("world"));
@@ -56,11 +44,7 @@ public class HttpInputStreamTest {
     @Test
     public void canReadVaryingLengthLines() throws Exception {
         String content = "short\r\ntoolong\r\n";
-        HttpInputStream s =
-            new HttpInputStream(
-                7,
-                new BufferedInputStream(
-                    new ByteArrayInputStream(content.getBytes())));
+        HttpInputStream s = httpInputStream(7, content);
 
         assertThat(s.readLine(), equalTo("short"));
         assertThat(s.readLine(), equalTo("toolong"));
@@ -69,11 +53,7 @@ public class HttpInputStreamTest {
     @Test
     public void canReadLinesTwiceAsBigAsBuffer() throws Exception {
         String content = "muchtoolong!\r\n";
-        HttpInputStream s =
-            new HttpInputStream(
-                7,
-                new BufferedInputStream(
-                    new ByteArrayInputStream(content.getBytes())));
+        HttpInputStream s = httpInputStream(7, content);
 
         assertThat(s.readLine(), equalTo("muchtoolong!"));
     }
@@ -81,11 +61,7 @@ public class HttpInputStreamTest {
     @Test
     public void silentlyEatsAnInitialBlankLine() throws Exception {
         String content = "\r\nline1\r\n\r\n";
-        HttpInputStream s =
-            new HttpInputStream(
-                2,
-                new BufferedInputStream(
-                    new ByteArrayInputStream(content.getBytes())));
+        HttpInputStream s = httpInputStream(2, content);
 
         assertThat(s.readLine(), equalTo("line1"));
         assertThat(s.readLine(), nullValue());
@@ -94,11 +70,7 @@ public class HttpInputStreamTest {
     @Test
     public void returnsNullOnEmptyLineRead() throws Exception {
         String content = "line1\r\nline2\r\nline3\r\n\r\n";
-        HttpInputStream s =
-            new HttpInputStream(
-                12,
-                new BufferedInputStream(
-                    new ByteArrayInputStream(content.getBytes())));
+        HttpInputStream s = httpInputStream(12, content);
 
         assertThat(s.readLine(), equalTo("line1"));
         assertThat(s.readLine(), equalTo("line2"));
@@ -109,11 +81,7 @@ public class HttpInputStreamTest {
     @Test
     public void canReadCRAndLFInSeparateBuffers() throws Exception {
         String content = "line\r\notherstuff\r\n";
-        HttpInputStream s =
-            new HttpInputStream(
-                5,
-                new BufferedInputStream(
-                    new ByteArrayInputStream(content.getBytes())));
+        HttpInputStream s = httpInputStream(5, content);
 
         assertThat(s.readLine(), equalTo("line"));
         assertThat(s.readLine(), equalTo("otherstuff"));
@@ -122,11 +90,7 @@ public class HttpInputStreamTest {
     @Test
     public void stopsReadingByLinesAfterBlankLine() throws Exception {
         String content = "line\r\n\r\notherthings";
-        HttpInputStream s =
-            new HttpInputStream(
-                12,
-                new BufferedInputStream(
-                    new ByteArrayInputStream(content.getBytes())));
+        HttpInputStream s = httpInputStream(12, content);
 
         assertThat(s.readLine(), equalTo("line"));
         assertThat(s.readLine(), nullValue());
@@ -141,14 +105,18 @@ public class HttpInputStreamTest {
     @Test
     public void cantReadBodyUntilBlankLineRead() throws Exception {
         String content = "line\r\n\r\notherthings";
-        HttpInputStream s =
-            new HttpInputStream(
-                12,
-                new BufferedInputStream(
-                    new ByteArrayInputStream(content.getBytes())));
+        HttpInputStream s = httpInputStream(12, content);
 
         assertThat(s.readBody(1), nullValue());
         assertThat(s.readBody(5), nullValue());
         assertThat(s.readBody(1000), nullValue());
+    }
+
+    private HttpInputStream httpInputStream(int buffLen, String content) {
+        return
+            new HttpInputStream(
+                buffLen,
+                new BufferedInputStream(
+                    new ByteArrayInputStream(content.getBytes())));
     }
 }
