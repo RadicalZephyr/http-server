@@ -38,6 +38,7 @@ public class CobSpecHandler implements Handler {
         testHandler.addHandler(GET,  "/form", this::getData);
         testHandler.addHandler(POST, "/form", this::storeData);
         testHandler.addHandler(PUT,  "/form", this::storeData);
+        testHandler.addHandler(DELETE,  "/form", this::deleteData);
 
         this.handler = new SequentialHandler(testHandler, fileHandler);
     }
@@ -65,6 +66,11 @@ public class CobSpecHandler implements Handler {
 
     public HttpResponse storeData(HttpRequest request) {
         this.data = request.bodyAsText();
+        return HttpResponse.responseFor(request);
+    }
+
+    public HttpResponse deleteData(HttpRequest request) {
+        this.data = "";
         return HttpResponse.responseFor(request);
     }
 }

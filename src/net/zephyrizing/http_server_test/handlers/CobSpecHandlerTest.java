@@ -1,10 +1,12 @@
 package net.zephyrizing.http_server_test.handlers;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,5 +106,61 @@ public class CobSpecHandlerTest {
                                                          equalTo("POST"),
                                                          equalTo("OPTIONS"),
                                                          equalTo("PUT"))));
+    }
+
+    @Test
+    public void getPostGetdeleteGet() throws IOException {
+        HttpRequest request;
+        HttpResponse response;
+        BufferedReader r;
+
+        // Initial GET
+        request = new HttpRequest(GET, "/form", "1.1");
+        response = handler.handle(request);
+
+        assertThat(response, notNullValue());
+        assertThat(response.status(), equalTo(200));
+        r =
+            new BufferedReader(
+                new InputStreamReader(response.getData()));
+        assertThat(r.readLine(), nullValue());
+
+        /// POST content
+        Map<String, List<String>> headers = new HashMap<String, List<String>>();
+        String body = "stuffnthings";
+        String bodyLength = Integer.toString(body.length());
+        headers.put("Content-Length", Arrays.asList(bodyLength));
+        ByteBuffer bodyBytes = ByteBuffer.wrap(body.getBytes());
+        request = new HttpRequest(POST, "/form", "1.1",
+                                  headers, bodyBytes);
+        response = handler.handle(request);
+
+        assertThat(response, notNullValue());
+        assertThat(response.status(), equalTo(200));
+
+        /// Intermediate GET
+        request = new HttpRequest(GET, "/form", "1.1");
+        response = handler.handle(request);
+
+        assertThat(response, notNullValue());
+        assertThat(response.status(), equalTo(200));
+        r = new BufferedReader(
+            new InputStreamReader(response.getData()));
+        assertThat(r.readLine(), equalTo(body));
+
+        /// DELETE
+        request = new HttpRequest(DELETE, "/form", "1.1");
+        response = handler.handle(request);
+
+        /// Final GET
+        request = new HttpRequest(GET, "/form", "1.1");
+        response = handler.handle(request);
+
+        assertThat(response, notNullValue());
+        assertThat(response.status(), equalTo(200));
+        r =
+            new BufferedReader(
+                new InputStreamReader(response.getData()));
+        assertThat(r.readLine(), nullValue());
     }
 }
