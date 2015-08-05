@@ -115,7 +115,10 @@ public class HttpProtocolTest {
         List<String> headers = Arrays.asList("Location: https://other-place.com",
                                              "Content-Length: 1234",
                                              "Accept-Encoding: gzip,deflate",
-                                             "Connection: Keep-Alive");
+                                             "Connection: Keep-Alive",
+                                             "NoOWS:really-none",
+                                             "PrecedingWhitespace:            things-and-stuff",
+                                             "TrailingWhitespace: lots-of-trailers             ");
 
         headers.forEach(s -> {
                 Matcher m = HttpProtocol.HEADER_RE.matcher(s);
@@ -124,12 +127,29 @@ public class HttpProtocolTest {
                                anyOf(equalTo("Location"),
                                      equalTo("Content-Length"),
                                      equalTo("Accept-Encoding"),
-                                     equalTo("Connection"))));
+                                     equalTo("Connection"),
+                                     equalTo("NoOWS"),
+                                     equalTo("PrecedingWhitespace"),
+                                     equalTo("TrailingWhitespace"))));
                 assertThat(m.group(2), both(notNullValue()).and(
                                anyOf(equalTo("https://other-place.com"),
                                      equalTo("1234"),
                                      equalTo("gzip,deflate"),
-                                     equalTo("Keep-Alive"))));
+                                     equalTo("Keep-Alive"),
+                                     equalTo("really-none"),
+                                     equalTo("things-and-stuff"),
+                                     equalTo("lots-of-trailers"))));
+            });
+    }
+
+    @Test
+    public void regexFailingHeaders() {
+        List<String> headers = Arrays.asList("  NoPrecedingWhitespace: bad-stuff",
+                                             "NoNameColonWhitespace   : more-bad-things");
+
+        headers.forEach(s -> {
+                Matcher m = HttpProtocol.HEADER_RE.matcher(s);
+                assertThat(m.matches(), equalTo(false));
             });
     }
 
