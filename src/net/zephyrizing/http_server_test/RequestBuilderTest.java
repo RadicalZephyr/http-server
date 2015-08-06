@@ -5,13 +5,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import net.zephyrizing.http_server.Headers;
 import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpRequest.Method;
 import net.zephyrizing.http_server.RequestBuilder;
-import static net.zephyrizing.http_server.HttpRequest.Method.*;
 
 import org.junit.Ignore;
 import org.junit.Test;
+
+import static net.zephyrizing.http_server.HttpRequest.Method.*;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
@@ -55,10 +57,8 @@ public class RequestBuilderTest {
 
         HttpRequest request = b.build();
 
-        assertThat(request, notNullValue());
+        Headers headers = request.headers();
 
-        Map<String, List<String>> headers = request.headers();
-        assertThat(headers, notNullValue());
         assertThat(headers.keySet(), hasItem(key));
         assertThat(headers.get(key), equalTo(val));
     }
