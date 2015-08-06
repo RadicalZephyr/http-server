@@ -9,8 +9,10 @@ import java.util.stream.Collectors;
 
 import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpResponse;
-import static net.zephyrizing.http_server.HttpRequest.Method.*;
 import net.zephyrizing.http_server.content.ContentProvider;
+import net.zephyrizing.http_server.content.StringContentProvider;
+
+import static net.zephyrizing.http_server.HttpRequest.Method.*;
 
 public class CobSpecHandler implements Handler {
     Handler handler;
@@ -50,13 +52,7 @@ public class CobSpecHandler implements Handler {
 
     public HttpResponse getData(HttpRequest r) {
         HttpResponse response = new HttpResponse();
-        response.setContent(new ContentProvider() {
-                @Override
-                public boolean contentExists() { return true;}
-
-                @Override
-                public InputStream getContent() { return new ByteArrayInputStream(data.getBytes());}
-            });
+        response.setContent(new StringContentProvider(this.data));
 
         return response;
     }
