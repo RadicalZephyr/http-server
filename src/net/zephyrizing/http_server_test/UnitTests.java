@@ -8,6 +8,8 @@ import net.zephyrizing.http_server_test.handlers.FileSystemHandlerTest;
 import net.zephyrizing.http_server_test.handlers.RouterTest;
 import net.zephyrizing.http_server_test.handlers.SequentialHandlerTest;
 
+import net.zephyrizing.http_server_test.middleware.UrlParamsTest;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -26,7 +28,6 @@ import org.junit.runners.Suite;
             CobSpecHandlerTest.class,
             FileSystemHandlerTest.class,
             RouterTest.class,
-            SequentialHandlerTest.class})
-public class UnitTests {
-
-}
+            SequentialHandlerTest.class,
+            UrlParamsTest.class})
+public class UnitTests {}
