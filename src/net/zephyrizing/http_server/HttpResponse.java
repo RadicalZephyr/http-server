@@ -39,7 +39,7 @@ public class HttpResponse {
     }
 
     private int status;
-    private Map<String, List<String>> headers;
+    private Headers headers;
     private ContentProvider provider;
 
     public HttpResponse() {
@@ -48,14 +48,14 @@ public class HttpResponse {
 
     public HttpResponse(int status) {
         this.status = status;
-        this.headers = new HashMap<String, List<String>>();
+        this.headers = new HeadersMap();
     }
 
     public int status() {
         return this.status;
     }
 
-    public Map<String, List<String>> headers() {
+    public Headers headers() {
         return this.headers;
     }
 

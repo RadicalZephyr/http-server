@@ -15,7 +15,7 @@ public class RequestBuilder {
     private String p;
     private ByteBuffer buff;
 
-    private Map<String, List<String>> headers = new HashMap<String, List<String>>();
+    private Headers headers = new HeadersMap();
 
     public RequestBuilder method(Method m) {
         this.m = m;

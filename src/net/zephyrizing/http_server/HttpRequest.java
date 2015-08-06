@@ -14,22 +14,22 @@ public class HttpRequest {
 
     private final Method method;
     private final Path   path;
-    private Map<String, List<String>> headers;
+    private Headers headers;
     private final ByteBuffer body;
 
     public HttpRequest(Method method, String path) {
         this(method, path,
-             new HashMap<String, List<String>>(),
+             new HeadersMap(),
              ByteBuffer.allocate(0));
     }
 
     public HttpRequest(Method method, String path,
-                       Map<String, List<String>> headers,
+                       Headers headers,
                        ByteBuffer body) {
-        this.method          = method;
-        this.path            = Paths.get(path);
-        this.headers         = headers;
-        this.body            = body;
+        this.method  = method;
+        this.path    = Paths.get(path);
+        this.headers = headers;
+        this.body    = body;
     }
 
     public Method method() {

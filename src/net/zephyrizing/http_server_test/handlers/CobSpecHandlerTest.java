@@ -14,6 +14,8 @@ import java.util.Map;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
+import net.zephyrizing.http_server.Headers;
+import net.zephyrizing.http_server.HeadersMap;
 import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpResponse;
 import static net.zephyrizing.http_server.HttpRequest.Method.*;
@@ -48,7 +50,7 @@ public class CobSpecHandlerTest {
 
         assertThat(response, notNullValue());
         assertThat(response.status(), equalTo(302));
-        Map<String, List<String>> headers = response.headers();
+        Headers headers = response.headers();
         assertThat(headers, notNullValue());
         assertThat(headers.containsKey("Location"), equalTo(true));
         assertThat(headers.get("Location"), hasItems("http://localhost:5000/"));
@@ -59,7 +61,7 @@ public class CobSpecHandlerTest {
         String data = "data=fatcat";
         HttpRequest request =
             new HttpRequest(PUT, "/form",
-                            new HashMap<String, List<String>>(),
+                            new HeadersMap(),
                             ByteBuffer.wrap(data.getBytes()));
         HttpResponse response = handler.handle(request);
         assertThat(response.status(), equalTo(200));
@@ -98,7 +100,7 @@ public class CobSpecHandlerTest {
 
         assertThat(response, notNullValue());
         assertThat(response.status(), equalTo(200));
-        Map<String, List<String>> headers = response.headers();
+        Headers headers = response.headers();
         assertThat(headers, notNullValue());
         assertThat(headers.containsKey("Allow"), equalTo(true));
         assertThat(headers.get("Allow"), everyItem(anyOf(equalTo("GET"),
@@ -126,7 +128,7 @@ public class CobSpecHandlerTest {
         assertThat(r.readLine(), nullValue());
 
         /// POST content
-        Map<String, List<String>> headers = new HashMap<String, List<String>>();
+        Headers headers = new HeadersMap();
         String body = "stuffnthings";
         String bodyLength = Integer.toString(body.length());
         headers.put("Content-Length", Arrays.asList(bodyLength));
