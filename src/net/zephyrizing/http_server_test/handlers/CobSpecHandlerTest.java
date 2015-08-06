@@ -40,7 +40,6 @@ public class CobSpecHandlerTest {
         HttpRequest request = new HttpRequest(GET, "/foobar");
         HttpResponse response = handler.handle(request);
 
-        assertThat(response, notNullValue());
         assertThat(response.status(), equalTo(404));
     }
 
@@ -49,10 +48,9 @@ public class CobSpecHandlerTest {
         HttpRequest request = new HttpRequest(GET, "/redirect");
         HttpResponse response = handler.handle(request);
 
-        assertThat(response, notNullValue());
         assertThat(response.status(), equalTo(302));
+
         Headers headers = response.headers();
-        assertThat(headers, notNullValue());
         assertThat(headers.containsKey("Location"), equalTo(true));
         assertThat(headers.get("Location"), hasItems("http://localhost:5000/"));
     }
@@ -81,7 +79,6 @@ public class CobSpecHandlerTest {
         HttpRequest request = new HttpRequest(PUT, "/form");
         HttpResponse response = handler.handle(request);
 
-        assertThat(response, notNullValue());
         assertThat(response.status(), equalTo(200));
     }
 
@@ -90,7 +87,6 @@ public class CobSpecHandlerTest {
         HttpRequest request = new HttpRequest(POST, "/form");
         HttpResponse response = handler.handle(request);
 
-        assertThat(response, notNullValue());
         assertThat(response.status(), equalTo(200));
     }
 
@@ -99,10 +95,9 @@ public class CobSpecHandlerTest {
         HttpRequest request = new HttpRequest(OPTIONS, "/method_options");
         HttpResponse response = handler.handle(request);
 
-        assertThat(response, notNullValue());
         assertThat(response.status(), equalTo(200));
+
         Headers headers = response.headers();
-        assertThat(headers, notNullValue());
         assertThat(headers.containsKey("Allow"), equalTo(true));
         assertThat(headers.get("Allow"), everyItem(anyOf(equalTo("GET"),
                                                          equalTo("HEAD"),
@@ -120,7 +115,6 @@ public class CobSpecHandlerTest {
                                               null, null);
         HttpResponse response = handler.handle(request);
 
-        assertThat(response, notNullValue());
         assertThat(response.status(), equalTo(200));
         BufferedReader r = new BufferedReader(
             new InputStreamReader(response.getData()));
@@ -140,7 +134,6 @@ public class CobSpecHandlerTest {
         request = new HttpRequest(GET, "/form");
         response = handler.handle(request);
 
-        assertThat(response, notNullValue());
         assertThat(response.status(), equalTo(200));
         r =
             new BufferedReader(
@@ -157,14 +150,12 @@ public class CobSpecHandlerTest {
                                   headers, bodyBytes);
         response = handler.handle(request);
 
-        assertThat(response, notNullValue());
         assertThat(response.status(), equalTo(200));
 
         /// Intermediate GET
         request = new HttpRequest(GET, "/form");
         response = handler.handle(request);
 
-        assertThat(response, notNullValue());
         assertThat(response.status(), equalTo(200));
         r = new BufferedReader(
             new InputStreamReader(response.getData()));
@@ -178,7 +169,6 @@ public class CobSpecHandlerTest {
         request = new HttpRequest(GET, "/form");
         response = handler.handle(request);
 
-        assertThat(response, notNullValue());
         assertThat(response.status(), equalTo(200));
         r =
             new BufferedReader(
