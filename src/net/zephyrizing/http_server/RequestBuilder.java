@@ -13,6 +13,7 @@ public class RequestBuilder {
 
     private Method m;
     private String p;
+    private String q;
     private ByteBuffer buff;
 
     private Headers headers = new HeadersMap();
@@ -24,6 +25,11 @@ public class RequestBuilder {
 
     public RequestBuilder path(String p) {
         this.p = p;
+        return this;
+    }
+
+    public RequestBuilder query(String q) {
+        this.q = q;
         return this;
     }
 
@@ -48,7 +54,7 @@ public class RequestBuilder {
     public HttpRequest build() {
         assertNotNull(this.m, "Request method must be set");
         assertNotNull(this.p, "Request path must be set");
-        return new HttpRequest(this.m, this.p,
+        return new HttpRequest(this.m, this.p, this.q,
                                this.headers, this.buff);
     }
 

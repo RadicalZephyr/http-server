@@ -60,7 +60,7 @@ public class CobSpecHandlerTest {
     public void formGetThenput() throws Exception {
         String data = "data=fatcat";
         HttpRequest request =
-            new HttpRequest(PUT, "/form",
+            new HttpRequest(PUT, "/form", null,
                             new HeadersMap(),
                             ByteBuffer.wrap(data.getBytes()));
         HttpResponse response = handler.handle(request);
@@ -133,7 +133,7 @@ public class CobSpecHandlerTest {
         String bodyLength = Integer.toString(body.length());
         headers.put("Content-Length", Arrays.asList(bodyLength));
         ByteBuffer bodyBytes = ByteBuffer.wrap(body.getBytes());
-        request = new HttpRequest(POST, "/form",
+        request = new HttpRequest(POST, "/form", null,
                                   headers, bodyBytes);
         response = handler.handle(request);
 
