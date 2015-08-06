@@ -33,32 +33,32 @@ public class HttpProtocol {
 
     public static final Pattern HEADER_RE = Pattern.compile("^([^\\s:]+):\\s*(.*?)\\s*$");
 
-    public static HttpRequest requestFromInputStream(InputStream stream)
+    public static HttpRequest requestFromInputStream(InputStream inStream)
         throws HttpServerException {
 
-        HttpInputStream r =
+        HttpInputStream stream =
             new HttpInputStream(
-                new BufferedInputStream(stream));
-        RequestBuilder b = new RequestBuilder();
+                new BufferedInputStream(inStream));
+        RequestBuilder builder = new RequestBuilder();
 
         try {
-            String s = r.readLine();
-            if (s == null) {
+            String tempStr = stream.readLine();
+            if (tempStr == null) {
                 return null;
             }
-            parseRequestLine(b, s);
+            parseRequestLine(builder, tempStr);
 
             List<String> headerLines = new ArrayList<String>();
-            s = r.readLine();
-            while (s != null) {
-                headerLines.add(s);
-                s = r.readLine();
+            tempStr = stream.readLine();
+            while (tempStr != null) {
+                headerLines.add(tempStr);
+                tempStr = stream.readLine();
             }
-            parseRequestHeaders(b, headerLines);
+            parseRequestHeaders(builder, headerLines);
 
-            if (b.hasContentHeader()) {
-                ByteBuffer body = r.readBody(b.contentLength());
-                b.body(body);
+            if (builder.hasContentHeader()) {
+                ByteBuffer body = stream.readBody(builder.contentLength());
+                builder.body(body);
             }
         } catch (IOException e) {
             return null;
@@ -66,7 +66,7 @@ public class HttpProtocol {
             return null;
         }
 
-        return b.build();
+        return builder.build();
     }
 
     public static InputStream responseStream(HttpResponse response) {
@@ -80,22 +80,22 @@ public class HttpProtocol {
         return new SequenceInputStream(head, body);
     }
 
-    private static void parseRequestLine(RequestBuilder b, String requestLine) {
+    private static void parseRequestLine(RequestBuilder builder, String requestLine) {
         String[] methodPathProto = requestLine.split(" ");
 
         if (methodPathProto.length != 3) {
             throw new IllegalArgumentException();
         }
 
-        b.method(Method.valueOf(methodPathProto[0]))
+        builder.method(Method.valueOf(methodPathProto[0]))
             .path(methodPathProto[1]);
     }
 
-    private static void parseRequestHeaders(RequestBuilder b, List<String> headerLines) {
-        headerLines.forEach(s -> parseRequestHeader(b, s));
+    private static void parseRequestHeaders(RequestBuilder builder, List<String> headerLines) {
+        headerLines.forEach(s -> parseRequestHeader(builder, s));
     }
 
-    private static void parseRequestHeader(RequestBuilder b,  String headerLine) {
+    private static void parseRequestHeader(RequestBuilder builder,  String headerLine) {
         Matcher m = HEADER_RE.matcher(headerLine);
         if (m.matches()) {
             String headerKey = m.group(1);
@@ -103,7 +103,7 @@ public class HttpProtocol {
 
             // This shouldn't really be done here. Header splitting isn't quite this generic
             String headerValues[] = headerValueStr.split("\\s*,\\s*");
-            b.header(headerKey, Arrays.asList(headerValues));
+            builder.header(headerKey, Arrays.asList(headerValues));
         }
     }
 }
