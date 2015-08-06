@@ -13,7 +13,6 @@ public class RequestBuilder {
 
     private Method m;
     private String p;
-    private String v;
     private ByteBuffer buff;
 
     private Map<String, List<String>> headers = new HashMap<String, List<String>>();
@@ -25,11 +24,6 @@ public class RequestBuilder {
 
     public RequestBuilder path(String p) {
         this.p = p;
-        return this;
-    }
-
-    public RequestBuilder protocolVersion(String v) {
-        this.v = v;
         return this;
     }
 
@@ -54,8 +48,7 @@ public class RequestBuilder {
     public HttpRequest build() {
         assertNotNull(this.m, "Request method must be set");
         assertNotNull(this.p, "Request path must be set");
-        assertNotNull(this.v, "Protocol version must be set");
-        return new HttpRequest(this.m, this.p, this.v,
+        return new HttpRequest(this.m, this.p,
                                this.headers, this.buff);
     }
 

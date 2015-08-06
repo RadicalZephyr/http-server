@@ -26,14 +26,12 @@ public class RequestBuilderTest {
 
         RequestBuilder b = new RequestBuilder()
             .method(m)
-            .path(p)
-            .protocolVersion(v);
+            .path(p);
 
         HttpRequest request = b.build();
 
         assertThat(request.method(),          equalTo(m));
         assertThat(request.path().toString(), equalTo(p));
-        assertThat(request.protocolVersion(), equalTo(v));
     }
 
     @Test
@@ -81,7 +79,6 @@ public class RequestBuilderTest {
     private RequestBuilder baseRequestBuilder() {
         return new RequestBuilder()
             .method(GET)
-            .path("/")
-            .protocolVersion("1.1");
+            .path("/");
     }
 }

@@ -26,7 +26,7 @@ public class RouterTest {
 
     @Test
     public void canAddARoute() throws Exception {
-        HttpRequest request = new HttpRequest(GET, "/", "1.1");
+        HttpRequest request = new HttpRequest(GET, "/");
         final HttpResponse response = new HttpResponse();
         router.addHandler(GET, "/", (HttpRequest iRequest) -> {
                 return response;
@@ -37,13 +37,13 @@ public class RouterTest {
 
     @Test
     public void canAddMultipleRoutes() throws Exception {
-        HttpRequest request = new HttpRequest(GET, "/root-beer", "1.1");
+        HttpRequest request = new HttpRequest(GET, "/root-beer");
         final HttpResponse response = new HttpResponse();
         router.addHandler(GET, "/root-beer", (HttpRequest iRequest) -> {
                 return response;
             });
 
-        HttpRequest request2 = new HttpRequest(GET, "/", "1.1");
+        HttpRequest request2 = new HttpRequest(GET, "/");
         final HttpResponse response2 = new HttpResponse();
         router.addHandler(GET, "/", (HttpRequest iRequest) -> {
                 return response2;
@@ -55,13 +55,13 @@ public class RouterTest {
 
     @Test
     public void canDifferentiateBetweenMethods() throws Exception {
-        HttpRequest request = new HttpRequest(POST, "/", "1.1");
+        HttpRequest request = new HttpRequest(POST, "/");
         final HttpResponse response = new HttpResponse();
         router.addHandler(POST, "/", (HttpRequest iRequest) -> {
                 return response;
             });
 
-        HttpRequest request2 = new HttpRequest(GET, "/", "1.1");
+        HttpRequest request2 = new HttpRequest(GET, "/");
         final HttpResponse response2 = new HttpResponse();
         router.addHandler(GET, "/", (HttpRequest iRequest) -> {
                 return response2;
@@ -74,7 +74,7 @@ public class RouterTest {
 
     @Test
     public void failsGracefullyWithNoMatch() {
-        HttpRequest request = new HttpRequest(POST, "/", "1.1");
+        HttpRequest request = new HttpRequest(POST, "/");
         assertThat(router.handle(request), nullValue());
     }
 
@@ -83,7 +83,7 @@ public class RouterTest {
         router.addHandler(GET, "/", (HttpRequest iRequest) -> null);
         router.addHandler(PUT, "/", (HttpRequest iRequest) -> null);
 
-        HttpRequest request = new HttpRequest(OPTIONS, "/", "1.1");
+        HttpRequest request = new HttpRequest(OPTIONS, "/");
         HttpResponse response = router.handle(request);
         assertThat(response.headers().get("Allow"), hasItems("GET", "PUT"));
     }

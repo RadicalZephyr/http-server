@@ -133,7 +133,7 @@ public class HttpServerTest {
     @Test
     public void serverAcceptsMultipleConnections() throws Exception {
         AcceptMockedHttpServer server = new AcceptMockedHttpServer(serverSocket, port,
-                                                                   new HttpRequest(Method.GET, "/", "1.1"));
+                                                                   new HttpRequest(Method.GET, "/"));
         int numCalls = 3;
         server.setNumberOfAccepts(numCalls);
 
@@ -145,7 +145,7 @@ public class HttpServerTest {
     @Test
     public void serverSendsResponses() throws Exception {
         AcceptMockedHttpServer server = new AcceptMockedHttpServer(serverSocket, port,
-                                                                   new HttpRequest(Method.GET, "/", "1.1"));
+                                                                   new HttpRequest(Method.GET, "/"));
         int numCalls = 1;
         server.setNumberOfAccepts(numCalls);
 

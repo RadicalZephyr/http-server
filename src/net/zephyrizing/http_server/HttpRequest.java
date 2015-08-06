@@ -14,22 +14,20 @@ public class HttpRequest {
 
     private final Method method;
     private final Path   path;
-    private final String protocolVersion;
     private Map<String, List<String>> headers;
     private final ByteBuffer body;
 
-    public HttpRequest(Method method, String path, String protocolVersion) {
-        this(method, path, protocolVersion,
+    public HttpRequest(Method method, String path) {
+        this(method, path,
              new HashMap<String, List<String>>(),
              ByteBuffer.allocate(0));
     }
 
-    public HttpRequest(Method method, String path, String protocolVersion,
+    public HttpRequest(Method method, String path,
                        Map<String, List<String>> headers,
                        ByteBuffer body) {
         this.method          = method;
         this.path            = Paths.get(path);
-        this.protocolVersion = protocolVersion;
         this.headers         = headers;
         this.body            = body;
     }
@@ -45,10 +43,6 @@ public class HttpRequest {
     public Path getResolvedPath(Path root) {
         Path relativeRequestedPath = Paths.get("/").relativize(this.path);
         return root.resolve(relativeRequestedPath);
-    }
-
-    public String protocolVersion() {
-        return protocolVersion;
     }
 
     public Map<String, List<String>> headers() {

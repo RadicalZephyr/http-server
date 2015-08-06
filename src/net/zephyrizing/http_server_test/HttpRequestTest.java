@@ -20,25 +20,23 @@ public class HttpRequestTest {
 
     @Test
     public void canCreateGETRequest() {
-        HttpRequest request = new HttpRequest(GET, "/", "1.1");
+        HttpRequest request = new HttpRequest(GET, "/");
 
         assertEquals(GET, request.method());
         assertEquals(Paths.get("/"), request.path());
-        assertEquals("1.1", request.protocolVersion());
     }
 
     @Test
     public void canCreatePOSTRequest() {
-        HttpRequest request = new HttpRequest(POST, "/root", "1.0");
+        HttpRequest request = new HttpRequest(POST, "/root");
 
         assertEquals(POST, request.method());
         assertEquals(Paths.get("/root"), request.path());
-        assertEquals("1.0", request.protocolVersion());
     }
 
     @Test
     public void canResolveTheRootPath() {
-        HttpRequest request = new HttpRequest(POST, "/", "1.0");
+        HttpRequest request = new HttpRequest(POST, "/");
 
         Path root = Paths.get("/root/path");
 
@@ -48,7 +46,7 @@ public class HttpRequestTest {
 
     @Test
     public void canResolvePaths() {
-        HttpRequest request = new HttpRequest(POST, "/branch", "1.0");
+        HttpRequest request = new HttpRequest(POST, "/branch");
 
         Path root = Paths.get("/root/path");
 
