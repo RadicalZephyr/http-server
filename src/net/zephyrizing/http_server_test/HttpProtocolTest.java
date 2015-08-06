@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import net.zephyrizing.http_server.Headers;
 import net.zephyrizing.http_server.HttpProtocol;
 import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpRequest.Method;
@@ -51,7 +52,7 @@ public class HttpProtocolTest {
         Stream<String> lines = Stream.of("GET /request?params=arehere HTTP/1.1");
 
         HttpRequest request = HttpProtocol.requestFromInputStream(bytesFromStream(lines));
-        assertThat(request, notNullValue());
+
         assertThat(request.path().toString(), equalTo("/request"));
         assertThat(request.query(), equalTo("params=arehere"));
     }
@@ -107,10 +108,9 @@ public class HttpProtocolTest {
         Stream<String> lines = Stream.of("GET / HTTP/1.1", header, header2);
 
         HttpRequest request = HttpProtocol.requestFromInputStream(bytesFromStream(lines));
-        assertThat(request, notNullValue());
 
-        Map<String, List<String>> headers = request.headers();
-        assertThat(headers, notNullValue());
+        Headers headers = request.headers();
+
         assertThat(headers.keySet(), hasItems(key, key2));
         assertThat(headers.get(key), hasItem(val));
         assertThat(headers.get(key2), hasItem(val2));
@@ -169,16 +169,15 @@ public class HttpProtocolTest {
                                          bodyText);
 
         HttpRequest request = HttpProtocol.requestFromInputStream(bytesFromStream(lines));
-        assertThat(request, notNullValue());
 
-        Map<String, List<String>> headers = request.headers();
-        assertThat(headers, notNullValue());
+        Headers headers = request.headers();
+
         assertThat(headers.keySet(), hasItem(key));
         String bodyLengthStr = Integer.toString(bodyText.length());
         assertThat(headers.get(key), hasItem(bodyLengthStr));
 
         ByteBuffer bodyBytes = request.body();
-        assertThat(bodyBytes, notNullValue());
+
         assertThat(bodyBytes.array(), equalTo(bodyText.getBytes()));
     }
 

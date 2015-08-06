@@ -53,7 +53,7 @@ public class HttpRequest {
         return root.resolve(relativeRequestedPath);
     }
 
-    public Map<String, List<String>> headers() {
+    public Headers headers() {
         return this.headers;
     }
 
