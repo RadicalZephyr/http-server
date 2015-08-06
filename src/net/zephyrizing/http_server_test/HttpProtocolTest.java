@@ -53,6 +53,7 @@ public class HttpProtocolTest {
         HttpRequest request = HttpProtocol.requestFromInputStream(bytesFromStream(lines));
         assertThat(request, notNullValue());
         assertThat(request.path().toString(), equalTo("/request"));
+        assertThat(request.query(), equalTo("params=arehere"));
     }
 
     @Test
