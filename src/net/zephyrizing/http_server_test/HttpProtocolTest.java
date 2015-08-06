@@ -99,7 +99,6 @@ public class HttpProtocolTest {
     @Test
     public void regexMatchingHeaders() throws Exception {
         List<String> headers = Arrays.asList("Location: https://other-place.com",
-                                             "Content-Length: 1234",
                                              "Accept-Encoding: gzip,deflate",
                                              "Connection: Keep-Alive",
                                              "NoOWS:really-none",
@@ -111,7 +110,6 @@ public class HttpProtocolTest {
                 assertThat(m.matches(), equalTo(true));
                 assertThat(m.group(1), both(notNullValue()).and(
                                anyOf(equalTo("Location"),
-                                     equalTo("Content-Length"),
                                      equalTo("Accept-Encoding"),
                                      equalTo("Connection"),
                                      equalTo("NoOWS"),
@@ -119,7 +117,6 @@ public class HttpProtocolTest {
                                      equalTo("TrailingWhitespace"))));
                 assertThat(m.group(2), both(notNullValue()).and(
                                anyOf(equalTo("https://other-place.com"),
-                                     equalTo("1234"),
                                      equalTo("gzip,deflate"),
                                      equalTo("Keep-Alive"),
                                      equalTo("really-none"),
