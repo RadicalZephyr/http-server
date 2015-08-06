@@ -30,34 +30,6 @@ public class UrlParamsTest {
     }
 
     @Test
-    public void urlParamsRegexMatches() {
-        List<String> urls = Arrays.asList("file.html?abc=123",
-                                          "?nofile=true",
-                                          "/many?p1=1&p2=2&p3=3");
-
-        urls.forEach(s -> {
-                Matcher m = UrlParams.URL_PARAMS_RE.matcher(s);
-                assertThat(m.matches(), equalTo(true));
-                assertThat(m.group(1), both(notNullValue()).and(
-                               anyOf(equalTo("abc=123"),
-                                     equalTo("nofile=true"),
-                                     equalTo("p1=1&p2=2&p3=3"))));
-            });
-    }
-
-    @Test
-    public void urlParamsRegexDoesntMatch() {
-        List<String> urls = Arrays.asList("file.html",
-                                          "",
-                                          "/");
-
-        urls.forEach(s -> {
-                Matcher m = UrlParams.URL_PARAMS_RE.matcher(s);
-                assertThat(m.matches(), equalTo(false));
-            });
-    }
-
-    @Test
     public void canParseURLParams() {
         MockHandler mockHandler = new MockHandler();
         Handler handler = UrlParams.wrap(mockHandler);
@@ -65,9 +37,11 @@ public class UrlParamsTest {
         String value = "123";
         String key2 = "foo";
         String value2 = "bar";
-        HttpRequest request = new HttpRequest(GET, String.format("/params?%s=%s&%s=%s",
-                                                                 key, value,
-                                                                 key2, value2));
+        HttpRequest request = new HttpRequest(GET, "/params",
+                                              String.format("%s=%s&%s=%s",
+                                                            key, value,
+                                                            key2, value2),
+                                              null, null);
 
         assertThat(request.getUrlParam(key), nullValue());
 
