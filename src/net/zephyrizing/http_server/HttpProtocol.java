@@ -5,6 +5,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.SequenceInputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,6 +62,8 @@ public class HttpProtocol {
                 ByteBuffer body = stream.readBody(builder.contentLength());
                 builder.body(body);
             }
+        } catch (URISyntaxException e) {
+            return null;
         } catch (IOException e) {
             return null;
         } catch (IllegalArgumentException e) {
@@ -80,15 +84,18 @@ public class HttpProtocol {
         return new SequenceInputStream(head, body);
     }
 
-    private static void parseRequestLine(RequestBuilder builder, String requestLine) {
+    private static void parseRequestLine(RequestBuilder builder, String requestLine)
+        throws URISyntaxException {
+
         String[] methodPathProto = requestLine.split(" ");
 
         if (methodPathProto.length != 3) {
             throw new IllegalArgumentException();
         }
 
-        builder.method(Method.valueOf(methodPathProto[0]))
-            .path(methodPathProto[1]);
+        builder.method(Method.valueOf(methodPathProto[0]));
+        URI uri = new URI(methodPathProto[1]);
+        builder.path(uri.getPath());
     }
 
     private static void parseRequestHeaders(RequestBuilder builder, List<String> headerLines) {
