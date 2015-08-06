@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
+import java.util.stream.Collectors;
 
 import net.zephyrizing.http_server.Headers;
 import net.zephyrizing.http_server.HeadersMap;
@@ -108,6 +109,25 @@ public class CobSpecHandlerTest {
                                                          equalTo("POST"),
                                                          equalTo("OPTIONS"),
                                                          equalTo("PUT"))));
+    }
+
+    @Test
+    public void parameterDecode() {
+        String cobSpecParams = "variable_1=Operators%20%3C%2C%20%3E%2C%20%3D"+
+            "%2C%20!%3D%3B%20%2B%2C%20-%2C%20*%2C%20%26%2C%20%40%2C%20%23%2C"+
+            "%20%24%2C%20%5B%2C%20%5D%3A%20%22is%20that%20all%22%3F&variable_2=stuff";
+        HttpRequest request = new HttpRequest(GET, "/parameters", cobSpecParams,
+                                              null, null);
+        HttpResponse response = handler.handle(request);
+
+        assertThat(response, notNullValue());
+        assertThat(response.status(), equalTo(200));
+        BufferedReader r = new BufferedReader(
+            new InputStreamReader(response.getData()));
+        List<String> lines = r.lines().collect(Collectors.toList());
+
+        assertThat(lines, hasItems("variable_2 = stuff",
+                                   "variable_1 = Operators <, >, =, !=; +, -, *, &, @, #, $, [, ]: \"is that all\"?"));
     }
 
     @Test

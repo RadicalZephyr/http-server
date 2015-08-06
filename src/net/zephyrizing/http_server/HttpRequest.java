@@ -65,6 +65,10 @@ public class HttpRequest {
         return this.urlParams.get(key);
     }
 
+    public Map<String, String> urlParams() {
+        return this.urlParams;
+    }
+
     public ByteBuffer body() {
         return this.body;
     }

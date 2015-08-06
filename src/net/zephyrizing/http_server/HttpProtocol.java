@@ -96,7 +96,7 @@ public class HttpProtocol {
         builder.method(Method.valueOf(methodPathProto[0]));
         URI uri = new URI(methodPathProto[1]);
         builder.path(uri.getPath())
-            .query(uri.getQuery());
+            .query(uri.getRawQuery());
     }
 
     private static void parseRequestHeaders(RequestBuilder builder, List<String> headerLines) {
