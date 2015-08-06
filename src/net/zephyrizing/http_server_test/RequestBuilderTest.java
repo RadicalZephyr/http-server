@@ -19,10 +19,9 @@ import static org.hamcrest.CoreMatchers.*;
 public class RequestBuilderTest {
 
     @Test
-    public void canAddAMethod() {
+    public void canAddAMethodAndPath() {
         Method m = GET;
         String p = "/";
-        String v = "1.1";
 
         RequestBuilder b = new RequestBuilder()
             .method(m)
