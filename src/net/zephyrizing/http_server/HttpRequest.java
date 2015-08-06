@@ -12,23 +12,25 @@ import java.util.Map;
 public class HttpRequest {
     public static enum Method {OPTIONS, GET, HEAD, POST, PUT, DELETE, TRACE};
 
-    private final Method method;
-    private final Path   path;
-    private Headers headers;
-    private final ByteBuffer body;
+    private final Method        method;
+    private final Path          path;
+    private final String        query;
+    private Headers             headers;
+    private final ByteBuffer    body;
     private Map<String, String> urlParams;
 
     public HttpRequest(Method method, String path) {
-        this(method, path,
+        this(method, path, null,
              new HeadersMap(),
              ByteBuffer.allocate(0));
     }
 
-    public HttpRequest(Method method, String path,
+    public HttpRequest(Method method, String path, String query,
                        Headers headers,
                        ByteBuffer body) {
         this.method  = method;
         this.path    = Paths.get(path);
+        this.query   = query;
         this.headers = headers;
         this.body    = body;
         this.urlParams = new HashMap<String, String>();
@@ -40,6 +42,10 @@ public class HttpRequest {
 
     public Path path() {
         return path;
+    }
+
+    public String query() {
+        return query;
     }
 
     public Path getResolvedPath(Path root) {

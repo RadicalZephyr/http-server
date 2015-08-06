@@ -34,6 +34,18 @@ public class RequestBuilderTest {
     }
 
     @Test
+    public void canAddQuery() {
+        RequestBuilder b = baseRequestBuilder();
+
+        String query = "abc=123&foo=bar";
+        b.query(query);
+
+        HttpRequest request = b.build();
+
+        assertThat(request.query(), equalTo(query));
+    }
+
+    @Test
     public void canAddHeaders() {
         RequestBuilder b = baseRequestBuilder();
 
