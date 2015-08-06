@@ -11,6 +11,7 @@ import net.zephyrizing.http_server.HttpRequest;
 import net.zephyrizing.http_server.HttpResponse;
 import net.zephyrizing.http_server.content.ContentProvider;
 import net.zephyrizing.http_server.content.StringContentProvider;
+import net.zephyrizing.http_server.middleware.UrlParams;
 
 import static net.zephyrizing.http_server.HttpRequest.Method.*;
 
@@ -29,6 +30,8 @@ public class CobSpecHandler implements Handler {
                                    response.addHeader("Location", "http://localhost:5000/");
                                    return response;
                                });
+
+        testHandler.addHandler(GET,  "/parameters", UrlParams.wrap(this::returnDecodedParams));
 
         testHandler.addHandler(GET,  "/method_options", nullHandler);
         testHandler.addHandler(HEAD, "/method_options", nullHandler);
@@ -49,6 +52,16 @@ public class CobSpecHandler implements Handler {
     }
 
     private String data = "";
+
+    public HttpResponse returnDecodedParams(HttpRequest request) {
+        HttpResponse response = new HttpResponse();
+        String body = request.urlParams().entrySet().stream()
+            .map(entry ->
+                 String.format("%s = %s", entry.getKey(), entry.getValue()))
+            .collect(Collectors.joining("\n"));
+        response.setContent(new StringContentProvider(body));
+        return response;
+    }
 
     public HttpResponse getData(HttpRequest r) {
         HttpResponse response = new HttpResponse();

@@ -1,5 +1,7 @@
 package net.zephyrizing.http_server.middleware;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,12 +17,17 @@ public class UrlParams {
 
     private static HttpRequest parseUrlParams(HttpRequest request) {
         String query = request.query();
-        if (query != null) {
-            String paramPairs[] = query.split("&");
-            for (String pair : paramPairs) {
-                String keyValue[] = pair.split("=", 2);
-                request.addUrlParam(keyValue[0], keyValue[1]);
+
+        try {
+            if (query != null) {
+                String paramPairs[] = query.split("&");
+                for (String pair : paramPairs) {
+                    String keyValue[] = pair.split("=", 2);
+                    request.addUrlParam(URLDecoder.decode(keyValue[0], "UTF-8"),
+                                        URLDecoder.decode(keyValue[1], "UTF-8"));
+                }
             }
+        } catch (UnsupportedEncodingException e) {
         }
 
         return request;
