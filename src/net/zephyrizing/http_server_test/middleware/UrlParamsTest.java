@@ -19,16 +19,6 @@ import static org.hamcrest.CoreMatchers.*;
 
 public class UrlParamsTest {
 
-    class MockHandler implements Handler {
-        public HttpRequest calledWith;
-
-        @Override
-        public HttpResponse handle(HttpRequest request) {
-            this.calledWith = request;
-            return null;
-        }
-    }
-
     @Test
     public void canParseURLParams() {
         MockHandler mockHandler = new MockHandler();
