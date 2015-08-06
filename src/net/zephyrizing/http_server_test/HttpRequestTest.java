@@ -15,7 +15,6 @@ import static java.util.Arrays.asList;
 
 import static net.zephyrizing.http_server.HttpRequest.Method.*;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
@@ -25,16 +24,16 @@ public class HttpRequestTest {
     public void canCreateGETRequest() {
         HttpRequest request = new HttpRequest(GET, "/");
 
-        assertEquals(GET, request.method());
-        assertEquals(Paths.get("/"), request.path());
+        assertThat(request.method(), equalTo(GET));
+        assertThat(request.path(), equalTo(Paths.get("/")));
     }
 
     @Test
     public void canCreatePOSTRequest() {
         HttpRequest request = new HttpRequest(POST, "/root");
 
-        assertEquals(POST, request.method());
-        assertEquals(Paths.get("/root"), request.path());
+        assertThat(request.method(), equalTo(POST));
+        assertThat(request.path(), equalTo(Paths.get("/root")));
     }
 
     @Test
@@ -44,7 +43,7 @@ public class HttpRequestTest {
         Path root = Paths.get("/root/path");
 
         Path requested = request.getResolvedPath(root);
-        assertEquals(Paths.get("/root/path"), requested);
+        assertThat(requested, equalTo(Paths.get("/root/path")));
     }
 
     @Test
@@ -54,7 +53,7 @@ public class HttpRequestTest {
         Path root = Paths.get("/root/path");
 
         Path requested = request.getResolvedPath(root);
-        assertEquals(Paths.get("/root/path/branch"), requested);
+        assertThat(requested, equalTo(Paths.get("/root/path/branch")));
     }
 
     @Test
