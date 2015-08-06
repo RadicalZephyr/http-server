@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.List;
@@ -30,10 +31,28 @@ import static org.hamcrest.CoreMatchers.*;
 public class HttpProtocolTest {
 
     @Test
+    public void canUseURIForParsingUrlPaths() throws Exception {
+        URI uri = new URI("/path/to/stuff?with=params#and-fragment");
+
+        assertThat(uri.getPath(), equalTo("/path/to/stuff"));
+        assertThat(uri.getQuery(), equalTo("with=params"));
+        assertThat(uri.getFragment(), equalTo("and-fragment"));
+    }
+
+    @Test
     public void createBasicRequest() throws Exception {
         Stream<String> lines = Stream.of("GET / HTTP/1.1");
 
         assertThat(HttpProtocol.requestFromInputStream(bytesFromStream(lines)), notNullValue());
+    }
+
+    @Test
+    public void createRequestWithQuery() throws Exception {
+        Stream<String> lines = Stream.of("GET /request?params=arehere HTTP/1.1");
+
+        HttpRequest request = HttpProtocol.requestFromInputStream(bytesFromStream(lines));
+        assertThat(request, notNullValue());
+        assertThat(request.path().toString(), equalTo("/request"));
     }
 
     @Test
