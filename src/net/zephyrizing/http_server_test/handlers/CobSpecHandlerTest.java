@@ -34,7 +34,7 @@ public class CobSpecHandlerTest {
 
     @Test
     public void notFound() {
-        HttpRequest request = new HttpRequest(GET, "/foobar", "1.1");
+        HttpRequest request = new HttpRequest(GET, "/foobar");
         HttpResponse response = handler.handle(request);
 
         assertThat(response, notNullValue());
@@ -43,7 +43,7 @@ public class CobSpecHandlerTest {
 
     @Test
     public void redirectPath() {
-        HttpRequest request = new HttpRequest(GET, "/redirect", "1.1");
+        HttpRequest request = new HttpRequest(GET, "/redirect");
         HttpResponse response = handler.handle(request);
 
         assertThat(response, notNullValue());
@@ -58,13 +58,13 @@ public class CobSpecHandlerTest {
     public void formGetThenput() throws Exception {
         String data = "data=fatcat";
         HttpRequest request =
-            new HttpRequest(PUT, "/form", "1.1",
+            new HttpRequest(PUT, "/form",
                             new HashMap<String, List<String>>(),
                             ByteBuffer.wrap(data.getBytes()));
         HttpResponse response = handler.handle(request);
         assertThat(response.status(), equalTo(200));
 
-        request = new HttpRequest(GET, "/form", "1.1");
+        request = new HttpRequest(GET, "/form");
         response = handler.handle(request);
         assertThat(response.status(), equalTo(200));
         BufferedReader r = new BufferedReader(
@@ -75,7 +75,7 @@ public class CobSpecHandlerTest {
 
     @Test
     public void simplePut() {
-        HttpRequest request = new HttpRequest(PUT, "/form", "1.1");
+        HttpRequest request = new HttpRequest(PUT, "/form");
         HttpResponse response = handler.handle(request);
 
         assertThat(response, notNullValue());
@@ -84,7 +84,7 @@ public class CobSpecHandlerTest {
 
     @Test
     public void simplePost() {
-        HttpRequest request = new HttpRequest(POST, "/form", "1.1");
+        HttpRequest request = new HttpRequest(POST, "/form");
         HttpResponse response = handler.handle(request);
 
         assertThat(response, notNullValue());
@@ -93,7 +93,7 @@ public class CobSpecHandlerTest {
 
     @Test
     public void simpleOptions() {
-        HttpRequest request = new HttpRequest(OPTIONS, "/method_options", "1.1");
+        HttpRequest request = new HttpRequest(OPTIONS, "/method_options");
         HttpResponse response = handler.handle(request);
 
         assertThat(response, notNullValue());
@@ -115,7 +115,7 @@ public class CobSpecHandlerTest {
         BufferedReader r;
 
         // Initial GET
-        request = new HttpRequest(GET, "/form", "1.1");
+        request = new HttpRequest(GET, "/form");
         response = handler.handle(request);
 
         assertThat(response, notNullValue());
@@ -131,7 +131,7 @@ public class CobSpecHandlerTest {
         String bodyLength = Integer.toString(body.length());
         headers.put("Content-Length", Arrays.asList(bodyLength));
         ByteBuffer bodyBytes = ByteBuffer.wrap(body.getBytes());
-        request = new HttpRequest(POST, "/form", "1.1",
+        request = new HttpRequest(POST, "/form",
                                   headers, bodyBytes);
         response = handler.handle(request);
 
@@ -139,7 +139,7 @@ public class CobSpecHandlerTest {
         assertThat(response.status(), equalTo(200));
 
         /// Intermediate GET
-        request = new HttpRequest(GET, "/form", "1.1");
+        request = new HttpRequest(GET, "/form");
         response = handler.handle(request);
 
         assertThat(response, notNullValue());
@@ -149,11 +149,11 @@ public class CobSpecHandlerTest {
         assertThat(r.readLine(), equalTo(body));
 
         /// DELETE
-        request = new HttpRequest(DELETE, "/form", "1.1");
+        request = new HttpRequest(DELETE, "/form");
         response = handler.handle(request);
 
         /// Final GET
-        request = new HttpRequest(GET, "/form", "1.1");
+        request = new HttpRequest(GET, "/form");
         response = handler.handle(request);
 
         assertThat(response, notNullValue());

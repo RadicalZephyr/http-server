@@ -19,7 +19,7 @@ public class SequentialHandlerTest {
     @Test
     public void returnsNullWithNoHandlers() throws Exception {
         Handler handler = new SequentialHandler();
-        HttpRequest request = new HttpRequest(GET, "/", "1.1");
+        HttpRequest request = new HttpRequest(GET, "/");
 
         assertThat(handler.handle(request), nullValue());
     }
@@ -27,7 +27,7 @@ public class SequentialHandlerTest {
     @Test
     public void returnsARequestGivenAHandler() throws Exception {
         Handler handler = new SequentialHandler(new NullHandler());
-        HttpRequest request = new HttpRequest(GET, "/", "1.1");
+        HttpRequest request = new HttpRequest(GET, "/");
 
         assertThat(handler.handle(request), not(nullValue()));
     }
@@ -38,7 +38,7 @@ public class SequentialHandlerTest {
         final HttpResponse response = new HttpResponse();
         Handler handler = new SequentialHandler((HttpRequest r) -> null,
                                                 (HttpRequest r) -> response);
-        HttpRequest request = new HttpRequest(GET, "/", "1.1");
+        HttpRequest request = new HttpRequest(GET, "/");
 
         assertThat(handler.handle(request), equalTo(response));
     }

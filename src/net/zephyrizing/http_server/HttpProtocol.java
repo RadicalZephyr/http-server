@@ -88,8 +88,7 @@ public class HttpProtocol {
         }
 
         b.method(Method.valueOf(methodPathProto[0]))
-            .path(methodPathProto[1])
-            .protocolVersion(methodPathProto[2].replace("HTTP/", ""));
+            .path(methodPathProto[1]);
     }
 
     private static void parseRequestHeaders(RequestBuilder b, List<String> headerLines) {

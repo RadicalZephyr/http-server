@@ -54,7 +54,7 @@ public class FileSystemHandlerTest {
 
         FileSystemHandler handler = new FileSystemHandler(rootDir);
 
-        HttpRequest request = new HttpRequest(OPTIONS, "/", "1.1");
+        HttpRequest request = new HttpRequest(OPTIONS, "/");
         HttpResponse response = handler.handle(request);
 
         assertThat(response.headers().get("Allow"), hasItem("GET"));
@@ -67,7 +67,7 @@ public class FileSystemHandlerTest {
 
         FileSystemHandler handler = new FileSystemHandler(rootDir);
 
-        HttpRequest request = new HttpRequest(POST, "/things", "1.1");
+        HttpRequest request = new HttpRequest(POST, "/things");
         HttpResponse response = handler.handle(request);
 
         assertThat(response.status(), equalTo(405));
