@@ -1,9 +1,9 @@
 (set-env!
  :resource-paths #{"resources"}
  :source-paths #{"src"}
- :dependencies '[[radicalzephyr/bootlaces  "0.1.14"         :scope "test"]
-                 [radicalzephyr/boot-junit "0.2.1-SNAPSHOT" :scope "test"]
-                 [junit                    "4.12"           :scope "test"]
+ :dependencies '[[radicalzephyr/bootlaces  "0.1.14" :scope "test"]
+                 [radicalzephyr/boot-junit "0.2.1"  :scope "test"]
+                 [junit                    "4.12"   :scope "test"]
                  [net.sf.jopt-simple/jopt-simple "4.9"]])
 
 (def +version+ "0.1.0-SNAPSHOT")
