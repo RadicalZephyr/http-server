@@ -16,6 +16,7 @@ public class HttpRequest {
     private final Path   path;
     private Headers headers;
     private final ByteBuffer body;
+    private Map<String, String> urlParams;
 
     public HttpRequest(Method method, String path) {
         this(method, path,
@@ -30,6 +31,7 @@ public class HttpRequest {
         this.path    = Paths.get(path);
         this.headers = headers;
         this.body    = body;
+        this.urlParams = new HashMap<String, String>();
     }
 
     public Method method() {
@@ -47,6 +49,14 @@ public class HttpRequest {
 
     public Map<String, List<String>> headers() {
         return this.headers;
+    }
+
+    public void addUrlParam(String key, String value) {
+        this.urlParams.put(key, value);
+    }
+
+    public String getUrlParam(String key) {
+        return this.urlParams.get(key);
     }
 
     public ByteBuffer body() {
