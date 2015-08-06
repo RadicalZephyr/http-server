@@ -32,8 +32,45 @@ public class HttpResponse {
     static {
         Map<Integer, String> descriptions = new HashMap<Integer, String>();
 
+        descriptions.put(100, "Continue");
+        descriptions.put(101, "Switching Protocols");
+
         descriptions.put(200, "OK");
+        descriptions.put(201, "Created");
+        descriptions.put(202, "Accepted");
+        descriptions.put(203, "Non-Authoritative Information");
+        descriptions.put(204, "No Content");
+        descriptions.put(205, "Reset Content");
+
+        descriptions.put(300, "Multiple Choices");
+        descriptions.put(301, "Moved Permanently");
+        descriptions.put(302, "Found");
+        descriptions.put(303, "See Other");
+        descriptions.put(305, "Use Proxy");
+        descriptions.put(307, "Temporary Redirect");
+
+        descriptions.put(400, "Bad Request");
+        descriptions.put(402, "Payment Required");
+        descriptions.put(403, "Forbidden");
         descriptions.put(404, "Not Found");
+        descriptions.put(405, "Method Not Allowed");
+        descriptions.put(406, "Not Acceptable");
+        descriptions.put(408, "Request Timeout");
+        descriptions.put(409, "Conflict");
+        descriptions.put(410, "Gone");
+        descriptions.put(411, "Length Required");
+        descriptions.put(413, "Payload Too Long");
+        descriptions.put(414, "URI Too Long");
+        descriptions.put(415, "Unsupported Media Type");
+        descriptions.put(417, "Expectation Failed");
+        descriptions.put(426, "Upgrade Required");
+
+        descriptions.put(500, "Internal Server Error");
+        descriptions.put(501, "Not Implemented");
+        descriptions.put(502, "Bad Gateway");
+        descriptions.put(503, "Service Unavailable");
+        descriptions.put(504, "Gateway Timeout");
+        descriptions.put(505, "HTTP Version Not Supported");
 
         RESPONSE_DESCRIPTIONS = Collections.unmodifiableMap(descriptions);
     }
