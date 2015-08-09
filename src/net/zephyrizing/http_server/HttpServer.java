@@ -23,6 +23,8 @@ import static java.util.Arrays.asList;
 
 public class HttpServer {
 
+    private static int DEFAULT_THREADS = 24;
+
     public static void main(String[] args) throws InterruptedException {
         String defaultPublicRoot = String.format("%s/src/cob_spec/public/",
                                                  System.getenv("HOME"));
@@ -33,7 +35,7 @@ public class HttpServer {
         OptionSpec<String>  rootOpt = parser.acceptsAll(asList("d", "directory"))
             .withRequiredArg().ofType(String.class).defaultsTo(defaultPublicRoot);
         OptionSpec<Integer> threadsOpt = parser.acceptsAll(asList("t", "threads"))
-            .withRequiredArg().ofType(Integer.class).defaultsTo(24);
+            .withRequiredArg().ofType(Integer.class).defaultsTo(DEFAULT_THREADS);
 
         OptionSet options = parser.parse(args);
 
@@ -61,12 +63,25 @@ public class HttpServer {
         }
     }
 
+    public static HttpServer createServer(int port, Handler handler) {
+        try (ServerSocket serverSocket = new ServerSocket();
+             HttpServerSocket httpSocket = new HttpServerSocketImpl(serverSocket);) {
+            return new HttpServer(httpSocket, port, handler);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
     // Actual class begins
 
     private Executor executor;
     private HttpServerSocket serverSocket;
     private int port;
     private Handler handler;
+
+    public HttpServer(HttpServerSocket serverSocket, int port, Handler handler) {
+        this(Executors.newFixedThreadPool(DEFAULT_THREADS), serverSocket, port, handler);
+    }
 
     public HttpServer(Executor executor, HttpServerSocket serverSocket, int port, Handler handler) {
         this.executor = executor;
