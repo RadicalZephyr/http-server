@@ -1,5 +1,6 @@
 package net.zephyrizing.http_server;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.nio.file.FileSystems;
@@ -21,7 +22,7 @@ import net.zephyrizing.http_server.handlers.CobSpecHandler;
 
 import static java.util.Arrays.asList;
 
-public class HttpServer {
+public class HttpServer implements Closeable {
 
     private static int DEFAULT_THREADS = 24;
 
@@ -51,11 +52,10 @@ public class HttpServer {
         }
 
         System.err.format("Starting server on port %d...", portNumber);
-        try (ServerSocket serverSocket = new ServerSocket();
-             HttpServerSocket httpSocket = new HttpServerSocketImpl(serverSocket);) {
-            Executor executor = Executors.newFixedThreadPool(threadPoolSize);
-            Handler handler = new CobSpecHandler(public_root);
-            HttpServer server = new HttpServer(executor, httpSocket, portNumber, handler);
+
+        Handler handler = new CobSpecHandler(public_root);
+        try (HttpServer server = HttpServer.createServer(portNumber, handler)) {
+
             server.listen();
             server.serve();
         } catch (IOException e) {
@@ -63,11 +63,22 @@ public class HttpServer {
         }
     }
 
-    public static HttpServer createServer(int port, Handler handler) {
-        try (ServerSocket serverSocket = new ServerSocket();
-             HttpServerSocket httpSocket = new HttpServerSocketImpl(serverSocket);) {
+    public static HttpServer createServer(int port, Handler handler) throws IOException {
+        ServerSocket serverSocket = null;
+        HttpServerSocket httpSocket = null;;
+
+        try {
+            serverSocket = new ServerSocket();
+            httpSocket = new HttpServerSocketImpl(serverSocket);
             return new HttpServer(httpSocket, port, handler);
         } catch (IOException e) {
+            if (httpSocket != null) {
+                httpSocket.close();
+
+            }
+            if (serverSocket != null) {
+                serverSocket.close();
+            }
             return null;
         }
     }
@@ -88,6 +99,11 @@ public class HttpServer {
         this.serverSocket = serverSocket;
         this.port = port;
         this.handler = handler;
+    }
+
+    @Override
+    public void close() throws IOException {
+        this.serverSocket.close();
     }
 
     public void listen() throws IOException {
