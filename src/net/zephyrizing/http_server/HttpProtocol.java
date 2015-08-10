@@ -109,9 +109,7 @@ public class HttpProtocol {
             String headerKey = m.group(1);
             String headerValueStr = m.group(2);
 
-            // This shouldn't really be done here. Header splitting isn't quite this generic
-            String headerValues[] = headerValueStr.split("\\s*,\\s*");
-            builder.header(headerKey, Arrays.asList(headerValues));
+            builder.header(headerKey, headerValueStr);
         }
     }
 }

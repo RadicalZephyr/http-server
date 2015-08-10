@@ -52,7 +52,7 @@ public class CobSpecHandlerTest {
 
         Headers headers = response.headers();
         assertThat(headers.containsKey("Location"), equalTo(true));
-        assertThat(headers.get("Location"), hasItems("http://localhost:5000/"));
+        assertThat(headers.get("Location"), equalTo("http://localhost:5000/"));
     }
 
     @Test
@@ -99,12 +99,12 @@ public class CobSpecHandlerTest {
 
         Headers headers = response.headers();
         assertThat(headers.containsKey("Allow"), equalTo(true));
-        assertThat(headers.get("Allow"), everyItem(anyOf(equalTo("GET"),
-                                                         equalTo("HEAD"),
-                                                         equalTo("POST"),
-                                                         equalTo("OPTIONS"),
-                                                         equalTo("PUT"))));
-    }
+        assertThat(headers.get("Allow"), allOf(containsString("GET"),
+                                               containsString("HEAD"),
+                                               containsString("POST"),
+                                               containsString("OPTIONS"),
+                                               containsString("PUT")));
+}
 
     @Test
     public void parameterDecode() {
@@ -144,7 +144,7 @@ public class CobSpecHandlerTest {
         Headers headers = new HeadersMap();
         String body = "stuffnthings";
         String bodyLength = Integer.toString(body.length());
-        headers.put("Content-Length", Arrays.asList(bodyLength));
+        headers.put("Content-Length", bodyLength);
         ByteBuffer bodyBytes = ByteBuffer.wrap(body.getBytes());
         request = new HttpRequest(POST, "/form", null,
                                   headers, bodyBytes);

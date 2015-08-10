@@ -57,7 +57,7 @@ public class FileSystemHandlerTest {
         HttpRequest request = new HttpRequest(OPTIONS, "/");
         HttpResponse response = handler.handle(request);
 
-        assertThat(response.headers().get("Allow"), hasItem("GET"));
+        assertThat(response.headers().get("Allow"), containsString("GET"));
     }
 
     @Test
