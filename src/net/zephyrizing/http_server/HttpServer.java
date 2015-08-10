@@ -42,6 +42,7 @@ public class HttpServer implements Closeable {
 
     // Actual class begins
 
+    private boolean running;
     private Executor executor;
     private HttpServerSocket serverSocket;
     private int port;
@@ -52,6 +53,7 @@ public class HttpServer implements Closeable {
     }
 
     public HttpServer(Executor executor, HttpServerSocket serverSocket, int port, Handler handler) {
+        this.running = true;
         this.executor = executor;
         this.serverSocket = serverSocket;
         this.port = port;
@@ -72,7 +74,12 @@ public class HttpServer implements Closeable {
     }
 
     public boolean acceptingConnections() {
-        return true;
+        return running;
+    }
+
+    public void shutdown() throws IOException {
+        running = false;
+        this.close();
     }
 
     private class Worker implements Runnable {
