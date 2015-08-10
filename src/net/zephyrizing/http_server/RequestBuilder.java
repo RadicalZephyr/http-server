@@ -33,8 +33,8 @@ public class RequestBuilder {
         return this;
     }
 
-    public RequestBuilder header(String key, List<String> values) {
-        this.headers.put(key, values);
+    public RequestBuilder header(String key, String value) {
+        this.headers.put(key, value);
         return this;
     }
 
@@ -43,7 +43,7 @@ public class RequestBuilder {
     }
 
     public long contentLength() {
-        return Integer.parseInt(this.headers.get(CONTENT_LENGTH_HEADER).get(0));
+        return Integer.parseInt(this.headers.get(CONTENT_LENGTH_HEADER));
     }
 
     public RequestBuilder body(ByteBuffer buff) {

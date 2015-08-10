@@ -52,7 +52,7 @@ public class RequestBuilderTest {
         RequestBuilder b = baseRequestBuilder();
 
         String key = "Content-Length";
-        List<String> val = Arrays.asList("A", "B");
+        String val = "A,B";
         b.header(key, val);
 
         HttpRequest request = b.build();
@@ -68,7 +68,7 @@ public class RequestBuilderTest {
         RequestBuilder b = baseRequestBuilder();
 
         String key = "Content-Length";
-        List<String> val = Arrays.asList("10");
+        String val = "10";
         b.header(key, val);
 
         assertThat(b.hasContentHeader(), equalTo(true));

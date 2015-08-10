@@ -85,6 +85,7 @@ public class RouterTest {
 
         HttpRequest request = new HttpRequest(OPTIONS, "/");
         HttpResponse response = router.handle(request);
-        assertThat(response.headers().get("Allow"), hasItems("GET", "PUT"));
+        assertThat(response.headers().get("Allow"), both(containsString("GET"))
+                   .and(containsString("PUT")));
     }
 }

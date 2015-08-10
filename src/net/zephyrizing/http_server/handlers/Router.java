@@ -46,12 +46,11 @@ public class Router implements Handler {
         return response;
     }
 
-    private String[] optionsForRoute(Path route) {
+    private String optionsForRoute(Path route) {
         return this.handlers.entrySet().stream()
             .filter((Map.Entry<Method, Map<Path, Handler>> entry) -> hasRoute(entry, route))
             .map((Map.Entry<Method, Map<Path, Handler>> entry) -> entry.getKey().toString())
-            .collect(Collectors.toList())
-            .toArray(new String[0]);
+            .collect(Collectors.joining(","));
     }
 
     private static boolean hasRoute(Map.Entry<Method, Map<Path, Handler>> entry, Path route) {

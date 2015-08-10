@@ -112,8 +112,8 @@ public class HttpProtocolTest {
         Headers headers = request.headers();
 
         assertThat(headers.keySet(), hasItems(key, key2));
-        assertThat(headers.get(key), hasItem(val));
-        assertThat(headers.get(key2), hasItem(val2));
+        assertThat(headers.get(key), equalTo(val));
+        assertThat(headers.get(key2), equalTo(val2));
     }
 
     @Test
@@ -174,7 +174,7 @@ public class HttpProtocolTest {
 
         assertThat(headers.keySet(), hasItem(key));
         String bodyLengthStr = Integer.toString(bodyText.length());
-        assertThat(headers.get(key), hasItem(bodyLengthStr));
+        assertThat(headers.get(key), equalTo(bodyLengthStr));
 
         ByteBuffer bodyBytes = request.body();
 

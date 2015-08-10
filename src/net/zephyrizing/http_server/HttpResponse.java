@@ -101,13 +101,8 @@ public class HttpResponse {
         return this;
     }
 
-    public HttpResponse addHeader(String key, String... values) {
-        if (values.length != 0) {
-            List<String> headerValues = this.headers.getOrDefault(key, new ArrayList<String>());
-            Collections.addAll(headerValues,
-                               values);
-            this.headers.putIfAbsent(key, headerValues);
-        }
+    public HttpResponse addHeader(String key, String value) {
+        this.headers.addHeader(key, value);
         return this;
     }
 
@@ -156,9 +151,8 @@ public class HttpResponse {
                              HttpProtocol.MINOR_VERSION);
     }
 
-    private static String renderHeader(Map.Entry<String, List<String>> entry) {
-        String prefix = String.format("%s: ", entry.getKey());
-        return entry.getValue().stream().collect(Collectors.joining(",", prefix, ""));
+    private static String renderHeader(Headers.Entry entry) {
+        return String.format("%s: %s", entry.getKey(), entry.getValue());
     }
 
     private static Stream.Builder<String> emptyStringStreamBuilder() {

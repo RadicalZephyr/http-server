@@ -20,6 +20,7 @@ import org.junit.runners.Suite;
             HttpRequestTest.class,
             RequestBuilderTest.class,
             HttpResponseTest.class,
+            HeadersMapTest.class,
             HttpInputStreamTest.class,
             HttpServerSocketImplTest.class,
             HttpServerTest.class,
