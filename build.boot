@@ -1,7 +1,7 @@
 (set-env!
  :resource-paths #{"resources"}
  :source-paths #{"src"}
- :dependencies '[[radicalzephyr/boot-junit "0.2.1"  :scope "test"]
+ :dependencies '[[radicalzephyr/boot-junit "0.4.0-SNAPSHOT"  :scope "test"]
                  [junit                    "4.12"   :scope "test"]])
 
 (def +version+ "0.1.0-SNAPSHOT")
@@ -21,7 +21,7 @@
       :licens {"MIT" "http://opensource.org/licenses/MIT"}}
  sift {:invert true
        :include #{#"\.java$"}}
- junit {:classes #{"UnitTests"}})
+ junit {:class-names #{"UnitTests"}})
 
 ;;; This prevents a name collision WARNING between the test task and
 ;;; clojure.core/test, a function that nobody really uses or cares
