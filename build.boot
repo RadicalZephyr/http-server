@@ -1,8 +1,7 @@
 (set-env!
  :resource-paths #{"resources"}
  :source-paths #{"src"}
- :dependencies '[[radicalzephyr/bootlaces  "0.1.14" :scope "test"]
-                 [radicalzephyr/boot-junit "0.2.1"  :scope "test"]
+ :dependencies '[[radicalzephyr/boot-junit "0.2.1"  :scope "test"]
                  [junit                    "4.12"   :scope "test"]])
 
 (def +version+ "0.1.0-SNAPSHOT")
@@ -10,7 +9,6 @@
 (require '[radicalzephyr.bootlaces  :refer :all]
          '[radicalzephyr.boot-junit :refer [junit]])
 
-(bootlaces! +version+)
 (set-env! :resource-paths #{}) ;; Must undo bootlaces! adding "src" to
                                ;; the resource-paths. Will be fixed in 0.1.15
 
